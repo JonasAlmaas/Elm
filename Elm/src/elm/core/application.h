@@ -3,6 +3,7 @@
 #include "elm/core/base.h"
 #include "elm/core/event/event.h"
 #include "elm/core/event/window_event.h"
+#include "elm/core/layer_stack.h"
 #include "elm/core/window.h"
 #include <memory>
 
@@ -19,6 +20,10 @@ namespace elm {
 
 		void run(void);
 
+		void push_layer(Layer *layer);
+		void push_overlay(Layer *layer);
+
+	private:
 		void on_event(Event& e);
 		bool on_window_close(WindowCloseEvent& e);
 
@@ -26,8 +31,9 @@ namespace elm {
 		static inline Application *get(void) { return s_instance; }
 
 	private:
-		std::unique_ptr<Window> m_window;
 		bool m_running;
+		std::unique_ptr<Window> m_window;
+		LayerStack m_layer_stack;
 
 	private:
 		static Application *s_instance;

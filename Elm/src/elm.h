@@ -4,5 +4,6 @@
 
 // --- Core -----------------
 #include "elm/core/application.h"
+#include "elm/core/layer.h"
 #include "elm/core/log.h"
 // --------------------------

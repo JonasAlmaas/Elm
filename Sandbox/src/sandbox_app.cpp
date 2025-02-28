@@ -1,9 +1,30 @@
 #include "sandbox_app.h"
 #include <stdio.h>
 
+class ExampleLayer : public elm::Layer
+{
+public:
+	ExampleLayer()
+		: Layer("ExampleLayer")
+	{
+	}
+
+	void on_update(void) override
+	{
+		ELM_TRACE("{0}::on_update()", get_name());
+	}
+
+	void on_event(elm::Event& e) override
+	{
+		ELM_TRACE("{0}::on_event({1})", get_name(), e.to_string());
+	}
+};
+
 Sandbox::Sandbox()
 {
 	ELM_TRACE("Sandbox start");
+
+	push_layer(new ExampleLayer());
 }
 
 Sandbox::~Sandbox()
