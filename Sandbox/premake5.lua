@@ -1,7 +1,7 @@
 project "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-	cppdialect "C++20"
+	cppdialect "C++23"
 	staticruntime "off"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
@@ -16,6 +16,8 @@ project "Sandbox"
 		"src",
 
 		"../Elm/src",
+
+		"%{IncludeDir.spdlog}",
 	}
 
 	links {
@@ -27,6 +29,10 @@ project "Sandbox"
 
 		defines {
 			"ELM_PLATFORM_WINDOWS"
+		}
+
+		buildoptions {
+			"/utf-8"
 		}
 
 	filter "configurations:Debug"

@@ -4,4 +4,5 @@
 
 // --- Core -----------------
 #include "elm/core/application.h"
+#include "elm/core/log.h"
 // --------------------------

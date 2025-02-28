@@ -1,7 +1,7 @@
 project "Elm"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++20"
+	cppdialect "C++23"
 	staticruntime "off"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
@@ -14,6 +14,8 @@ project "Elm"
 
 	includedirs {
 		"src",
+
+		"%{IncludeDir.spdlog}",
 	}
 
 	filter "system:windows"
@@ -21,6 +23,10 @@ project "Elm"
 
 		defines {
 			"ELM_PLATFORM_WINDOWS"
+		}
+
+		buildoptions {
+			"/utf-8"
 		}
 
 	filter "configurations:Debug"

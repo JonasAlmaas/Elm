@@ -6,6 +6,8 @@
 
 int main(int argc, char** argv)
 {
+	elm::Log::init();
+
 	auto app = elm::Application::Create();
 	app->run();
 	delete app;
