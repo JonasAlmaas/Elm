@@ -5,7 +5,3 @@
 // --- Core -----------------
 #include "elm/core/application.h"
 // --------------------------
-
-// --- Entrypoint -----------
-#include "elm/core/entypoiny.h"
-// --------------------------

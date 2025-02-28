@@ -1,23 +1,10 @@
-#include "elm.h"
-
+#include "sandbox_app.h"
 #include <stdio.h>
 
-class Sandbox : public elm::Application
+Sandbox::Sandbox()
 {
-public:
-	Sandbox()
-	{
-	}
+}
 
-	~Sandbox()
-	{
-	}
-};
-
-namespace elm {
-
-	Application *Application::Create(void)
-	{
-		return new Sandbox();
-	}
+Sandbox::~Sandbox()
+{
 }
