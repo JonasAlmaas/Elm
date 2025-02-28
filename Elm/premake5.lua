@@ -15,12 +15,15 @@ project "Elm"
 	includedirs {
 		"src",
 
-		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.glad}",
 		"%{IncludeDir.glfw}",
+		"%{IncludeDir.spdlog}",
 	}
 
 	links {
+		"glad",
 		"GLFW",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"

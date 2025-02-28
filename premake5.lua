@@ -32,5 +32,6 @@ workspace "Elm"
 	group ""
 
 	group "Dependencies"
+		include "Elm/vendor/glad"
 		include "Elm/vendor/glfw"
 	group ""
