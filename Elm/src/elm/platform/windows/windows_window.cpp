@@ -7,6 +7,7 @@
 #include "elm/core/event/window_event.h"
 #include "elm/core/log.h"
 
+#include <glad/glad.h>
 #include <glfw/glfw3.h>
 
 namespace elm {
@@ -69,6 +70,8 @@ namespace elm {
 
 		m_window = glfwCreateWindow((int)spec.width, (int)spec.height, m_data.title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_window);
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		ELM_CORE_ASSERT(status, "Failed to initialize glad");
 		glfwSetWindowUserPointer(m_window, &m_data);
 		set_vsync(spec.vsync);
 
