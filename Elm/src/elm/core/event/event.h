@@ -1,7 +1,6 @@
 #pragma once
 
 #include "elm/core.h"
-
 #include <string>
 #include <functional>
 

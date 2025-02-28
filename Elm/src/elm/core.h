@@ -4,6 +4,6 @@
 
 #else
 	#error Missing platform
-#endif
+#endif /* ELM_PLATFORM_WINDOWS */
 
 #define BIT(n) (1<<(n))
