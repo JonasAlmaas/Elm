@@ -26,20 +26,20 @@ project "Sandbox"
 		systemversion "latest"
 
 		defines {
-			"ME_PLATFORM_WINDOWS"
+			"ELM_PLATFORM_WINDOWS"
 		}
 
 	filter "configurations:Debug"
-		defines "EE_DEBUG"
+		defines "ELM_DEBUG"
 		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "EE_RELEASE"
+		defines "ELM_RELEASE"
 		runtime "Release"
 		optimize "on"
 
 	filter "configurations:Dist"
-		defines "EE_DIST"
+		defines "ELM_DIST"
 		runtime "Release"
 		optimize "on"
