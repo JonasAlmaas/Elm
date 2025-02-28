@@ -1,6 +1,6 @@
 #pragma once
 
-#include "elm/core.h"
+#include "elm/core/base.h"
 #include <string>
 #include <functional>
 
@@ -44,7 +44,7 @@ namespace elm {
 
 		bool is_in_category(EventCategory category) const
 		{
-			return this->get_category_flags() & category;
+			return get_category_flags() & category;
 		}
 	};
 

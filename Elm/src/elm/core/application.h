@@ -1,5 +1,9 @@
 #pragma once
 
+#include "elm/core/base.h"
+#include "elm/core/window.h"
+#include <memory>
+
 namespace elm {
 
 	class Application
@@ -16,6 +20,7 @@ namespace elm {
 		static inline Application *get(void) { return s_instance; }
 
 	private:
+		std::unique_ptr<Window> m_window;
 		bool m_running;
 
 	private:

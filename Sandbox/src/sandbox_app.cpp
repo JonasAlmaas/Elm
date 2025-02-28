@@ -3,7 +3,7 @@
 
 Sandbox::Sandbox()
 {
-	ELM_LOG("Sandbox start");
+	ELM_TRACE("Sandbox start");
 }
 
 Sandbox::~Sandbox()

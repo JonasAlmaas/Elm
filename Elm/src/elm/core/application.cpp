@@ -7,9 +7,10 @@ namespace elm {
 	Application::Application(void)
 		: m_running(true)
 	{
-		// TODO: Assert on s_instance existing
-
+		ELM_CORE_ASSERT(!s_instance, "Application already exists!");
 		s_instance = this;
+
+		m_window = std::unique_ptr<Window>(Window::create());
 	}
 
 	Application::~Application(void)
@@ -19,7 +20,7 @@ namespace elm {
 	void Application::run(void)
 	{
 		while (m_running) {
-
+			m_window->on_update();
 		}
 	}
 }

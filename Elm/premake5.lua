@@ -16,6 +16,11 @@ project "Elm"
 		"src",
 
 		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.glfw}",
+	}
+
+	links {
+		"GLFW",
 	}
 
 	filter "system:windows"

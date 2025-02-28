@@ -31,5 +31,6 @@ workspace "Elm"
 		include ""
 	group ""
 
-	-- group "Dependencies"
-	-- group ""
+	group "Dependencies"
+		include "Elm/vendor/glfw"
+	group ""

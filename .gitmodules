@@ -1,3 +1,6 @@
 [submodule "Elm/vendor/spdlog"]
 	path = Elm/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "Elm/vendor/glfw"]
+	path = Elm/vendor/glfw
+	url = https://github.com/JonasAlmaas/glfw.git

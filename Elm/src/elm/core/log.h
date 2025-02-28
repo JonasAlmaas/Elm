@@ -1,6 +1,6 @@
 #pragma once
 
-#include "elm/core.h"
+#include "elm/core/base.h"
 
 #pragma warning(push, 0)
 #include <spdlog/spdlog.h>
@@ -25,13 +25,13 @@ namespace elm {
 	};
 }
 
-#define ELM_CORE_LOG(...)               ::elm::Log::get_core_logger()->trace(__VA_ARGS__)
+#define ELM_CORE_TRACE(...)               ::elm::Log::get_core_logger()->trace(__VA_ARGS__)
 #define ELM_CORE_INFO(...)              ::elm::Log::get_core_logger()->info(__VA_ARGS__)
 #define ELM_CORE_WARN(...)              ::elm::Log::get_core_logger()->warn(__VA_ARGS__)
 #define ELM_CORE_ERROR(...)             ::elm::Log::get_core_logger()->error(__VA_ARGS__)
 #define ELM_CORE_CRITICAL(...)          ::elm::Log::get_core_logger()->critical(__VA_ARGS__)
 
-#define ELM_LOG(...)                    ::elm::Log::get_client_logger()->trace(__VA_ARGS__)
+#define ELM_TRACE(...)                    ::elm::Log::get_client_logger()->trace(__VA_ARGS__)
 #define ELM_INFO(...)                   ::elm::Log::get_client_logger()->info(__VA_ARGS__)
 #define ELM_WARN(...)                   ::elm::Log::get_client_logger()->warn(__VA_ARGS__)
 #define ELM_ERROR(...)                  ::elm::Log::get_client_logger()->error(__VA_ARGS__)
