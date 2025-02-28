@@ -62,7 +62,7 @@ namespace elm {
 		if (s_glfw_window_count == 0) {
 			int success = glfwInit();
 			glfwSetErrorCallback(glfw_error_cb);
-			ELM_CORE_ASSERT(success, "Could not initialize GLFW!");
+			ELM_CORE_ASSERT(success, "Could not initialize GLFW");
 		}
 
 		++s_glfw_window_count;
