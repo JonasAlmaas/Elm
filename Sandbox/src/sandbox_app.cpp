@@ -22,8 +22,6 @@ public:
 
 Sandbox::Sandbox()
 {
-	ELM_TRACE("Sandbox start");
-
 	push_layer(new ExampleLayer());
 }
 
