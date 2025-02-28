@@ -17,12 +17,14 @@ project "Elm"
 
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.glfw}",
+		"%{IncludeDir.imgui}",
 		"%{IncludeDir.spdlog}",
 	}
 
 	links {
 		"glad",
 		"GLFW",
+		"imgui",
 		"opengl32.lib"
 	}
 

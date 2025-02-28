@@ -1,6 +1,6 @@
 #include "application.h"
 
-#define BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#include <glad/glad.h>
 
 namespace elm {
 
@@ -23,6 +23,9 @@ namespace elm {
 	void Application::run(void)
 	{
 		while (m_running) {
+			glClearColor(1, 0, 1, 1);
+			glClear(GL_COLOR_BUFFER_BIT);
+
 			for (auto layer : m_layer_stack) {
 				layer->on_update();
 			}
@@ -34,11 +37,13 @@ namespace elm {
 	void Application::push_layer(Layer* layer)
 	{
 		m_layer_stack.push_layer(layer);
+		layer->on_attach();
 	}
 
 	void Application::push_overlay(Layer* layer)
 	{
 		m_layer_stack.push_overlay(layer);
+		layer->on_attach();
 	}
 
 	void Application::on_event(Event& e)

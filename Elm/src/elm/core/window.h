@@ -32,6 +32,9 @@ namespace elm {
 		virtual void set_vsync(bool enabled) = 0;
 		virtual bool is_vsync(void) const = 0;
 
-		static Window* create(const WindowSpecification& spec = WindowSpecification());
+		virtual void *get_native_window(void) = 0;
+
+	public:
+		static Window *create(const WindowSpecification& spec = WindowSpecification());
 	};
 }

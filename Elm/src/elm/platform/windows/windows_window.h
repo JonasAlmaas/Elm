@@ -24,6 +24,8 @@ namespace elm {
 		void set_vsync(bool enabled) override;
 		inline bool is_vsync(void) const override { return m_data.vsync; }
 
+		void *get_native_window(void) override { return (void *)m_window; }
+
 	private:
 		virtual void init(const WindowSpecification& specs);
 		virtual void shutdown(void);

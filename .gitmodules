@@ -4,3 +4,6 @@
 [submodule "Elm/vendor/glfw"]
 	path = Elm/vendor/glfw
 	url = https://github.com/JonasAlmaas/glfw.git
+[submodule "Elm/vendor/imgui"]
+	path = Elm/vendor/imgui
+	url = https://github.com/JonasAlmaas/imgui.git

@@ -23,12 +23,14 @@ namespace elm {
 		void push_layer(Layer *layer);
 		void push_overlay(Layer *layer);
 
-	private:
-		void on_event(Event& e);
-		bool on_window_close(WindowCloseEvent& e);
+		inline Window* get_window(void) const { return &*m_window; }
 
 	public:
 		static inline Application *get(void) { return s_instance; }
+
+	private:
+		void on_event(Event& e);
+		bool on_window_close(WindowCloseEvent& e);
 
 	private:
 		bool m_running;

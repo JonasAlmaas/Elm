@@ -30,6 +30,8 @@
 
 #define BIT(n) (1<<(n))
 
+#define BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+
 #define ELM_EXPAND_MACRO(x) x
 #define ELM_STRINGIFY_MACRO(x) #x
 

@@ -86,13 +86,13 @@ namespace elm {
 		});
 
 		glfwSetWindowCloseCallback(m_window, [](GLFWwindow *window) {
-			WindowData* data = (WindowData*)glfwGetWindowUserPointer(window);
+			WindowData *data = (WindowData*)glfwGetWindowUserPointer(window);
 			WindowCloseEvent e;
 			data->event_callback(e);
 		});
 
 		glfwSetKeyCallback(m_window, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-			WindowData* data = (WindowData*)glfwGetWindowUserPointer(window);
+			WindowData *data = (WindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action) {
 			case GLFW_PRESS: {
@@ -113,8 +113,14 @@ namespace elm {
 			}
 		});
 
+		glfwSetCharCallback(m_window, [](GLFWwindow* window, unsigned int key_code) {
+			WindowData *data = (WindowData*)glfwGetWindowUserPointer(window);
+			KeyTypedEvent e(key_code);
+			data->event_callback(e);
+		});
+
 		glfwSetMouseButtonCallback(m_window, [](GLFWwindow *window, int button, int action, int mods) {
-			WindowData* data = (WindowData*)glfwGetWindowUserPointer(window);
+			WindowData *data = (WindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action) {
 			case GLFW_PRESS: {
@@ -131,13 +137,13 @@ namespace elm {
 		});
 		
 		glfwSetScrollCallback(m_window, [](GLFWwindow *window, double x_offset, double y_offset) {
-			WindowData* data = (WindowData*)glfwGetWindowUserPointer(window);
+			WindowData *data = (WindowData*)glfwGetWindowUserPointer(window);
 			MouseScrolledEvent e((float)x_offset, (float)y_offset);
 			data->event_callback(e);
 		});
 
 		glfwSetCursorPosCallback(m_window, [](GLFWwindow *window, double x_pos, double y_pos) {
-			WindowData* data = (WindowData*)glfwGetWindowUserPointer(window);
+			WindowData *data = (WindowData*)glfwGetWindowUserPointer(window);
 			MouseMovedEvent e((float)x_pos, (float)y_pos);
 			data->event_callback(e);
 		});

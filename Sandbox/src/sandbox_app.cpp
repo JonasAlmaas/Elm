@@ -23,6 +23,7 @@ public:
 Sandbox::Sandbox()
 {
 	push_layer(new ExampleLayer());
+	push_overlay(new elm::ImGuiLayer());
 }
 
 Sandbox::~Sandbox()
