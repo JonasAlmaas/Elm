@@ -29,7 +29,13 @@ namespace elm {
 
 	void Application::on_event(Event& e)
 	{
-		ELM_CORE_TRACE("{0}", e.to_string());
-		/*EventDispatcher dispatcher(e); */
+		EventDispatcher dispatcher(e);
+		dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::on_window_close));
+	}
+
+	bool Application::on_window_close(WindowCloseEvent& e)
+	{
+		m_running = false;
+		return true;
 	}
 }

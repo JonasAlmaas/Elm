@@ -2,6 +2,7 @@
 
 #include "elm/core/base.h"
 #include "elm/core/event/event.h"
+#include "elm/core/event/window_event.h"
 #include "elm/core/window.h"
 #include <memory>
 
@@ -19,6 +20,7 @@ namespace elm {
 		void run(void);
 
 		void on_event(Event& e);
+		bool on_window_close(WindowCloseEvent& e);
 
 	public:
 		static inline Application *get(void) { return s_instance; }
