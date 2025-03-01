@@ -68,9 +68,11 @@ namespace elm {
 	private:
 		Event& m_event;
 	};
-
-	inline std::ostream& operator<<(std::ostream& os, const Event& e)
-	{
-		return os << e.to_string();
-	}
 }
+
+inline std::ostream& operator<<(std::ostream& os, const elm::Event& e)
+{
+	return os << e.to_string();
+}
+
+template <> struct fmt::formatter<elm::Event> : fmt::ostream_formatter {};
