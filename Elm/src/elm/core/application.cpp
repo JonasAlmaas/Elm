@@ -83,7 +83,7 @@ void main()
 
 			m_shader->bind();
 			m_vertex_array->bind();
-			glDrawElements(GL_TRIANGLES, /*m_index_buffer->get_count()*/ 3, GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, m_vertex_array->get_index_buffer()->get_count(), GL_UNSIGNED_INT, nullptr);
 
 			for (auto layer : m_layer_stack) {
 				layer->on_update();
