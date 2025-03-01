@@ -58,7 +58,7 @@ namespace elm {
 		m_data.vsync = spec.vsync;
 
 
-		ELM_CORE_INFO("Creating window \"{0}\" ({1}, {2})", spec.title, spec.width, spec.height);
+		ELM_CORE_TRACE("Creating window \"{0}\" ({1}, {2})", spec.title, spec.width, spec.height);
 
 		if (s_glfw_window_count == 0) {
 			int success = glfwInit();

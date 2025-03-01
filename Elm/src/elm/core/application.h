@@ -39,6 +39,8 @@ namespace elm {
 		LayerStack m_layer_stack;
 		ImGuiLayer *m_imgui_layer;
 
+		uint32_t m_vertex_array, m_vertex_buffer, m_index_buffer;
+
 	private:
 		static Application *s_instance;
 	};
