@@ -7,7 +7,6 @@
 #include "elm/core/event/window_event.h"
 #include "elm/core/log.h"
 
-#include <glad/glad.h>
 #include <glfw/glfw3.h>
 
 namespace elm {
@@ -37,7 +36,7 @@ namespace elm {
 	void WindowsWindow::on_update(void)
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_window);
+		m_context->swap_buffers();
 	}
 
 	void WindowsWindow::set_event_callback(const EventCallbackFn& cb)
@@ -58,6 +57,7 @@ namespace elm {
 		m_data.height = spec.height;
 		m_data.vsync = spec.vsync;
 
+
 		ELM_CORE_INFO("Creating window \"{0}\" ({1}, {2})", spec.title, spec.width, spec.height);
 
 		if (s_glfw_window_count == 0) {
@@ -69,9 +69,10 @@ namespace elm {
 		++s_glfw_window_count;
 
 		m_window = glfwCreateWindow((int)spec.width, (int)spec.height, m_data.title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		ELM_CORE_ASSERT(status, "Failed to initialize glad");
+
+		m_context = GraphicsContext::create(m_window);
+		m_context->init();
+
 		glfwSetWindowUserPointer(m_window, &m_data);
 		set_vsync(spec.vsync);
 

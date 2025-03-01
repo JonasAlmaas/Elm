@@ -3,8 +3,11 @@
 #ifdef ELM_PLATFORM_WINDOWS
 
 #include "elm/core/window.h"
+#include "elm/core/renderer/graphics_context.h"
 
 struct GLFWwindow;
+
+#include <memory>
 
 namespace elm {
 
@@ -32,6 +35,7 @@ namespace elm {
 
 	private:
 		GLFWwindow* m_window;
+		std::unique_ptr<GraphicsContext> m_context;
 
 		struct WindowData
 		{
