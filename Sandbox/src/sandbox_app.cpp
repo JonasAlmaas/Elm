@@ -24,8 +24,9 @@ public:
 	{
 		ImGui::Begin("Test");
 		ImGui::Text("Hello world");
-		ImGui::End();;
+		ImGui::End();
 	}
+
 };
 
 Sandbox::Sandbox()
