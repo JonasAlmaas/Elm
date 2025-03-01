@@ -11,12 +11,12 @@
 
 namespace elm {
 
-	ImGuiLayer::ImGuiLayer()
+	ImGuiLayer::ImGuiLayer(void)
 		: Layer("ImGuiLayer")
 	{
 	}
 
-	ImGuiLayer::~ImGuiLayer()
+	ImGuiLayer::~ImGuiLayer(void)
 	{
 	}
 

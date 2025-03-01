@@ -8,7 +8,7 @@ namespace elm {
 	class GraphicsContext
 	{
 	public:
-		virtual ~GraphicsContext() = default;
+		virtual ~GraphicsContext(void) = default;
 
 		virtual void init(void) = 0;
 		virtual void swap_buffers(void) = 0;

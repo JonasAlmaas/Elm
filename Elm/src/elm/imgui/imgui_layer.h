@@ -7,8 +7,8 @@ namespace elm {
 	class ImGuiLayer : public Layer
 	{
 	public:
-		ImGuiLayer();
-		~ImGuiLayer();
+		ImGuiLayer(void);
+		~ImGuiLayer(void);
 
 		virtual void on_attach(void) override;
 		virtual void on_detach(void) override;
