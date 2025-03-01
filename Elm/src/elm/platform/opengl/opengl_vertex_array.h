@@ -10,7 +10,7 @@ namespace elm {
 	{
 	public:
 		opengl_vertex_array();
-		virtual ~opengl_vertex_array() = default;
+		virtual ~opengl_vertex_array();
 
 		virtual void bind(void) const override;
 		virtual void unbind(void) const override;

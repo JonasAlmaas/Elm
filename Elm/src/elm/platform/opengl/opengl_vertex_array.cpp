@@ -32,6 +32,11 @@ namespace elm {
 		glGenVertexArrays(1, &m_renderer_id);
 	}
 
+	opengl_vertex_array::~opengl_vertex_array()
+	{
+		glDeleteBuffers(1, &m_renderer_id);
+	}
+
 	void opengl_vertex_array::bind(void) const
 	{
 		glBindVertexArray(m_renderer_id);
