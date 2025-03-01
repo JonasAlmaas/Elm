@@ -17,6 +17,7 @@ project "Sandbox"
 
 		"../Elm/src",
 
+		"%{IncludeDir.glm}",
 		"%{IncludeDir.spdlog}",
 	}
 

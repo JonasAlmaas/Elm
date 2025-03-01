@@ -7,3 +7,6 @@
 [submodule "Elm/vendor/imgui"]
 	path = Elm/vendor/imgui
 	url = https://github.com/JonasAlmaas/imgui.git
+[submodule "elm/vendor/glm"]
+	path = elm/vendor/glm
+	url = https://github.com/g-truc/glm

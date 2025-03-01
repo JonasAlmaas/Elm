@@ -16,6 +16,7 @@ project "Elm"
 		"src",
 
 		"%{IncludeDir.glad}",
+		"%{IncludeDir.glm}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.spdlog}",
