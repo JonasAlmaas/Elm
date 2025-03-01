@@ -8,6 +8,8 @@
 #include "elm/imgui/imgui_layer.h"
 #include <memory>
 
+#include "elm/core/renderer/shader.h"
+
 namespace elm {
 
 	class Application
@@ -40,6 +42,7 @@ namespace elm {
 		ImGuiLayer *m_imgui_layer;
 
 		uint32_t m_vertex_array, m_vertex_buffer, m_index_buffer;
+		std::unique_ptr<Shader> m_shader;
 
 	private:
 		static Application *s_instance;

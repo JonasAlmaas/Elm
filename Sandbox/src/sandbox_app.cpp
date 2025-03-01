@@ -22,8 +22,9 @@ public:
 
 	virtual void on_imgui_render(void)
 	{
-		static bool show = true;
-		ImGui::ShowDemoWindow(&show);
+		ImGui::Begin("Test");
+		ImGui::Text("Hello world");
+		ImGui::End();;
 	}
 };
 
