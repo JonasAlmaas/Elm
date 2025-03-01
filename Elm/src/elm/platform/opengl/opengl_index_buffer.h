@@ -5,11 +5,11 @@
 
 namespace elm {
 
-	class OpenGLIndexBuffer : public IndexBuffer
+	class opengl_index_buffer : public index_buffer
 	{
 	public:
-		OpenGLIndexBuffer(const uint32_t *indices, uint32_t count);
-		virtual ~OpenGLIndexBuffer();
+		opengl_index_buffer(const uint32_t *indices, uint32_t count);
+		virtual ~opengl_index_buffer();
 
 		virtual void bind(void) const override;
 		virtual void unbind(void) const  override;

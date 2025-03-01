@@ -4,8 +4,8 @@
 
 namespace elm {
 
-	std::unique_ptr<GraphicsContext> GraphicsContext::create(void* window)
+	std::unique_ptr<graphics_context> graphics_context::create(void* window)
 	{
-		return std::make_unique<OpenGLContext>(static_cast<GLFWwindow*>(window));
+		return std::make_unique<opengl_context>(static_cast<GLFWwindow*>(window));
 	}
 }

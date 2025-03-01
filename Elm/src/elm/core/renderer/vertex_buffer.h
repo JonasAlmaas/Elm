@@ -5,16 +5,16 @@
 
 namespace elm {
 
-	class VertexBuffer
+	class vertex_buffer
 	{
 	public:
-		virtual ~VertexBuffer(void) {}
+		virtual ~vertex_buffer(void) {}
 
 		virtual void bind(void) const = 0;
 		virtual void unbind(void) const = 0;
 
 	public:
-		static VertexBuffer *create(const void *vertices, uint32_t size);
+		static vertex_buffer *create(const void *vertices, uint32_t size);
 
 	};
 }

@@ -4,7 +4,7 @@
 
 namespace elm {
 
-	Shader::Shader(const std::string& vertex_src, const std::string& fragment_src)
+	shader::shader(const std::string& vertex_src, const std::string& fragment_src)
 	{
 		GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -84,17 +84,17 @@ namespace elm {
 		glDetachShader(m_renderer_id, fragment_shader);
 	}
 
-	Shader::~Shader(void)
+	shader::~shader(void)
 	{
 		glDeleteProgram(m_renderer_id);
 	}
 
-	void Shader::bind(void) const
+	void shader::bind(void) const
 	{
 		glUseProgram(m_renderer_id);
 	}
 
-	void Shader::unbind(void) const
+	void shader::unbind(void) const
 	{
 		glUseProgram(0);
 	}

@@ -11,16 +11,16 @@
 
 namespace elm {
 
-	ImGuiLayer::ImGuiLayer(void)
-		: Layer("ImGuiLayer")
+	imgui_layer::imgui_layer(void)
+		: layer("ImGuiLayer")
 	{
 	}
 
-	ImGuiLayer::~ImGuiLayer(void)
+	imgui_layer::~imgui_layer(void)
 	{
 	}
 
-	void ImGuiLayer::on_attach(void)
+	void imgui_layer::on_attach(void)
 	{
 		IMGUI_CHECKVERSION();
 
@@ -41,41 +41,41 @@ namespace elm {
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 
-		Application* app = Application::get();
+		application* app = application::get();
 		GLFWwindow *window = static_cast<GLFWwindow*>(app->get_window()->get_native_window());
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
-	void ImGuiLayer::on_detach(void)
+	void imgui_layer::on_detach(void)
 	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::on_event(Event& e)
+	void imgui_layer::on_event(event& e)
 	{
 		if (!m_block_events) {
 			return;
 		}
 
 		ImGuiIO& io = ImGui::GetIO();
-		e.handled |= e.is_in_category(EventCategoryMouse) & io.WantCaptureMouse;
-		e.handled |= e.is_in_category(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+		e.handled |= e.is_in_category(EVENT_CATEGORY_MOUSE) & io.WantCaptureMouse;
+		e.handled |= e.is_in_category(EVENT_CATEGORY_KEYBOARD) & io.WantCaptureKeyboard;
 	}
 
-	void ImGuiLayer::begin(void)
+	void imgui_layer::begin(void)
 	{
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 	}
 
-	void ImGuiLayer::end(void)
+	void imgui_layer::end(void)
 	{
-		auto app = Application::get();
+		auto app = application::get();
 
 		ImGuiIO& io = ImGui::GetIO();
 		io.DisplaySize = ImVec2(

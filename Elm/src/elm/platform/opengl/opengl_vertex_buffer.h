@@ -5,11 +5,11 @@
 
 namespace elm {
 
-	class OpenGLVertexBuffer : public VertexBuffer
+	class opengl_vertex_buffer : public vertex_buffer
 	{
 	public:
-		OpenGLVertexBuffer(const void *vertices, uint32_t size);
-		virtual ~OpenGLVertexBuffer();
+		opengl_vertex_buffer(const void *vertices, uint32_t size);
+		virtual ~opengl_vertex_buffer();
 
 		virtual void bind(void) const override;
 		virtual void unbind(void) const  override;

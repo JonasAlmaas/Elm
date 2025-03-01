@@ -14,41 +14,41 @@
 
 namespace elm {
 
-	class Application
+	class application
 	{
 	public:
-		Application(void);
-		virtual ~Application(void);
+		application(void);
+		virtual ~application(void);
 
 		// To be defined by the client
-		static Application *Create(void);
+		static application *create(void);
 
 		void run(void);
 
-		void push_layer(Layer *layer);
-		void push_overlay(Layer *layer);
+		void push_layer(layer *layer);
+		void push_overlay(layer *layer);
 
-		inline Window* get_window(void) const { return &*m_window; }
+		inline window* get_window(void) const { return &*m_window; }
 
 	public:
-		static inline Application *get(void) { return s_instance; }
+		static inline application *get(void) { return s_instance; }
 
 	private:
-		void on_event(Event& e);
-		bool on_window_close(WindowCloseEvent& e);
+		void on_event(event& e);
+		bool on_window_close(window_close_event& e);
 
 	private:
 		bool m_running;
-		std::unique_ptr<Window> m_window;
-		LayerStack m_layer_stack;
-		ImGuiLayer *m_imgui_layer;
+		std::unique_ptr<window> m_window;
+		layer_stack m_layer_stack;
+		imgui_layer *m_imgui_layer;
 
 		uint32_t m_vertex_array;
-		std::unique_ptr<Shader> m_shader;
-		std::unique_ptr<VertexBuffer> m_vertex_buffer;
-		std::unique_ptr<IndexBuffer> m_index_buffer;
+		std::unique_ptr<shader> m_shader;
+		std::unique_ptr<vertex_buffer> m_vertex_buffer;
+		std::unique_ptr<index_buffer> m_index_buffer;
 
 	private:
-		static Application *s_instance;
+		static application *s_instance;
 	};
 }

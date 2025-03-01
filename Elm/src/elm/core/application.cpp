@@ -4,18 +4,18 @@
 
 namespace elm {
 
-	Application* Application::s_instance = nullptr;
+	application* application::s_instance = nullptr;
 
-	Application::Application(void)
+	application::application(void)
 		: m_running(true)
 	{
 		ELM_CORE_ASSERT(!s_instance, "Application already exists");
 		s_instance = this;
 
-		m_window = std::unique_ptr<Window>(Window::create());
-		m_window->set_event_callback(BIND_EVENT_FN(Application::on_event));
+		m_window = std::unique_ptr<window>(window::create());
+		m_window->set_event_callback(BIND_EVENT_FN(application::on_event));
 
-		m_imgui_layer = new ImGuiLayer();
+		m_imgui_layer = new imgui_layer();
 		push_overlay(m_imgui_layer);
 
 		// Hello triangle
@@ -28,13 +28,13 @@ namespace elm {
 			 0.0f,  0.5f, 0.0f,
 		};
 
-		m_vertex_buffer.reset(VertexBuffer::create((void *)vertices, sizeof vertices));
+		m_vertex_buffer.reset(vertex_buffer::create((void *)vertices, sizeof vertices));
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, nullptr);
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		m_index_buffer.reset(IndexBuffer::create(indices, sizeof indices / sizeof(uint32_t)));
+		m_index_buffer.reset(index_buffer::create(indices, sizeof indices / sizeof(uint32_t)));
 
 		std::string vertex_src = R"(
 #version 330 core
@@ -62,14 +62,14 @@ void main()
 }
 )";
 
-		m_shader = std::make_unique<Shader>(vertex_src, fragment_src);
+		m_shader = std::make_unique<shader>(vertex_src, fragment_src);
 	}
 
-	Application::~Application(void)
+	application::~application(void)
 	{
 	}
 
-	void Application::run(void)
+	void application::run(void)
 	{
 		while (m_running) {
 			glClearColor(0.1f, 0.1f, 0.1f, 1);
@@ -93,20 +93,20 @@ void main()
 		}
 	}
 
-	void Application::push_layer(Layer* layer)
+	void application::push_layer(layer* layer)
 	{
 		m_layer_stack.push_layer(layer);
 	}
 
-	void Application::push_overlay(Layer* layer)
+	void application::push_overlay(layer* layer)
 	{
 		m_layer_stack.push_overlay(layer);
 	}
 
-	void Application::on_event(Event& e)
+	void application::on_event(event& e)
 	{
-		EventDispatcher dispatcher(e);
-		dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::on_window_close));
+		event_dispatcher dispatcher(e);
+		dispatcher.dispatch<window_close_event>(BIND_EVENT_FN(application::on_window_close));
 
 		for (auto it = m_layer_stack.end(); it != m_layer_stack.begin(); ) {
 			(*--it)->on_event(e);
@@ -116,7 +116,7 @@ void main()
 		}
 	}
 
-	bool Application::on_window_close(WindowCloseEvent& e)
+	bool application::on_window_close(window_close_event& e)
 	{
 		m_running = false;
 		return true;

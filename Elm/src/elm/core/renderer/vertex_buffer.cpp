@@ -5,15 +5,15 @@
 
 namespace elm {
 
-	VertexBuffer *VertexBuffer::create(const void *vertices, uint32_t size)
+	vertex_buffer *vertex_buffer::create(const void *vertices, uint32_t size)
 	{
-		switch (Renderer::get_api()) {
-		case RendererAPI::None: ELM_CORE_ASSERT(false, "RendererAPI::None is not currently supported"); break;
-		case RendererAPI::OpenGL:
-			return new OpenGLVertexBuffer(vertices, size);
+		switch (renderer::get_api()) {
+		case renderer_api::none: ELM_CORE_ASSERT(false, "RendererAPI::None is not currently supported"); break;
+		case renderer_api::opengl:
+			return new opengl_vertex_buffer(vertices, size);
 		}
 
-		ELM_CORE_ASSERT(false, "Unknown rrenderer API");
+		ELM_CORE_ASSERT(false, "Unknown renderer API");
 		return nullptr;
 	}
 }

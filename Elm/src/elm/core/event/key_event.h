@@ -6,31 +6,31 @@
 
 namespace elm {
 
-	class KeyEvent : public Event
+	class key_event : public event
 	{
 	public:
-		inline KeyCode get_key_code() const { return m_key_code; }
+		inline key_code get_key_code() const { return m_key_code; }
 
-		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
+		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_KEYBOARD | EVENT_CATEGORY_INPUT)
 
 	protected:
-		KeyEvent(KeyCode keycode)
+		key_event(key_code keycode)
 			: m_key_code(keycode)
 		{
 		}
 
-		KeyCode m_key_code;
+		key_code m_key_code;
 	};
 
-	class KeyPressedEvent : public KeyEvent
+	class key_pressed_event : public key_event
 	{
 	public:
-		KeyPressedEvent(KeyCode keycode, bool is_repeat = false)
-			: KeyEvent(keycode), m_is_repeat(is_repeat)
+		key_pressed_event(key_code keycode, bool is_repeat = false)
+			: key_event(keycode), m_is_repeat(is_repeat)
 		{
 		}
 
-		bool IsRepeat() const { return m_is_repeat; }
+		bool is_repeat() const { return m_is_repeat; }
 
 		std::string to_string() const override
 		{
@@ -39,17 +39,17 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(KeyPressed)
+		EVENT_CLASS_TYPE(EVENT_TYPE_KEY_PRESSED)
 
 	private:
 		bool m_is_repeat;
 	};
 
-	class KeyReleasedEvent : public KeyEvent
+	class key_released_event : public key_event
 	{
 	public:
-		KeyReleasedEvent(KeyCode keycode)
-			: KeyEvent(keycode)
+		key_released_event(key_code keycode)
+			: key_event(keycode)
 		{
 		}
 
@@ -60,14 +60,14 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(KeyReleased)
+		EVENT_CLASS_TYPE(EVENT_TYPE_KEY_RELEASED)
 	};
 
-	class KeyTypedEvent : public KeyEvent
+	class key_typed_event : public key_event
 	{
 	public:
-		KeyTypedEvent(KeyCode keycode)
-			: KeyEvent(keycode)
+		key_typed_event(key_code keycode)
+			: key_event(keycode)
 		{
 		}
 
@@ -78,6 +78,6 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(KeyTyped)
+		EVENT_CLASS_TYPE(EVENT_TYPE_KEY_TYPED)
 	};
 }

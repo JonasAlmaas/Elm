@@ -6,27 +6,27 @@
 
 namespace elm {
 
-	class MouseButtonEvent : public Event
+	class mouse_button_event : public event
 	{
 	public:
-		inline MouseCode get_mouse_button(void) const { return m_button; }
+		inline mouse_code get_mouse_button(void) const { return m_button; }
 
-		EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse | EventCategoryMouseButton)
+		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_INPUT | EVENT_CATEGORY_MOUSE | EVENT_CATEGORY_MOUSE_BUTTON)
 
 	protected:
-		MouseButtonEvent(MouseCode button)
+		mouse_button_event(mouse_code button)
 			: m_button(button)
 		{
 		}
 
-		MouseCode m_button;
+		mouse_code m_button;
 	};
 
-	class MouseButtonPressedEvent : public MouseButtonEvent
+	class mouse_button_pressed_event : public mouse_button_event
 	{
 	public:
-		MouseButtonPressedEvent(MouseCode button)
-			: MouseButtonEvent(button)
+		mouse_button_pressed_event(mouse_code button)
+			: mouse_button_event(button)
 		{
 		}
 
@@ -37,14 +37,14 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(MouseButtonPressed)
+		EVENT_CLASS_TYPE(EVENT_TYPE_MOUSE_BUTTON_PRESSED)
 	};
 
-	class MouseButtonReleasedEvent : public MouseButtonEvent
+	class mouse_button_released_event : public mouse_button_event
 	{
 	public:
-		MouseButtonReleasedEvent(MouseCode button)
-			: MouseButtonEvent(button)
+		mouse_button_released_event(mouse_code button)
+			: mouse_button_event(button)
 		{
 		}
 
@@ -55,13 +55,13 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(MouseButtonReleased)
+		EVENT_CLASS_TYPE(EVENT_TYPE_MOUSE_BUTTON_RELEASED)
 	};
 
-	class MouseMovedEvent : public Event
+	class mouse_moved_event : public event
 	{
 	public:
-		MouseMovedEvent(float x, float y)
+		mouse_moved_event(float x, float y)
 			: m_mouse_x(x), m_mouse_y(y)
 		{
 		}
@@ -76,17 +76,17 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(MouseMoved)
-		EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse)
+		EVENT_CLASS_TYPE(EVENT_TYPE_MOUSE_MOVED)
+		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_INPUT | EVENT_CATEGORY_MOUSE)
 
 	private:
 		float m_mouse_x, m_mouse_y;
 	};
 
-	class MouseScrolledEvent : public Event
+	class mouse_scrolled_event : public event
 	{
 	public:
-		MouseScrolledEvent(float offset_x, float offset_y)
+		mouse_scrolled_event(float offset_x, float offset_y)
 			: m_offset_x(offset_x), m_offset_y(offset_y)
 		{
 		}
@@ -101,8 +101,8 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(MouseScrolled)
-		EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse)
+		EVENT_CLASS_TYPE(EVENT_TYPE_MOUSE_SCROLLED)
+		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_INPUT | EVENT_CATEGORY_MOUSE)
 
 	private:
 		float m_offset_x, m_offset_y;

@@ -4,18 +4,18 @@
 
 namespace elm {
 
-	enum class RendererAPI {
-		None = 0,
-		OpenGL
+	enum class renderer_api {
+		none = 0,
+		opengl
 	};
 
-	class Renderer
+	class renderer
 	{
 	public:
-		inline static RendererAPI get_api(void) { return s_renderer_api; }
+		inline static renderer_api get_api(void) { return s_renderer_api; }
 
 	public:
-		static RendererAPI s_renderer_api;
+		static renderer_api s_renderer_api;
 
 	};
 }

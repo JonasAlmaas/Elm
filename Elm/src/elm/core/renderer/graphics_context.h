@@ -5,16 +5,16 @@
 
 namespace elm {
 
-	class GraphicsContext
+	class graphics_context
 	{
 	public:
-		virtual ~GraphicsContext(void) = default;
+		virtual ~graphics_context(void) = default;
 
 		virtual void init(void) = 0;
 		virtual void swap_buffers(void) = 0;
 
 	public:
-		static std::unique_ptr<GraphicsContext> create(void *window);
+		static std::unique_ptr<graphics_context> create(void *window);
 
 	};
 }

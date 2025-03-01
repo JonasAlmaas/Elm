@@ -4,7 +4,7 @@
 
 namespace elm {
 
-	OpenGLIndexBuffer::OpenGLIndexBuffer(const uint32_t* indices, uint32_t count)
+	opengl_index_buffer::opengl_index_buffer(const uint32_t* indices, uint32_t count)
 		: m_count(count)
 	{
 		glCreateBuffers(1, &m_renderer_id);
@@ -12,17 +12,17 @@ namespace elm {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
 	}
 
-	OpenGLIndexBuffer::~OpenGLIndexBuffer()
+	opengl_index_buffer::~opengl_index_buffer()
 	{
 		glDeleteBuffers(1, &m_renderer_id);
 	}
 
-	void OpenGLIndexBuffer::bind(void) const
+	void opengl_index_buffer::bind(void) const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, m_renderer_id);
 	}
 
-	void OpenGLIndexBuffer::unbind(void) const
+	void opengl_index_buffer::unbind(void) const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}

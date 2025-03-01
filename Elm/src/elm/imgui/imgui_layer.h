@@ -4,15 +4,15 @@
 
 namespace elm {
 
-	class ImGuiLayer : public Layer
+	class imgui_layer : public layer
 	{
 	public:
-		ImGuiLayer(void);
-		~ImGuiLayer(void);
+		imgui_layer(void);
+		~imgui_layer(void);
 
 		virtual void on_attach(void) override;
 		virtual void on_detach(void) override;
-		virtual void on_event(Event& e) override;
+		virtual void on_event(event& e) override;
 
 		void begin(void);
 		void end(void);

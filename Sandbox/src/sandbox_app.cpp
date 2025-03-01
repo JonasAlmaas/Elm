@@ -2,11 +2,11 @@
 #include <imgui.h>
 #include <stdio.h>
 
-class ExampleLayer : public elm::Layer
+class example_layer : public elm::layer
 {
 public:
-	ExampleLayer()
-		: Layer("ExampleLayer")
+	example_layer(void)
+		: layer("ExampleLayer")
 	{
 	}
 
@@ -15,7 +15,7 @@ public:
 		//ELM_TRACE("{0}::on_update()", get_name());
 	}
 
-	virtual void on_event(elm::Event& e) override
+	virtual void on_event(elm::event& e) override
 	{
 		//ELM_TRACE("{0}::on_event({1})", get_name(), e);
 	}
@@ -29,11 +29,11 @@ public:
 
 };
 
-Sandbox::Sandbox()
+sandbox::sandbox()
 {
-	push_layer(new ExampleLayer());
+	push_layer(new example_layer());
 }
 
-Sandbox::~Sandbox()
+sandbox::~sandbox()
 {
 }

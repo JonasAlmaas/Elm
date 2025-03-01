@@ -2,5 +2,5 @@
 
 namespace elm {
 
-	RendererAPI Renderer::s_renderer_api = RendererAPI::OpenGL;
+	renderer_api renderer::s_renderer_api = renderer_api::opengl;
 }

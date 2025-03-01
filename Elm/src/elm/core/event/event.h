@@ -6,51 +6,54 @@
 
 namespace elm {
 
-	enum class EventType {
-		None = 0,
-		WindowClose, WindowMinimize, WindowResize, WindowFocus, WindowBlur, WindowMoved,
-		KeyPressed, KeyReleased, KeyTyped,
-		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
+	enum class event_type {
+		EVENT_TYPE_NONE = 0,
+		EVENT_TYPE_WINDOW_CLOSE, EVENT_TYPE_WINDOW_MINIMIZE, EVENT_TYPE_WINDOW_RESIZ,
+		EVENT_TYPE_WINDOW_FOCUS, EVENT_TYPE_WINDOW_BLUR, EVENT_TYPE_WINDOW_MOVED,
+		EVENT_TYPE_KEY_PRESSED, EVENT_TYPE_KEY_RELEASED, EVENT_TYPE_KEY_TYPED,
+		EVENT_TYPE_MOUSE_BUTTON_PRESSED, EVENT_TYPE_MOUSE_BUTTON_RELEASED, EVENT_TYPE_MOUSE_MOVED, EVENT_TYPE_MOUSE_SCROLLED
 	};
 
-	enum EventCategory {
-		None = 0,
-		EventCategoryApplication = 1<<0,
-		EventCategoryInput = 1<<1,
-		EventCategoryKeyboard = 1<<2,
-		EventCategoryMouse = 1<<3,
-		EventCategoryMouseButton = 1<<4,
+	enum event_category {
+		EVENT_CATEGORY_NONE = 0,
+		EVENT_CATEGORY_APPLICATION = 1<<0,
+		EVENT_CATEGORY_INPUT = 1<<1,
+		EVENT_CATEGORY_KEYBOARD = 1<<2,
+		EVENT_CATEGORY_MOUSE = 1<<3,
+		EVENT_CATEGORY_MOUSE_BUTTON = 1<<4,
 	};
 
-	#define EVENT_CLASS_TYPE(type) static EventType get_static_type(void) { return EventType::##type; }\
-		virtual EventType get_event_type(void) const override { return get_static_type(); }\
-		virtual const char* get_name(void) const override { return #type; }\
+	#define EVENT_CLASS_TYPE(type) static event_type get_static_type(void) { return event_type::##type; }\
+		virtual event_type get_event_type(void) const override { return get_static_type(); }\
+		virtual const char* get_name(void) const override { return #type; }
 
 	#define EVENT_CLASS_CATEGORY(category) virtual int get_category_flags(void) const override { return category; }
 
-	class Event
+	class event
 	{
-		friend class EventDispatcher;
+		friend class event_dispatcher;
 	public:
-		virtual ~Event(void) = default;
+		virtual ~event(void) = default;
 
-		bool handled = false;
-
-		virtual EventType get_event_type(void) const = 0;
+		virtual event_type get_event_type(void) const = 0;
 		virtual const char *get_name(void) const = 0;
 		virtual int get_category_flags(void) const = 0;
 		virtual std::string to_string(void) const { return get_name(); }
 
-		bool is_in_category(EventCategory category) const
+		bool is_in_category(event_category category) const
 		{
 			return get_category_flags() & category;
 		}
+
+	public:
+		bool handled = false;
+
 	};
 
-	class EventDispatcher
+	class event_dispatcher
 	{
 	public:
-		EventDispatcher(Event& e)
+		event_dispatcher(event& e)
 			: m_event(e)
 		{
 		}
@@ -66,13 +69,13 @@ namespace elm {
 		}
 
 	private:
-		Event& m_event;
+		event& m_event;
 	};
 }
 
-inline std::ostream& operator<<(std::ostream& os, const elm::Event& e)
+inline std::ostream& operator<<(std::ostream& os, const elm::event& e)
 {
 	return os << e.to_string();
 }
 
-template <> struct fmt::formatter<elm::Event> : fmt::ostream_formatter {};
+template <> struct fmt::formatter<elm::event> : fmt::ostream_formatter {};

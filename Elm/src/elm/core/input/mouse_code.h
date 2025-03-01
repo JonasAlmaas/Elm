@@ -4,11 +4,11 @@
 
 namespace elm {
 
-	using MouseCode = uint16_t;
+	using mouse_code = uint16_t;
 
-	namespace Mouse {
+	namespace mouse {
 
-		enum : MouseCode {
+		enum : mouse_code {
 			// From glfw3.h
 			Button0 = 0,
 			Button1 = 1,

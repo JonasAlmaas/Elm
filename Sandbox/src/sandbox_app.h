@@ -2,9 +2,9 @@
 
 #include "elm.h"
 
-class Sandbox : public elm::Application
+class sandbox : public elm::application
 {
 public:
-	Sandbox();
-	~Sandbox();
+	sandbox();
+	~sandbox();
 };

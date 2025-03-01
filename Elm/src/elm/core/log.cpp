@@ -4,10 +4,10 @@
 
 namespace elm {
 
-	std::shared_ptr<spdlog::logger> Log::s_core_logger;
-	std::shared_ptr<spdlog::logger> Log::s_client_logger;
+	std::shared_ptr<spdlog::logger> log::s_core_logger;
+	std::shared_ptr<spdlog::logger> log::s_client_logger;
 
-	void Log::init(void)
+	void log::init(void)
 	{
 		spdlog::set_pattern("%^[%T] %n: %v%$");
 

@@ -11,11 +11,11 @@ struct GLFWwindow;
 
 namespace elm {
 
-	class WindowsWindow : public Window
+	class windows_window : public window
 	{
 	public:
-		WindowsWindow(const WindowSpecification& spec);
-		virtual ~WindowsWindow();
+		windows_window(const window_specification& spec);
+		virtual ~windows_window();
 
 		virtual void on_update(void) override;
 
@@ -23,19 +23,19 @@ namespace elm {
 		virtual inline uint32_t get_height(void) const override { return m_data.width; }
 
 		// Window attributes
-		virtual void set_event_callback(const EventCallbackFn& cb) override;
+		virtual void set_event_callback(const event_callback_fn& cb) override;
 		virtual void set_vsync(bool enabled) override;
 		virtual inline bool is_vsync(void) const override { return m_data.vsync; }
 
 		virtual void *get_native_window(void) override { return (void *)m_window; }
 
 	private:
-		virtual void init(const WindowSpecification& specs);
+		virtual void init(const window_specification& specs);
 		virtual void shutdown(void);
 
 	private:
 		GLFWwindow* m_window;
-		std::unique_ptr<GraphicsContext> m_context;
+		std::unique_ptr<graphics_context> m_context;
 
 		struct WindowData
 		{
@@ -43,7 +43,7 @@ namespace elm {
 			uint32_t width, height;
 			bool vsync;
 
-			EventCallbackFn event_callback;
+			event_callback_fn event_callback;
 		};
 
 		WindowData m_data;

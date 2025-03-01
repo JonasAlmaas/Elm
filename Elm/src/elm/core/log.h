@@ -11,7 +11,7 @@
 
 namespace elm {
 
-	class Log
+	class log
 	{
 	public:
 		static void init(void);
@@ -25,14 +25,14 @@ namespace elm {
 	};
 }
 
-#define ELM_CORE_TRACE(...)             ::elm::Log::get_core_logger()->trace(__VA_ARGS__)
-#define ELM_CORE_INFO(...)              ::elm::Log::get_core_logger()->info(__VA_ARGS__)
-#define ELM_CORE_WARN(...)              ::elm::Log::get_core_logger()->warn(__VA_ARGS__)
-#define ELM_CORE_ERROR(...)             ::elm::Log::get_core_logger()->error(__VA_ARGS__)
-#define ELM_CORE_CRITICAL(...)          ::elm::Log::get_core_logger()->critical(__VA_ARGS__)
+#define ELM_CORE_TRACE(...)             ::elm::log::get_core_logger()->trace(__VA_ARGS__)
+#define ELM_CORE_INFO(...)              ::elm::log::get_core_logger()->info(__VA_ARGS__)
+#define ELM_CORE_WARN(...)              ::elm::log::get_core_logger()->warn(__VA_ARGS__)
+#define ELM_CORE_ERROR(...)             ::elm::log::get_core_logger()->error(__VA_ARGS__)
+#define ELM_CORE_CRITICAL(...)          ::elm::log::get_core_logger()->critical(__VA_ARGS__)
 
-#define ELM_TRACE(...)                  ::elm::Log::get_client_logger()->trace(__VA_ARGS__)
-#define ELM_INFO(...)                   ::elm::Log::get_client_logger()->info(__VA_ARGS__)
-#define ELM_WARN(...)                   ::elm::Log::get_client_logger()->warn(__VA_ARGS__)
-#define ELM_ERROR(...)                  ::elm::Log::get_client_logger()->error(__VA_ARGS__)
-#define ELM_CRITICAL(...)               ::elm::Log::get_client_logger()->critical(__VA_ARGS__)
+#define ELM_TRACE(...)                  ::elm::log::get_client_logger()->trace(__VA_ARGS__)
+#define ELM_INFO(...)                   ::elm::log::get_client_logger()->info(__VA_ARGS__)
+#define ELM_WARN(...)                   ::elm::log::get_client_logger()->warn(__VA_ARGS__)
+#define ELM_ERROR(...)                  ::elm::log::get_client_logger()->error(__VA_ARGS__)
+#define ELM_CRITICAL(...)               ::elm::log::get_client_logger()->critical(__VA_ARGS__)

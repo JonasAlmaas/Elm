@@ -6,9 +6,9 @@
 
 int main(int argc, char** argv)
 {
-	elm::Log::init();
+	elm::log::init();
 
-	auto app = elm::Application::Create();
+	auto app = elm::application::create();
 	app->run();
 	delete app;
 

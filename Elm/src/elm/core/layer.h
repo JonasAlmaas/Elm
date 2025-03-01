@@ -5,20 +5,20 @@
 
 namespace elm {
 
-	class Layer
+	class layer
 	{
 	public:
-		Layer(const std::string& name = "Layer")
+		layer(const std::string& name = "Layer")
 			: m_debug_name(name)
 		{
 		}
 
-		virtual ~Layer() = default;
+		virtual ~layer() = default;
 
 		virtual void on_attach(void) {}
 		virtual void on_detach(void) {}
 		virtual void on_update(void) {}
-		virtual void on_event(Event& e) {}
+		virtual void on_event(event& e) {}
 
 		virtual void on_imgui_render(void) {}
 

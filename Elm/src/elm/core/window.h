@@ -7,7 +7,7 @@
 
 namespace elm {
 
-	struct WindowSpecification
+	struct window_specification
 	{
 		std::string title = "Elm engine";
 		uint32_t width = 1920u;
@@ -15,12 +15,12 @@ namespace elm {
 		bool vsync = true;
 	};
 
-	class Window
+	class window
 	{
 	public:
-		using EventCallbackFn = std::function<void(Event&)>;
+		using event_callback_fn = std::function<void(event&)>;
 
-		virtual ~Window(void) = default;
+		virtual ~window(void) = default;
 
 		virtual void on_update(void) = 0;
 
@@ -28,13 +28,13 @@ namespace elm {
 		virtual uint32_t get_height(void) const = 0;
 
 		// Window attributes
-		virtual void set_event_callback(const EventCallbackFn& cb) = 0;
+		virtual void set_event_callback(const event_callback_fn& cb) = 0;
 		virtual void set_vsync(bool enabled) = 0;
 		virtual bool is_vsync(void) const = 0;
 
 		virtual void *get_native_window(void) = 0;
 
 	public:
-		static Window *create(const WindowSpecification& spec = WindowSpecification());
+		static window *create(const window_specification& spec = window_specification());
 	};
 }

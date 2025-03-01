@@ -5,11 +5,11 @@
 
 namespace elm {
 
-	class Shader
+	class shader
 	{
 	public:
-		Shader(const std::string& vertex_src, const std::string& fragment_src);
-		~Shader(void);
+		shader(const std::string& vertex_src, const std::string& fragment_src);
+		~shader(void);
 
 		void bind(void) const;
 		void unbind(void) const;

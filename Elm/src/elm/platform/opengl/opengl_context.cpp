@@ -5,13 +5,13 @@
 
 namespace elm {
 
-	OpenGLContext::OpenGLContext(GLFWwindow *window)
+	opengl_context::opengl_context(GLFWwindow *window)
 		: m_window(window)
 	{
 		ELM_CORE_ASSERT(m_window, "Window handle is null");
 	}
 
-	void OpenGLContext::init(void)
+	void opengl_context::init(void)
 	{
 		glfwMakeContextCurrent(m_window);
 
@@ -26,7 +26,7 @@ namespace elm {
 		ELM_CORE_ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5), "ELM requires at least OpenGL version 4.5");
 	}
 
-	void OpenGLContext::swap_buffers(void)
+	void opengl_context::swap_buffers(void)
 	{
 		glfwSwapBuffers(m_window);
 	}

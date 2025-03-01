@@ -6,34 +6,34 @@
 
 namespace elm {
 
-	class WindowCloseEvent : public Event
+	class window_close_event : public event
 	{
 	public:
-		WindowCloseEvent(void) = default;
+		window_close_event(void) = default;
 
-		EVENT_CLASS_TYPE(WindowClose)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		EVENT_CLASS_TYPE(EVENT_TYPE_WINDOW_CLOSE)
+		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_APPLICATION)
 	};
 
-	class WindowMinimizeEvent : public Event
+	class window_minimize_event : public event
 	{
 	public:
-		WindowMinimizeEvent(bool minimized)
+		window_minimize_event(bool minimized)
 			: m_minimized(minimized) {}
 
 		inline bool is_minimized(void) const { return m_minimized; }
 
-		EVENT_CLASS_TYPE(WindowMinimize)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		EVENT_CLASS_TYPE(EVENT_TYPE_WINDOW_MINIMIZE)
+		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_APPLICATION)
 
 	private:
 		bool m_minimized;
 	};
 
-	class WindowResizeEvent : public Event
+	class window_resize_event : public event
 	{
 	public:
-		WindowResizeEvent(uint32_t width, uint32_t height)
+		window_resize_event(uint32_t width, uint32_t height)
 			: m_width(width), m_height(height) {}
 
 		inline uint32_t get_width(void) const { return m_width; }
@@ -46,8 +46,8 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(WindowResize)
-		EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		EVENT_CLASS_TYPE(EVENT_TYPE_WINDOW_RESIZ)
+		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_APPLICATION)
 
 	private:
 		uint32_t m_width, m_height;

@@ -4,11 +4,11 @@
 
 namespace elm {
 
-	using KeyCode = uint16_t;
+	using key_code = uint16_t;
 
 	namespace key {
 
-		enum : KeyCode {
+		enum : key_code {
 			// From glfw3.h
 			Space = 32,
 			Apostrophe = 39, /* ' */

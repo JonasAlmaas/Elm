@@ -5,8 +5,8 @@
 
 namespace elm {
 
-	Application* Application::Create(void)
+	application* application::create(void)
 	{
-		return new Sandbox();
+		return new sandbox();
 	}
 }
