@@ -1,10 +1,12 @@
 #include "shader.h"
 
+#include <glm/gtc/type_ptr.hpp>
 #include <glad/glad.h>
 
 namespace elm {
 
 	shader::shader(const std::string& vertex_src, const std::string& fragment_src)
+		: m_renderer_id(UINT32_MAX)
 	{
 		GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -97,5 +99,11 @@ namespace elm {
 	void shader::unbind(void) const
 	{
 		glUseProgram(0);
+	}
+
+	void shader::upload_uniform_mat4(const std::string &name, const glm::mat4 &mat) const
+	{
+		GLint location = glGetUniformLocation(m_renderer_id, name.c_str());
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	}
 }

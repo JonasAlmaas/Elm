@@ -8,7 +8,7 @@ namespace elm {
 	application* application::s_instance = nullptr;
 
 	application::application(void)
-		: m_running(true)
+		: m_camera(-1.0f, 1.0f, -1.0f, 1.0f)
 	{
 		ELM_CORE_ASSERT(!s_instance, "Application already exists");
 		s_instance = this;
@@ -70,12 +70,14 @@ namespace elm {
 layout(location = 0) in vec3 a_position;
 layout(location = 1) in vec4 a_color;
 
+uniform mat4 u_view_projection;
+
 out vec4 v_color;
 
 void main()
 {
 	v_color = a_color;
-	gl_Position = vec4(a_position, 1.0);
+	gl_Position = u_view_projection * vec4(a_position, 1.0);
 }
 )";
 
@@ -109,13 +111,10 @@ void main()
 			render_command::set_clear_color({ 0.1f, 0.1f, 0.1f, 1 });
 			render_command::clear();
 
-			renderer::begin_scene();
+			renderer::begin_scene(&m_camera);
 
-			m_shader->bind();
-			renderer::submit(m_vertex_array2);
-
-			m_shader->bind();
-			renderer::submit(m_vertex_array);
+			renderer::submit(m_shader, m_vertex_array2);
+			renderer::submit(m_shader, m_vertex_array);
 
 			renderer::end_scene();
 

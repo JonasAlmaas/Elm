@@ -1,6 +1,7 @@
 #pragma once
 
 #include "elm/core/base.h"
+#include <glm/glm.hpp>
 #include <string>
 
 namespace elm {
@@ -13,6 +14,8 @@ namespace elm {
 
 		void bind(void) const;
 		void unbind(void) const;
+
+		void upload_uniform_mat4(const std::string &name, const glm::mat4 &mat) const;
 
 	private:
 		uint32_t m_renderer_id;
