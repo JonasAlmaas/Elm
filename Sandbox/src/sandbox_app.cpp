@@ -16,7 +16,7 @@ public:
 
 	void on_event(elm::Event& e) override
 	{
-		ELM_TRACE("{0}::on_event({1})", get_name(), e.to_string());
+		//ELM_TRACE("{0}::on_event({1})", get_name(), e.to_string());
 	}
 };
 
