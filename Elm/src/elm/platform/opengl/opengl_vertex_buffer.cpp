@@ -25,4 +25,9 @@ namespace elm {
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
+
+	void opengl_vertex_buffer::set_layout(const vertex_buffer_layout *layout)
+	{
+		m_layout = *layout;
+	}
 }

@@ -28,7 +28,7 @@ namespace elm {
 		void push_layer(layer *layer);
 		void push_overlay(layer *layer);
 
-		inline window* get_window(void) const { return &*m_window; }
+		inline window* get_window(void) const { return m_window.get(); }
 
 	public:
 		static inline application *get(void) { return s_instance; }

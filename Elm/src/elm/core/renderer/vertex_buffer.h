@@ -1,6 +1,7 @@
 #pragma once
 
 #include "elm/core/base.h"
+#include "vertex_buffer_layout.h"
 #include <stdint.h>
 
 namespace elm {
@@ -12,6 +13,9 @@ namespace elm {
 
 		virtual void bind(void) const = 0;
 		virtual void unbind(void) const = 0;
+
+		virtual const vertex_buffer_layout *get_layout(void) const = 0;
+		virtual void set_layout(const vertex_buffer_layout *layout) = 0;
 
 	public:
 		static vertex_buffer *create(const void *vertices, uint32_t size);

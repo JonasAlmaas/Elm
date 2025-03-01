@@ -2,6 +2,7 @@
 
 #include "elm/core/renderer/vertex_buffer.h"
 #include <stdint.h>
+#include <memory>
 
 namespace elm {
 
@@ -14,8 +15,12 @@ namespace elm {
 		virtual void bind(void) const override;
 		virtual void unbind(void) const  override;
 
+		inline virtual const vertex_buffer_layout *get_layout(void) const override { return &m_layout; }
+		virtual void set_layout(const vertex_buffer_layout *layout) override;
+
 	private:
 		uint32_t m_renderer_id;
+		vertex_buffer_layout m_layout;
 
 	};
 }
