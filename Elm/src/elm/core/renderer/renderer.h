@@ -1,21 +1,20 @@
 #pragma once
 
 #include "elm/core/base.h"
+#include "renderer_api.h"
+#include "vertex_array.h"
 
 namespace elm {
-
-	enum class renderer_api {
-		none = 0,
-		opengl
-	};
 
 	class renderer
 	{
 	public:
-		inline static renderer_api get_api(void) { return s_renderer_api; }
+		static void begin_scene(void);
+		static void end_scene(void);
 
-	public:
-		static renderer_api s_renderer_api;
+		static void submit(const std::shared_ptr<vertex_array> &vertex_array);
+
+		inline static renderer_api::api get_api(void) { return renderer_api::get_api(); }
 
 	};
 }

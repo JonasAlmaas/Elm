@@ -42,8 +42,9 @@ namespace elm {
 		layer_stack m_layer_stack;
 		imgui_layer *m_imgui_layer;
 
-		std::unique_ptr<vertex_array> m_vertex_array;
-		std::unique_ptr<shader> m_shader;
+		std::shared_ptr<vertex_array> m_vertex_array;
+		std::shared_ptr<vertex_array> m_vertex_array2;
+		std::shared_ptr<shader> m_shader;
 
 	private:
 		static application *s_instance;
