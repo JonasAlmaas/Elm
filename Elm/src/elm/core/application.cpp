@@ -1,33 +1,12 @@
 #include "application.h"
 
+#include "elm/core/renderer/vertex_buffer.h"
+#include "elm/core/renderer/index_buffer.h"
 #include <glad/glad.h>
 
 namespace elm {
 
 	application* application::s_instance = nullptr;
-
-	static GLenum shader_data_type_to_opengl_base_type(shader_data_type type)
-	{
-		switch (type) {
-		case elm::shader_data_type::Bool:
-			return GL_BOOL;
-		case elm::shader_data_type::Int:
-		case elm::shader_data_type::Int2:
-		case elm::shader_data_type::Int3:
-		case elm::shader_data_type::Int4:
-			return GL_INT;
-		case elm::shader_data_type::Float:
-		case elm::shader_data_type::Float2:
-		case elm::shader_data_type::Float3:
-		case elm::shader_data_type::Float4:
-		case elm::shader_data_type::Mat3:
-		case elm::shader_data_type::Mat4:
-			return GL_FLOAT;
-		}
-
-		ELM_CORE_ASSERT(false, "Unknown shader data type");
-		return 0;
-	}
 
 	application::application(void)
 		: m_running(true)
@@ -42,8 +21,7 @@ namespace elm {
 		push_overlay(m_imgui_layer);
 
 		// Hello triangle
-		glGenVertexArrays(1, &m_vertex_array);
-		glBindVertexArray(m_vertex_array);
+		m_vertex_array.reset(vertex_array::create());
 
 		float vertices[7 * 3] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
@@ -51,30 +29,16 @@ namespace elm {
 			 0.0f,  0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
 		};
 
-		m_vertex_buffer.reset(vertex_buffer::create((void *)vertices, sizeof vertices));
-		{
-			vertex_buffer_layout layout = {
-				{ shader_data_type::Float3, "a_position" },
-				{ shader_data_type::Float4, "a_color" }};
-			m_vertex_buffer->set_layout(&layout);
-		}
-
-		const vertex_buffer_layout *layout = m_vertex_buffer->get_layout();
-		uint32_t ix = 0;
-		for (const auto &el : *layout) {
-			glEnableVertexAttribArray(ix);
-			glVertexAttribPointer(
-				ix,
-				el.get_component_count(),
-				shader_data_type_to_opengl_base_type(el.type),
-				el.normalized ? GL_TRUE : GL_FALSE,
-				layout->get_stride(),
-				(const void *)el.offset);
-			++ix;
-		}
+		auto vb = std::shared_ptr<vertex_buffer>(vertex_buffer::create((void *)vertices, sizeof vertices));
+		vertex_buffer_layout layout = {
+			{ shader_data_type::Float3, "a_position" },
+			{ shader_data_type::Float4, "a_color" }};
+		vb->set_layout(&layout);
+		m_vertex_array->add_vertex_buffer(vb);
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		m_index_buffer.reset(index_buffer::create(indices, sizeof indices / sizeof(uint32_t)));
+		auto ib = std::shared_ptr<index_buffer>(index_buffer::create(indices, sizeof indices / sizeof(uint32_t)));
+		m_vertex_array->set_index_buffer(ib);
 
 		std::string vertex_src = R"(
 #version 330 core
@@ -118,8 +82,8 @@ void main()
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			m_shader->bind();
-			glBindVertexArray(m_vertex_array);
-			glDrawElements(GL_TRIANGLES, m_index_buffer->get_count(), GL_UNSIGNED_INT, nullptr);
+			m_vertex_array->bind();
+			glDrawElements(GL_TRIANGLES, /*m_index_buffer->get_count()*/ 3, GL_UNSIGNED_INT, nullptr);
 
 			for (auto layer : m_layer_stack) {
 				layer->on_update();

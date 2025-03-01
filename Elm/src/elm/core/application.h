@@ -9,8 +9,7 @@
 #include <memory>
 
 #include "elm/core/renderer/shader.h"
-#include "elm/core/renderer/vertex_buffer.h"
-#include "elm/core/renderer/index_buffer.h"
+#include "elm/core/renderer/vertex_array.h"
 
 namespace elm {
 
@@ -43,10 +42,8 @@ namespace elm {
 		layer_stack m_layer_stack;
 		imgui_layer *m_imgui_layer;
 
-		uint32_t m_vertex_array;
+		std::unique_ptr<vertex_array> m_vertex_array;
 		std::unique_ptr<shader> m_shader;
-		std::unique_ptr<vertex_buffer> m_vertex_buffer;
-		std::unique_ptr<index_buffer> m_index_buffer;
 
 	private:
 		static application *s_instance;
