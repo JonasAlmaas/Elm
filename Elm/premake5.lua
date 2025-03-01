@@ -2,6 +2,7 @@ project "Elm"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++23"
+	staticruntime "on"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -9,6 +10,8 @@ project "Elm"
 	files {
 		"src/**.h",
 		"src/**.cpp",
+
+		"include/**.h",
 	}
 
 	includedirs {
