@@ -14,17 +14,17 @@ namespace elm {
 		WindowsWindow(const WindowSpecification& spec);
 		virtual ~WindowsWindow();
 
-		void on_update(void) override;
+		virtual void on_update(void) override;
 
-		inline uint32_t get_width(void) const override { return m_data.width; }
-		inline uint32_t get_height(void) const override { return m_data.width; }
+		virtual inline uint32_t get_width(void) const override { return m_data.width; }
+		virtual inline uint32_t get_height(void) const override { return m_data.width; }
 
 		// Window attributes
-		void set_event_callback(const EventCallbackFn& cb) override;
-		void set_vsync(bool enabled) override;
-		inline bool is_vsync(void) const override { return m_data.vsync; }
+		virtual void set_event_callback(const EventCallbackFn& cb) override;
+		virtual void set_vsync(bool enabled) override;
+		virtual inline bool is_vsync(void) const override { return m_data.vsync; }
 
-		void *get_native_window(void) override { return (void *)m_window; }
+		virtual void *get_native_window(void) override { return (void *)m_window; }
 
 	private:
 		virtual void init(const WindowSpecification& specs);
