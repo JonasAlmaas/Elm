@@ -8,10 +8,6 @@
 #include "elm/imgui/imgui_layer.h"
 #include <memory>
 
-#include "elm/core/renderer/shader.h"
-#include "elm/core/renderer/vertex_array.h"
-#include "elm/core/renderer/camera/orthographic_camera.h"
-
 namespace elm {
 
 	class application
@@ -42,11 +38,6 @@ namespace elm {
 		std::unique_ptr<window> m_window;
 		layer_stack m_layer_stack;
 		imgui_layer *m_imgui_layer;
-
-		std::shared_ptr<vertex_array> m_vertex_array;
-		std::shared_ptr<vertex_array> m_vertex_array2;
-		std::shared_ptr<shader> m_shader;
-		orthographic_camera m_camera;
 
 	private:
 		static application *s_instance;
