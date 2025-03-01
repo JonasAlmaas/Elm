@@ -21,7 +21,7 @@ namespace elm {
 
 	private:
 		std::vector<Layer*> m_layers;
-		uint32_t m_layer_insert_ix;
+		uint32_t m_layer_insert_ix = 0;
 
 	};
 }

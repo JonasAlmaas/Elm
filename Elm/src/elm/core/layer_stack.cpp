@@ -3,9 +3,7 @@
 namespace elm {
 
 	LayerStack::LayerStack(void)
-		: m_layer_insert_ix(0)
 	{
-
 	}
 
 	LayerStack::~LayerStack(void)
@@ -19,11 +17,13 @@ namespace elm {
 	{
 		m_layers.emplace(m_layers.begin() + m_layer_insert_ix, layer);
 		++m_layer_insert_ix;
+		layer->on_attach();
 	}
 
 	void LayerStack::push_overlay(Layer *layer)
 	{
 		m_layers.emplace_back(layer);
+		layer->on_attach();
 	}
 
 	bool LayerStack::pop_layer(Layer *layer)
@@ -32,9 +32,10 @@ namespace elm {
 		if (it != m_layers.end()) {
 			m_layers.erase(it);
 			--m_layer_insert_ix;
+			layer->on_detach();
+			delete layer;
 			return true;
 		} else {
-
 			return false;
 		}
 	}
@@ -44,9 +45,10 @@ namespace elm {
 		auto it = std::find(m_layers.begin(), m_layers.end(), layer);
 		if (it != m_layers.end()) {
 			m_layers.erase(it);
+			layer->on_detach();
+			delete layer;
 			return true;
 		} else {
-
 			return false;
 		}
 	}

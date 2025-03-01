@@ -14,6 +14,9 @@ namespace elm {
 
 		m_window = std::unique_ptr<Window>(Window::create());
 		m_window->set_event_callback(BIND_EVENT_FN(Application::on_event));
+
+		m_imgui_layer = new ImGuiLayer();
+		push_overlay(m_imgui_layer);
 	}
 
 	Application::~Application(void)
@@ -30,6 +33,12 @@ namespace elm {
 				layer->on_update();
 			}
 
+			m_imgui_layer->begin();
+			for (auto layer : m_layer_stack) {
+				layer->on_imgui_render();
+			}
+			m_imgui_layer->end();
+
 			m_window->on_update();
 		}
 	}
@@ -37,13 +46,11 @@ namespace elm {
 	void Application::push_layer(Layer* layer)
 	{
 		m_layer_stack.push_layer(layer);
-		layer->on_attach();
 	}
 
 	void Application::push_overlay(Layer* layer)
 	{
 		m_layer_stack.push_overlay(layer);
-		layer->on_attach();
 	}
 
 	void Application::on_event(Event& e)

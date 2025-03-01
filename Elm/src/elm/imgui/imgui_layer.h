@@ -10,15 +10,16 @@ namespace elm {
 		ImGuiLayer();
 		~ImGuiLayer();
 
-		void on_attach(void) override;
-		void on_detach(void) override;
-		void on_update(void) override;
-		void on_event(Event& e) override;
+		virtual void on_attach(void) override;
+		virtual void on_detach(void) override;
+		virtual void on_event(Event& e) override;
+
+		void begin(void);
+		void end(void);
 
 		void set_block_events(bool block) { m_block_events = block; }
 
 	private:
-		float m_time = 0.0f;
 		bool m_block_events = false;
 
 	};

@@ -20,6 +20,8 @@ namespace elm {
 		virtual void on_update(void) {}
 		virtual void on_event(Event& e) {}
 
+		virtual void on_imgui_render(void) {}
+
 		inline const std::string& get_name(void) const { return m_debug_name; }
 
 	private:

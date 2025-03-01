@@ -5,6 +5,7 @@
 #include "elm/core/event/window_event.h"
 #include "elm/core/layer_stack.h"
 #include "elm/core/window.h"
+#include "elm/imgui/imgui_layer.h"
 #include <memory>
 
 namespace elm {
@@ -36,6 +37,7 @@ namespace elm {
 		bool m_running;
 		std::unique_ptr<Window> m_window;
 		LayerStack m_layer_stack;
+		ImGuiLayer *m_imgui_layer;
 
 	private:
 		static Application *s_instance;
