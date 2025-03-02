@@ -26,8 +26,8 @@ private:
 	std::shared_ptr<elm::shader> m_texture_shader;
 
 	std::shared_ptr<elm::texture_2d> m_texture;
+	std::shared_ptr<elm::texture_2d> m_texture2;
 
 	float m_camera_move_speed = 1.0f;
 	float m_camera_rot_speed = 10.0f;
-
 };

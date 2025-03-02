@@ -13,6 +13,8 @@ namespace elm {
 	class renderer
 	{
 	public:
+		static void init(void);
+
 		static void begin_scene(const camera *camera);
 		static void end_scene(void);
 

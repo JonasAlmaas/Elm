@@ -10,6 +10,11 @@ namespace elm {
 	class render_command
 	{
 	public:
+		inline static void init(void)
+		{
+			s_renderer_api->init();
+		}
+
 		inline static void set_clear_color(const glm::vec4 &color)
 		{
 			s_renderer_api->set_clear_color(color);
@@ -27,7 +32,5 @@ namespace elm {
 
 	private:
 		static std::unique_ptr<renderer_api> s_renderer_api;
-
 	};
-
 }

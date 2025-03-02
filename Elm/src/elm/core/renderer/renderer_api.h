@@ -16,6 +16,8 @@ namespace elm {
 		};
 
 	public:
+		virtual void init(void) = 0;
+
 		virtual void set_clear_color(const glm::vec4 &color) = 0;
 		virtual void clear(void) = 0;
 
@@ -26,6 +28,5 @@ namespace elm {
 
 	private:
 		static api s_api;
-
 	};
 }

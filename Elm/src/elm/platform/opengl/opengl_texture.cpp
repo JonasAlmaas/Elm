@@ -16,13 +16,29 @@ namespace elm {
 		m_width = (uint32_t)width;
 		m_height = (uint32_t)height;
 
+		GLenum internal_format = 0, data_format = 0;
+
+		switch (channels) {
+		case 3:
+			internal_format = GL_RGB8;
+			data_format = GL_RGB;
+			break;
+		case 4:
+			internal_format = GL_RGBA8;
+			data_format = GL_RGBA;
+			break;
+		default:
+			ELM_CORE_ASSERT(false, "Texture format not supported");
+			break;
+		}
+
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_renderer_id);
-		glTextureStorage2D(m_renderer_id, 1, GL_RGB8, m_width, m_height);
+		glTextureStorage2D(m_renderer_id, 1, internal_format, m_width, m_height);
 
 		glTextureParameteri(m_renderer_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_renderer_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		glTextureSubImage2D(m_renderer_id, 0, 0, 0, m_width, m_height, GL_RGB, GL_UNSIGNED_BYTE, (const void *)data);
+		glTextureSubImage2D(m_renderer_id, 0, 0, 0, m_width, m_height, data_format, GL_UNSIGNED_BYTE, (const void *)data);
 
 		stbi_image_free(data);
 	}

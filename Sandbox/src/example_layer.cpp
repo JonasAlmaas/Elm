@@ -122,6 +122,7 @@ example_layer::example_layer(void)
 		m_texture_shader = elm::shader::create(vertex_src, fragment_src);
 
 		m_texture = elm::texture_2d::create("content/textures/dev/checkerboard.png");
+		m_texture2 = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png");
 
 		std::dynamic_pointer_cast<elm::opengl_shader>(m_texture_shader)->bind();
 		std::dynamic_pointer_cast<elm::opengl_shader>(m_texture_shader)->upload_uniform_int("u_texture", 0);
@@ -172,6 +173,9 @@ void example_layer::on_update(elm::timestep ts)
 	}
 
 	m_texture->bind();
+	elm::renderer::submit(m_texture_shader, m_square_va, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+	m_texture2->bind();
 	elm::renderer::submit(m_texture_shader, m_square_va, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 	elm::renderer::submit(m_flat_color_shader, m_triangle_va);

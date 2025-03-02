@@ -1,6 +1,7 @@
 #include "application.h"
+#include "elm/core/renderer/renderer.h"
 
-// Temp
+// Temp (used to get time)
 #include <GLFW/glfw3.h>
 
 namespace elm {
@@ -14,6 +15,8 @@ namespace elm {
 
 		m_window = std::unique_ptr<window>(window::create());
 		m_window->set_event_callback(ELM_BIND_EVENT_FN(application::on_event));
+
+		renderer::init();
 
 		m_imgui_layer = new imgui_layer();
 		push_overlay(m_imgui_layer);
