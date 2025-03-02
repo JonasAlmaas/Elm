@@ -15,17 +15,27 @@ namespace elm {
 	void orthographic_camera_controller::on_update(timestep ts)
 	{
 		if (input::is_key_pressed(key::A)) {
-			m_camera.set_position(m_camera.get_position() + glm::vec3(-m_translation_speed * ts.get_seconds(), 0.0f, 0.0f));
-		}
-		else if (elm::input::is_key_pressed(elm::key::D)) {
-			m_camera.set_position(m_camera.get_position() + glm::vec3(m_translation_speed * ts.get_seconds(), 0.0f, 0.0f));
+			glm::vec3 pos = m_camera.get_position();
+			pos.x -= glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
+			pos.y -= glm::sin(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
+			m_camera.set_position(pos);
+		} else if (elm::input::is_key_pressed(elm::key::D)) {
+			glm::vec3 pos = m_camera.get_position();
+			pos.x += glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
+			pos.y += glm::sin(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
+			m_camera.set_position(pos);
 		}
 
 		if (elm::input::is_key_pressed(elm::key::W)) {
-			m_camera.set_position(m_camera.get_position() + glm::vec3(0.0f, m_translation_speed * ts.get_seconds(), 0.0f));
-		}
-		else if (elm::input::is_key_pressed(elm::key::S)) {
-			m_camera.set_position(m_camera.get_position() + glm::vec3(0.0f, -m_translation_speed * ts.get_seconds(), 0.0f));
+			glm::vec3 pos = m_camera.get_position();
+			pos.x += -glm::sin(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
+			pos.y += glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
+			m_camera.set_position(pos);
+		} else if (elm::input::is_key_pressed(elm::key::S)) {
+			glm::vec3 pos = m_camera.get_position();
+			pos.x -= -glm::sin(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
+			pos.y -= glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
+			m_camera.set_position(pos);
 		}
 
 		if (m_rotation) {
