@@ -1,6 +1,6 @@
 #pragma once
 
-#include "elm/core/renderer/camera/orthographic_camera.h"
+#include "orthographic_camera.h"
 #include "elm/core/event/mouse_event.h"
 #include "elm/core/event/window_event.h"
 #include "elm/core/timestep.h"

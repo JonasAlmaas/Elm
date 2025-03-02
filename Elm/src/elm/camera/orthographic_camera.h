@@ -1,7 +1,7 @@
 #pragma once
 
 #include "elm/core/base.h"
-#include "camera.h"
+#include "elm/core/renderer/camera.h"
 #include <glm/glm.hpp>
 
 namespace elm {

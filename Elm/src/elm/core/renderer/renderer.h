@@ -4,7 +4,7 @@
 #include "elm/core/renderer/renderer_api.h"
 #include "elm/core/renderer/shader.h"
 #include "elm/core/renderer/vertex_array.h"
-#include "elm/core/renderer/camera/camera.h"
+#include "elm/core/renderer/camera.h"
 #include <glm/glm.hpp>
 #include <memory>
 
