@@ -1,5 +1,8 @@
 #include "application.h"
 
+// Temp
+#include <GLFW/glfw3.h>
+
 namespace elm {
 
 	application* application::s_instance = nullptr;
@@ -23,8 +26,12 @@ namespace elm {
 	void application::run(void)
 	{
 		while (m_running) {
+			float time = (float)glfwGetTime();
+			timestep timestep(time - m_last_frame_time_sec);
+			m_last_frame_time_sec = time;
+
 			for (auto layer : m_layer_stack) {
-				layer->on_update();
+				layer->on_update(timestep);
 			}
 
 			m_imgui_layer->begin();

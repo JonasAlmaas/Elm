@@ -39,6 +39,8 @@ namespace elm {
 		layer_stack m_layer_stack;
 		imgui_layer *m_imgui_layer;
 
+		float m_last_frame_time_sec = 0.0f;
+
 	private:
 		static application *s_instance;
 	};

@@ -83,24 +83,24 @@ void main()
 	m_shader = std::make_unique<elm::shader>(vertex_src, fragment_src);
 }
 
-void example_layer::on_update(void)
+void example_layer::on_update(elm::timestep ts)
 {
 	if (elm::input::is_key_pressed(elm::key::A)) {
-		m_camera.set_position(m_camera.get_position() + glm::vec3(-m_camera_move_speed, 0.0f, 0.0f));
+		m_camera.set_position(m_camera.get_position() + glm::vec3(-m_camera_move_speed * ts.get_seconds(), 0.0f, 0.0f));
 	} else if (elm::input::is_key_pressed(elm::key::D)) {
-		m_camera.set_position(m_camera.get_position() + glm::vec3(m_camera_move_speed, 0.0f, 0.0f));
+		m_camera.set_position(m_camera.get_position() + glm::vec3(m_camera_move_speed * ts.get_seconds(), 0.0f, 0.0f));
 	}
 
 	if (elm::input::is_key_pressed(elm::key::W)) {
-		m_camera.set_position(m_camera.get_position() + glm::vec3(0.0f, m_camera_move_speed, 0.0f));
+		m_camera.set_position(m_camera.get_position() + glm::vec3(0.0f, m_camera_move_speed * ts.get_seconds(), 0.0f));
 	} else if (elm::input::is_key_pressed(elm::key::S)) {
-		m_camera.set_position(m_camera.get_position() + glm::vec3(0.0f, -m_camera_move_speed, 0.0f));
+		m_camera.set_position(m_camera.get_position() + glm::vec3(0.0f, -m_camera_move_speed * ts.get_seconds(), 0.0f));
 	}
 
 	if (elm::input::is_key_pressed(elm::key::Q)) {
-		m_camera.set_rotation_deg(m_camera.get_rotation_deg() - m_camera_rot_speed);
+		m_camera.set_rotation_deg(m_camera.get_rotation_deg() - m_camera_rot_speed * ts.get_seconds());
 	} else if (elm::input::is_key_pressed(elm::key::E)) {
-		m_camera.set_rotation_deg(m_camera.get_rotation_deg() + m_camera_rot_speed);
+		m_camera.set_rotation_deg(m_camera.get_rotation_deg() + m_camera_rot_speed * ts.get_seconds());
 	}
 
 	elm::render_command::set_clear_color({ 0.1f, 0.1f, 0.1f, 1 });
@@ -124,8 +124,8 @@ void example_layer::on_imgui_render(void)
 {
 	ImGui::Begin("Test");
 
-	ImGui::DragFloat("Camera move speeed", &m_camera_move_speed, 0.01f, 0.005f, 0.25f);
-	ImGui::DragFloat("Camera rotation speeed", &m_camera_rot_speed, 0.05f, 0.01f, 10.0f);
+	ImGui::DragFloat("Camera move speeed", &m_camera_move_speed, 0.1f, 0.1f, 5.0f);
+	ImGui::DragFloat("Camera rotation speeed", &m_camera_rot_speed, 0.5f, 0.5f, 100.0f);
 
 	ImGui::End();
 }

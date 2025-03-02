@@ -6,6 +6,7 @@
 #include <elm/core/application.h>
 #include <elm/core/layer.h>
 #include <elm/core/log.h>
+#include <elm/core/timestep.h>
 
 #include <elm/core/event/event.h>
 #include <elm/core/event/key_event.h>

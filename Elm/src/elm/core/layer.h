@@ -1,6 +1,7 @@
 #pragma once
 
 #include "elm/core/event/event.h"
+#include "elm/core/timestep.h"
 #include <string>
 
 namespace elm {
@@ -17,7 +18,7 @@ namespace elm {
 
 		virtual void on_attach(void) {}
 		virtual void on_detach(void) {}
-		virtual void on_update(void) {}
+		virtual void on_update(timestep ts) {}
 		virtual void on_event(event& e) {}
 
 		virtual void on_imgui_render(void) {}
