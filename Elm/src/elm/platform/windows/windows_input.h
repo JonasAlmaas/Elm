@@ -2,7 +2,7 @@
 
 #ifdef ELM_PLATFORM_WINDOWS
 
-#include "elm/core/input/Input.h"
+#include "elm/core/input/input.h"
 
 namespace elm {
 

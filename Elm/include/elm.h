@@ -13,7 +13,7 @@
 #include <elm/core/event/mouse_event.h>
 #include <elm/core/event/window_event.h>
 
-#include <elm/core/input/Input.h>
+#include <elm/core/input/input.h>
 #include <elm/core/input/key_code.h>
 #include <elm/core/input/mouse_code.h>
 
@@ -21,7 +21,6 @@
 #include <elm/core/renderer/render_command.h>
 
 // --- Core - Renderer ------
-
 #include <elm/core/renderer/index_buffer.h>
 #include <elm/core/renderer/shader.h>
 #include <elm/core/renderer/shader_library.h>
@@ -32,4 +31,8 @@
 #include <elm/core/renderer/vertex_buffer_layout.h>
 
 #include <elm/core/renderer/camera/orthographic_camera.h>
+// --------------------------
+
+// --- Renderer -------------
+#include <elm/camera/orthographic_camera_controller.h>
 // --------------------------
