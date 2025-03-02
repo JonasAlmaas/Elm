@@ -32,6 +32,6 @@ namespace elm {
 		glm::mat4 m_view_projection_matrix; /* Cached (m_projection_matrix * m_view_matrix)*/
 
 		glm::vec3 m_position = { 0.0f, 0.0f, 0.0f };
-		float m_rotation_deg = 0.0f;
+		float m_rotation_deg = 0.0f; // Anti-clockwise
 	};
 }

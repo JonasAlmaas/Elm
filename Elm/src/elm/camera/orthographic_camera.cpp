@@ -26,6 +26,13 @@ namespace elm {
 	void orthographic_camera::set_rotation_deg(float rotation_deg)
 	{
 		m_rotation_deg = rotation_deg;
+
+		if (m_rotation_deg > 180.0f) {
+			m_rotation_deg -= 360.0f;
+		} else if (m_rotation_deg <= -180.0f) {
+			m_rotation_deg += 360.0f;
+		}
+
 		recalculate_view_matrix();
 	}
 
