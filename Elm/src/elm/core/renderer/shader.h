@@ -15,6 +15,7 @@ namespace elm {
 		void bind(void) const;
 		void unbind(void) const;
 
+		void upload_uniform_float4(const std::string &name, const glm::vec4 &vec) const;
 		void upload_uniform_mat4(const std::string &name, const glm::mat4 &mat) const;
 
 	private:

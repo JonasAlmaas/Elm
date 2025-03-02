@@ -101,6 +101,12 @@ namespace elm {
 		glUseProgram(0);
 	}
 
+	void shader::upload_uniform_float4(const std::string &name, const glm::vec4 &vec) const
+	{
+		GLint location = glGetUniformLocation(m_renderer_id, name.c_str());
+		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
+	}
+
 	void shader::upload_uniform_mat4(const std::string &name, const glm::mat4 &mat) const
 	{
 		GLint location = glGetUniformLocation(m_renderer_id, name.c_str());

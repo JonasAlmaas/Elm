@@ -75,11 +75,14 @@ void main()
 
 layout(location = 0) out vec4 o_color;
 
+uniform vec4 u_color;
+
 in vec4 v_color;
 
 void main()
 {
-	o_color = v_color;
+	o_color = u_color;
+	//o_color = v_color;
 }
 )";
 
@@ -111,7 +114,24 @@ void example_layer::on_update(elm::timestep ts)
 
 	elm::renderer::begin_scene(&m_camera);
 
-	elm::renderer::submit(m_shader, m_square_va);
+	glm::vec4 color_red(0.8f, 0.2f, 0.3f, 1.0f);
+	glm::vec4 color_blue(0.2f, 0.3f, 0.8f, 1.0f);
+
+	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+	for (int y = 0; y < 20; ++y) {
+		for (int x = 0; x < 20; ++x) {
+			glm::vec3 pos(x * 0.2f, y * 0.2f, 0.0f);
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+			if ((y % 2 == 0 && x % 2 == 0)
+					|| (y % 2 != 0 && x % 2 != 0)) {
+				m_shader->upload_uniform_float4("u_color", color_red);
+			} else {
+				m_shader->upload_uniform_float4("u_color", color_blue);
+			}
+			elm::renderer::submit(m_shader, m_square_va, transform);
+		}
+	}
+
 	elm::renderer::submit(m_shader, m_triangle_va);
 
 	elm::renderer::end_scene();
