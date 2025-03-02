@@ -9,6 +9,7 @@ namespace elm {
 	layer_stack::~layer_stack(void)
 	{
 		for (auto l : m_layers) {
+			l->on_detach();
 			delete l;
 		}
 	}
