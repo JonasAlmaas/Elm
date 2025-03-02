@@ -3,7 +3,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glad/glad.h>
 #include <fstream>
-#include <vector>
+#include <array>
 
 namespace elm {
 
@@ -95,8 +95,9 @@ namespace elm {
 
 	void opengl_shader::compile(std::unordered_map<GLenum, std::string> &shader_sources)
 	{
-		std::vector<GLenum> glshader_ids;
-		glshader_ids.reserve(shader_sources.size());
+		ELM_CORE_ASSERT(shader_sources.size() <= 2, "More than two shader sources are not supported");
+		std::array<GLenum, 2> glshader_ids;
+		int glshader_id_ix = 0;
 
 		GLuint program = glCreateProgram();
 
@@ -129,7 +130,7 @@ namespace elm {
 			}
 
 			glAttachShader(program, shader);
-			glshader_ids.push_back(shader);
+			glshader_ids[glshader_id_ix++] = shader;
 		}
 
 		glLinkProgram(program);
