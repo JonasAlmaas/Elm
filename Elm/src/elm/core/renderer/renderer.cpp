@@ -1,6 +1,9 @@
 #include "renderer.h"
 #include "render_command.h"
 
+// Temporary
+#include "elm/platform/opengl/opengl_shader.h"
+
 namespace elm {
 
 	std::unique_ptr<renderer::scene_data> renderer::s_scene_data = std::make_unique<renderer::scene_data>(glm::mat4(1.0f));
@@ -21,8 +24,8 @@ namespace elm {
 		const glm::mat4 &transform)
 	{
 		shader->bind();
-		shader->upload_uniform_mat4("u_view_projection", s_scene_data->view_projection_matrix);
-		shader->upload_uniform_mat4("u_transform", transform);
+		((elm::opengl_shader *)shader.get())->upload_uniform_mat4("u_view_projection", s_scene_data->view_projection_matrix);
+		((elm::opengl_shader *)shader.get())->upload_uniform_mat4("u_transform", transform);
 
 		vertex_array->bind();
 		render_command::draw_indexed(vertex_array);

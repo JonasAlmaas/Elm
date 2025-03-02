@@ -3,6 +3,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <imgui.h>
 
+// Temporary
+#include <elm/platform/opengl/opengl_shader.h>
+
 example_layer::example_layer(void)
 	: layer("ExampleLayer"),
 	m_camera(-1.0f, 1.0f, -1.0f, 1.0f)
@@ -86,7 +89,7 @@ void main()
 }
 )";
 
-	m_shader = std::make_unique<elm::shader>(vertex_src, fragment_src);
+	m_shader.reset(elm::shader::create(vertex_src, fragment_src));
 }
 
 void example_layer::on_update(elm::timestep ts)
@@ -124,9 +127,9 @@ void example_layer::on_update(elm::timestep ts)
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 			if ((y % 2 == 0 && x % 2 == 0)
 					|| (y % 2 != 0 && x % 2 != 0)) {
-				m_shader->upload_uniform_float4("u_color", color_red);
+				((elm::opengl_shader *)m_shader.get())->upload_uniform_float4("u_color", color_red);
 			} else {
-				m_shader->upload_uniform_float4("u_color", color_blue);
+				((elm::opengl_shader *)m_shader.get())->upload_uniform_float4("u_color", color_blue);
 			}
 			elm::renderer::submit(m_shader, m_square_va, transform);
 		}
