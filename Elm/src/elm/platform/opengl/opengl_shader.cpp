@@ -95,9 +95,10 @@ namespace elm {
 
 	void opengl_shader::compile(std::unordered_map<GLenum, std::string> &shader_sources)
 	{
-		GLuint program = glCreateProgram();
 		std::vector<GLenum> glshader_ids;
 		glshader_ids.reserve(shader_sources.size());
+
+		GLuint program = glCreateProgram();
 
 		for (auto &kv : shader_sources) {
 			GLenum type = kv.first;
