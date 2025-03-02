@@ -1,5 +1,7 @@
 #pragma once
 
+#include "elm/core/base.h"
+
 #ifdef ELM_PLATFORM_WINDOWS
 
 #include "elm/core/input/input.h"

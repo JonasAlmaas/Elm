@@ -1,6 +1,7 @@
+#include "windows_window.h"
+
 #ifdef ELM_PLATFORM_WINDOWS
 
-#include "windows_window.h"
 #include "elm/core/base.h"
 #include "elm/core/event/key_event.h"
 #include "elm/core/event/mouse_event.h"

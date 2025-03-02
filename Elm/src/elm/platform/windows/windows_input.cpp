@@ -1,8 +1,8 @@
+#include "windows_input.h"
+
 #ifdef ELM_PLATFORM_WINDOWS
 
-#include "windows_input.h"
 #include "elm/core/application.h"
-
 #include <GLFW/glfw3.h>
 
 namespace elm {

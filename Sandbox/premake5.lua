@@ -30,14 +30,7 @@ project "Sandbox"
 
 	filter "system:windows"
 		systemversion "latest"
-
-		defines {
-			"ELM_PLATFORM_WINDOWS"
-		}
-
-		buildoptions {
-			"/utf-8"
-		}
+		buildoptions { "/utf-8" }
 
 	filter "configurations:Debug"
 		defines "ELM_DEBUG"
