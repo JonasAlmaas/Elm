@@ -1,12 +1,16 @@
 [submodule "Elm/vendor/spdlog"]
 	path = Elm/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+	branch = v1.x
 [submodule "Elm/vendor/glfw"]
 	path = Elm/vendor/glfw
 	url = https://github.com/JonasAlmaas/glfw.git
+	branch = master
 [submodule "Elm/vendor/imgui"]
 	path = Elm/vendor/imgui
 	url = https://github.com/JonasAlmaas/imgui.git
+	branch = docking
 [submodule "Elm/vendor/glm"]
 	path = Elm/vendor/glm
 	url = https://github.com/g-truc/glm
+	branch = master
