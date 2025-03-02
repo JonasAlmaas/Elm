@@ -23,7 +23,7 @@ namespace elm {
 		EVENT_CATEGORY_MOUSE_BUTTON = 1<<4,
 	};
 
-	#define EVENT_CLASS_TYPE(type) static event_type get_static_type(void) { return event_type::##type; }\
+	#define EVENT_CLASS_TYPE(type) static event_type get_static_type(void) { return event_type::type; }\
 		virtual event_type get_event_type(void) const override { return get_static_type(); }\
 		virtual const char* get_name(void) const override { return #type; }
 
