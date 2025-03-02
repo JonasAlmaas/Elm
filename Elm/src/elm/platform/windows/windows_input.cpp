@@ -7,7 +7,7 @@
 
 namespace elm {
 
-	input* input::s_instance = new windows_input();
+	std::unique_ptr<input> input::s_instance = std::make_unique<windows_input>();
 
 	bool windows_input::is_key_pressed_impl(key_code key_code) const
 	{

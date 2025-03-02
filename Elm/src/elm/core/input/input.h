@@ -3,6 +3,7 @@
 #include "elm/core/base.h"
 #include "key_code.h"
 #include "mouse_code.h"
+#include <memory>
 
 namespace elm {
 
@@ -23,6 +24,6 @@ namespace elm {
 		virtual float get_mouse_y_impl(void) const = 0;
 
 	private:
-		static input *s_instance;
+		static std::unique_ptr<input> s_instance;
 	};
 }
