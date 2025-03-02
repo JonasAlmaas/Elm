@@ -1,13 +1,15 @@
 #include "example_layer.h"
 
+#include <glm/gtc/matrix_transform.hpp>
 #include <imgui.h>
 
 example_layer::example_layer(void)
-	: layer("ExampleLayer"), m_camera(-1.0f, 1.0f, -1.0f, 1.0f)
+	: layer("ExampleLayer"),
+	m_camera(-1.0f, 1.0f, -1.0f, 1.0f)
 {
 	// Triangle
 	{
-		m_vertex_array.reset(elm::vertex_array::create());
+		m_triangle_va.reset(elm::vertex_array::create());
 
 		float vertices[7 * 3] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
@@ -20,16 +22,16 @@ example_layer::example_layer(void)
 			{ elm::shader_data_type::Float3, "a_position" },
 			{ elm::shader_data_type::Float4, "a_color" } };
 		vb->set_layout(&layout);
-		m_vertex_array->add_vertex_buffer(vb);
+		m_triangle_va->add_vertex_buffer(vb);
 
 		uint32_t indices[3] = { 0, 1, 2 };
 		auto ib = std::shared_ptr<elm::index_buffer>(elm::index_buffer::create(indices, sizeof indices / sizeof(uint32_t)));
-		m_vertex_array->set_index_buffer(ib);
+		m_triangle_va->set_index_buffer(ib);
 	}
 
 	// Square
 	{
-		m_vertex_array2.reset(elm::vertex_array::create());
+		m_square_va.reset(elm::vertex_array::create());
 
 		float vertices[7 * 4] = {
 			-0.75f, -0.75f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
@@ -43,11 +45,11 @@ example_layer::example_layer(void)
 			{ elm::shader_data_type::Float3, "a_position" },
 			{ elm::shader_data_type::Float4, "a_color" } };
 		vb->set_layout(&layout);
-		m_vertex_array2->add_vertex_buffer(vb);
+		m_square_va->add_vertex_buffer(vb);
 
 		uint32_t indices[6] = { 0, 1, 2, 0, 2, 3 };
 		auto ib = std::shared_ptr<elm::index_buffer>(elm::index_buffer::create(indices, sizeof indices / sizeof(uint32_t)));
-		m_vertex_array2->set_index_buffer(ib);
+		m_square_va->set_index_buffer(ib);
 	}
 
 	std::string vertex_src = R"(
@@ -57,13 +59,14 @@ layout(location = 0) in vec3 a_position;
 layout(location = 1) in vec4 a_color;
 
 uniform mat4 u_view_projection;
+uniform mat4 u_transform;
 
 out vec4 v_color;
 
 void main()
 {
 	v_color = a_color;
-	gl_Position = u_view_projection * vec4(a_position, 1.0);
+	gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
 }
 )";
 
@@ -108,8 +111,8 @@ void example_layer::on_update(elm::timestep ts)
 
 	elm::renderer::begin_scene(&m_camera);
 
-	elm::renderer::submit(m_shader, m_vertex_array2);
-	elm::renderer::submit(m_shader, m_vertex_array);
+	elm::renderer::submit(m_shader, m_square_va);
+	elm::renderer::submit(m_shader, m_triangle_va);
 
 	elm::renderer::end_scene();
 }

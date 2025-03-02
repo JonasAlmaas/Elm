@@ -1,6 +1,7 @@
 #pragma once
 
 #include <elm.h>
+#include <glm/glm.hpp>
 #include <memory>
 
 class example_layer : public elm::layer
@@ -16,8 +17,8 @@ private:
 	bool on_key_pressed(elm::key_pressed_event &e);
 
 private:
-	std::shared_ptr<elm::vertex_array> m_vertex_array;
-	std::shared_ptr<elm::vertex_array> m_vertex_array2;
+	std::shared_ptr<elm::vertex_array> m_triangle_va;
+	std::shared_ptr<elm::vertex_array> m_square_va;
 	std::shared_ptr<elm::shader> m_shader;
 	elm::orthographic_camera m_camera;
 

@@ -16,7 +16,10 @@ namespace elm {
 		static void begin_scene(const camera *camera);
 		static void end_scene(void);
 
-		static void submit(const std::shared_ptr<shader> &shader, const std::shared_ptr<vertex_array> &vertex_array);
+		static void submit(
+			const std::shared_ptr<shader> &shader,
+			const std::shared_ptr<vertex_array> &vertex_array,
+			const glm::mat4 &transform = glm::mat4(1.0f));
 
 		inline static renderer_api::api get_api(void) { return renderer_api::get_api(); }
 
