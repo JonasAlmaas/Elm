@@ -12,6 +12,8 @@ project "Elm"
 		"src/**.cpp",
 
 		"include/**.h",
+
+		"%{IncludeDir.stb}/stb_image.cpp",
 	}
 
 	includedirs {
@@ -22,6 +24,7 @@ project "Elm"
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.stb}",
 	}
 
 	links {

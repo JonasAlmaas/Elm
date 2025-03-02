@@ -17,10 +17,15 @@ private:
 	bool on_key_pressed(elm::key_pressed_event &e);
 
 private:
+	elm::orthographic_camera m_camera;
+
 	std::shared_ptr<elm::vertex_array> m_triangle_va;
 	std::shared_ptr<elm::vertex_array> m_square_va;
-	std::shared_ptr<elm::shader> m_shader;
-	elm::orthographic_camera m_camera;
+
+	std::shared_ptr<elm::shader> m_flat_color_shader;
+	std::shared_ptr<elm::shader> m_texture_shader;
+
+	std::shared_ptr<elm::texture_2d> m_texture;
 
 	float m_camera_move_speed = 1.0f;
 	float m_camera_rot_speed = 10.0f;

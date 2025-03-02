@@ -14,16 +14,14 @@ example_layer::example_layer(void)
 	{
 		m_triangle_va = elm::vertex_array::create();
 
-		float vertices[7 * 3] = {
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-				0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-				0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-		};
+		float vertices[3 * 3] = {
+			-0.5f, -0.5f, 0.0f,
+			 0.5f, -0.5f, 0.0f,
+			 0.0f,  0.5f, 0.0f};
 
 		auto vb = std::shared_ptr<elm::vertex_buffer>(elm::vertex_buffer::create((void *)vertices, sizeof vertices));
 		elm::vertex_buffer_layout layout = {
-			{ elm::shader_data_type::Float3, "a_position" },
-			{ elm::shader_data_type::Float4, "a_color" } };
+			{ elm::shader_data_type::Float3, "a_position" }};
 		vb->set_layout(&layout);
 		m_triangle_va->add_vertex_buffer(vb);
 
@@ -36,17 +34,16 @@ example_layer::example_layer(void)
 	{
 		m_square_va = elm::vertex_array::create();
 
-		float vertices[7 * 4] = {
-			-0.75f, -0.75f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-				0.75f, -0.75f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-				0.75f,  0.75f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-			-0.75f,  0.75f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-		};
+		float vertices[5 * 4] = {
+			-0.75f, -0.75f, 0.0f, 0.0f, 0.0f,
+			 0.75f, -0.75f, 0.0f, 1.0f, 0.0f,
+			 0.75f,  0.75f, 0.0f, 1.0f, 1.0f,
+			-0.75f,  0.75f, 0.0f, 0.0f, 1.0f};
 
 		auto vb = std::shared_ptr<elm::vertex_buffer>(elm::vertex_buffer::create((void *)vertices, sizeof vertices));
 		elm::vertex_buffer_layout layout = {
 			{ elm::shader_data_type::Float3, "a_position" },
-			{ elm::shader_data_type::Float4, "a_color" } };
+			{ elm::shader_data_type::Float2, "a_uv" } };
 		vb->set_layout(&layout);
 		m_square_va->add_vertex_buffer(vb);
 
@@ -55,41 +52,80 @@ example_layer::example_layer(void)
 		m_square_va->set_index_buffer(ib);
 	}
 
-	std::string vertex_src = R"(
-#version 330 core
+	{
+		std::string vertex_src = R"(
+			#version 330 core
 
-layout(location = 0) in vec3 a_position;
-layout(location = 1) in vec4 a_color;
+			layout(location = 0) in vec3 a_position;
 
-uniform mat4 u_view_projection;
-uniform mat4 u_transform;
+			uniform mat4 u_view_projection;
+			uniform mat4 u_transform;
 
-out vec4 v_color;
+			out vec4 v_color;
 
-void main()
-{
-	v_color = a_color;
-	gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
-}
-)";
+			void main()
+			{
+				gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
+			}
+			)";
 
-	std::string fragment_src = R"(
-#version 330 core
+		std::string fragment_src = R"(
+			#version 330 core
 
-layout(location = 0) out vec4 o_color;
+			layout(location = 0) out vec4 o_color;
 
-uniform vec4 u_color;
+			uniform vec4 u_color;
 
-in vec4 v_color;
+			void main()
+			{
+				o_color = u_color;
+			}
+			)";
 
-void main()
-{
-	o_color = u_color;
-	//o_color = v_color;
-}
-)";
+		m_flat_color_shader = elm::shader::create(vertex_src, fragment_src);
+	}
 
-	m_shader = elm::shader::create(vertex_src, fragment_src);
+	{
+		std::string vertex_src = R"(
+			#version 330 core
+
+			layout(location = 0) in vec3 a_position;
+			layout(location = 1) in vec2 a_uv;
+
+			uniform mat4 u_view_projection;
+			uniform mat4 u_transform;
+
+			out vec2 v_uv;
+
+			void main()
+			{
+				v_uv = a_uv;
+				gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
+			}
+			)";
+
+		std::string fragment_src = R"(
+			#version 330 core
+
+			layout(location = 0) out vec4 o_color;
+
+			in vec2 v_uv;
+
+			uniform sampler2D u_texture;
+
+			void main()
+			{
+				o_color = texture(u_texture, v_uv);
+			}
+			)";
+
+		m_texture_shader = elm::shader::create(vertex_src, fragment_src);
+
+		m_texture = elm::texture_2d::create("content/textures/dev/checkerboard.png");
+
+		std::dynamic_pointer_cast<elm::opengl_shader>(m_texture_shader)->bind();
+		std::dynamic_pointer_cast<elm::opengl_shader>(m_texture_shader)->upload_uniform_int("u_texture", 0);
+	}
 }
 
 void example_layer::on_update(elm::timestep ts)
@@ -127,15 +163,18 @@ void example_layer::on_update(elm::timestep ts)
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 			if ((y % 2 == 0 && x % 2 == 0)
 					|| (y % 2 != 0 && x % 2 != 0)) {
-				std::dynamic_pointer_cast<elm::opengl_shader>(m_shader)->upload_uniform_float4("u_color", color_red);
+				std::dynamic_pointer_cast<elm::opengl_shader>(m_flat_color_shader)->upload_uniform_float4("u_color", color_red);
 			} else {
-				std::dynamic_pointer_cast<elm::opengl_shader>(m_shader)->upload_uniform_float4("u_color", color_blue);
+				std::dynamic_pointer_cast<elm::opengl_shader>(m_flat_color_shader)->upload_uniform_float4("u_color", color_blue);
 			}
-			elm::renderer::submit(m_shader, m_square_va, transform);
+			elm::renderer::submit(m_flat_color_shader, m_square_va, transform);
 		}
 	}
 
-	elm::renderer::submit(m_shader, m_triangle_va);
+	m_texture->bind();
+	elm::renderer::submit(m_texture_shader, m_square_va, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+	elm::renderer::submit(m_flat_color_shader, m_triangle_va);
 
 	elm::renderer::end_scene();
 }

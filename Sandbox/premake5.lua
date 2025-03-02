@@ -21,6 +21,7 @@ project "Sandbox"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.imgui}",
+		"%{IncludeDir.stb}",
 	}
 
 	links {
