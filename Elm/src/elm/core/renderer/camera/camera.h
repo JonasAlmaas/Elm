@@ -11,6 +11,5 @@ namespace elm {
 		virtual ~camera(void) = default;
 
 		virtual const glm::mat4 &get_view_projection_matrix(void) const = 0;
-
 	};
 }

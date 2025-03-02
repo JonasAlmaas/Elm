@@ -16,6 +16,5 @@ namespace elm {
 
 	private:
 		GLFWwindow *m_window;
-
 	};
 }

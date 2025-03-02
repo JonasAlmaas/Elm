@@ -31,6 +31,5 @@ namespace elm {
 		};
 
 		static std::unique_ptr<scene_data> s_scene_data;
-
 	};
 }

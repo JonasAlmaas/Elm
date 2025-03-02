@@ -31,6 +31,5 @@ namespace elm {
 
 		glm::vec3 m_position;
 		float m_rotation_deg = 0.0f;
-
 	};
 }

@@ -18,6 +18,5 @@ namespace elm {
 
 	public:
 		static std::shared_ptr<index_buffer> create(const uint32_t *indices, uint32_t count);
-
 	};
 }

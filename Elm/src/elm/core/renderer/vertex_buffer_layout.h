@@ -41,6 +41,5 @@ namespace elm {
 				m_stride += el.size;
 			}
 		}
-
 	};
 }

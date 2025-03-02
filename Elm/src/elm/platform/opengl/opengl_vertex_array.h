@@ -25,6 +25,5 @@ namespace elm {
 		uint32_t m_renderer_id;
 		std::vector<std::shared_ptr<vertex_buffer>> m_vertex_buffers;
 		std::shared_ptr<index_buffer> m_index_buffer;
-
 	};
 }

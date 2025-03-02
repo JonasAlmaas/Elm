@@ -21,6 +21,5 @@ namespace elm {
 
 	private:
 		bool m_block_events = false;
-
 	};
 }

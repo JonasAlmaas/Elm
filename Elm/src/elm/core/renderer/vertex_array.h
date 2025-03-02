@@ -24,6 +24,5 @@ namespace elm {
 
 	public:
 		static std::shared_ptr<vertex_array> create(void);
-
 	};
 }

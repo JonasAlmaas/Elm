@@ -19,6 +19,5 @@ namespace elm {
 	private:
 		uint32_t m_renderer_id;
 		uint32_t m_count;
-
 	};
 }

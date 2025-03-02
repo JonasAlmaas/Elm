@@ -15,6 +15,5 @@ namespace elm {
 
 	public:
 		static std::unique_ptr<graphics_context> create(void *window);
-
 	};
 }

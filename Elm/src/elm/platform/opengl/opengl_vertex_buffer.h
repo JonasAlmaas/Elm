@@ -21,6 +21,5 @@ namespace elm {
 	private:
 		uint32_t m_renderer_id;
 		vertex_buffer_layout m_layout;
-
 	};
 }

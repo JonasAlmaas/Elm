@@ -20,6 +20,5 @@ namespace elm {
 
 	public:
 		static std::shared_ptr<vertex_buffer> create(const void *vertices, uint32_t size);
-
 	};
 }

@@ -14,7 +14,6 @@ namespace elm {
 		virtual std::pair<float, float> get_mouse_pos_impl(void) const override;
 		virtual float get_mouse_x_impl(void) const override;
 		virtual float get_mouse_y_impl(void) const override;
-
 	};
 }
 

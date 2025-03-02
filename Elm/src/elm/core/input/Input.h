@@ -24,6 +24,5 @@ namespace elm {
 
 	private:
 		static input *s_instance;
-
 	};
 }
