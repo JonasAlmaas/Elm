@@ -7,8 +7,7 @@
 #include <elm/platform/opengl/opengl_shader.h>
 
 example_layer::example_layer(void)
-	: layer("ExampleLayer"),
-	m_camera_controller(16.0f / 9.0f, true)
+	: layer("ExampleLayer"), m_camera_controller(16.0f / 9.0f, true)
 {
 	// Triangle
 	{
@@ -19,14 +18,14 @@ example_layer::example_layer(void)
 			 0.5f, -0.5f, 0.0f,
 			 0.0f,  0.5f, 0.0f};
 
-		auto vb = std::shared_ptr<elm::vertex_buffer>(elm::vertex_buffer::create((void *)vertices, sizeof vertices));
+		auto vb = elm::vertex_buffer::create((void *)vertices, sizeof vertices);
 		elm::vertex_buffer_layout layout = {
 			{ elm::shader_data_type::Float3, "a_position" }};
 		vb->set_layout(&layout);
 		m_triangle_va->add_vertex_buffer(vb);
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		auto ib = std::shared_ptr<elm::index_buffer>(elm::index_buffer::create(indices, sizeof indices / sizeof(uint32_t)));
+		auto ib = elm::index_buffer::create(indices, sizeof indices / sizeof(uint32_t));
 		m_triangle_va->set_index_buffer(ib);
 	}
 
@@ -40,7 +39,7 @@ example_layer::example_layer(void)
 			 0.75f,  0.75f, 0.0f, 1.0f, 1.0f,
 			-0.75f,  0.75f, 0.0f, 0.0f, 1.0f};
 
-		auto vb = std::shared_ptr<elm::vertex_buffer>(elm::vertex_buffer::create((void *)vertices, sizeof vertices));
+		auto vb = elm::vertex_buffer::create((void *)vertices, sizeof vertices);
 		elm::vertex_buffer_layout layout = {
 			{ elm::shader_data_type::Float3, "a_position" },
 			{ elm::shader_data_type::Float2, "a_uv" } };
@@ -48,7 +47,7 @@ example_layer::example_layer(void)
 		m_square_va->add_vertex_buffer(vb);
 
 		uint32_t indices[6] = { 0, 1, 2, 0, 2, 3 };
-		auto ib = std::shared_ptr<elm::index_buffer>(elm::index_buffer::create(indices, sizeof indices / sizeof(uint32_t)));
+		auto ib = elm::index_buffer::create(indices, sizeof indices / sizeof(uint32_t));
 		m_square_va->set_index_buffer(ib);
 	}
 

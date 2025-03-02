@@ -8,6 +8,7 @@ class example_layer : public elm::layer
 {
 public:
 	example_layer(void);
+	virtual ~example_layer(void) = default;
 
 	virtual void on_update(elm::timestep ts) override;
 	virtual void on_event(elm::event &e) override;
