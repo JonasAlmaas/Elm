@@ -9,8 +9,9 @@ namespace elm {
 	class opengl_shader : public shader
 	{
 	public:
+		opengl_shader(const std::string &fpath);
 		opengl_shader(const std::string &vertex_src, const std::string &fragment_src);
-		~opengl_shader(void);
+		virtual ~opengl_shader(void);
 
 		virtual void bind(void) const override;
 		virtual void unbind(void) const override;
@@ -26,11 +27,12 @@ namespace elm {
 		void upload_uniform_mat4(const std::string &name, const glm::mat4 &mat);
 
 	private:
+		void compile(std::unordered_map<uint32_t /*GLenum*/, std::string> &shader_sources);
+
 		int get_location(const std::string &name);
 
 	private:
 		uint32_t m_renderer_id;
 		std::unordered_map<std::string, int> m_location_map;
-
 	};
 }
