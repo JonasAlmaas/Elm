@@ -42,7 +42,7 @@ namespace elm {
 		std::string to_string() const override
 		{
 			std::stringstream ss;
-			ss <<  get_name() << ": " << m_width << ", " << m_height;
+			ss << get_name() << ": " << m_width << ", " << m_height;
 			return ss.str();
 		}
 
