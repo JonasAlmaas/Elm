@@ -22,10 +22,6 @@ namespace elm {
 		push_overlay(m_imgui_layer);
 	}
 
-	application::~application(void)
-	{
-	}
-
 	void application::run(void)
 	{
 		while (m_running) {

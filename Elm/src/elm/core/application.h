@@ -14,7 +14,7 @@ namespace elm {
 	{
 	public:
 		application(void);
-		virtual ~application(void);
+		virtual ~application(void) = default;
 
 		// To be defined by the client
 		static application *create(void);
