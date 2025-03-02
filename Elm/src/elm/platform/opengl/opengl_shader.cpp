@@ -67,10 +67,23 @@ namespace elm {
 		std::string shader_source = read_file(fpath);
 		auto shader_sources = preprocess(shader_source);
 		compile(shader_sources);
+
+		// Extract name from fpath
+		// "content/shaders/flat_color.glsl" = "flat_color"
+		size_t last_slash = fpath.find_last_of("/\\");
+		last_slash = last_slash == std::string::npos ? 0 : last_slash + 1;
+		size_t last_dot = fpath.rfind('.');
+		size_t count = last_dot == std::string::npos
+			? fpath.size() - last_slash
+			: last_dot - last_slash;
+		m_name = fpath.substr(last_slash, count);
 	}
 
-	opengl_shader::opengl_shader(const std::string &vertex_src, const std::string &fragment_src)
-		: m_renderer_id(UINT32_MAX)
+	opengl_shader::opengl_shader(
+			const std::string &name,
+			const std::string &vertex_src,
+			const std::string &fragment_src)
+		: m_renderer_id(UINT32_MAX), m_name(name)
 	{
 		std::unordered_map<GLenum, std::string> shader_sources = {
 			{ GL_VERTEX_SHADER, vertex_src },

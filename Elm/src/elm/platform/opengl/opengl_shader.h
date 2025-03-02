@@ -2,6 +2,7 @@
 
 #include "elm/core/renderer/shader.h"
 #include <stdint.h>
+#include <string>
 #include <unordered_map>
 
 namespace elm {
@@ -10,11 +11,16 @@ namespace elm {
 	{
 	public:
 		opengl_shader(const std::string &fpath);
-		opengl_shader(const std::string &vertex_src, const std::string &fragment_src);
+		opengl_shader(
+			const std::string &name,
+			const std::string &vertex_src,
+			const std::string &fragment_src);
 		virtual ~opengl_shader(void);
 
 		virtual void bind(void) const override;
 		virtual void unbind(void) const override;
+
+		inline virtual const std::string &get_name(void) const override { return m_name; }
 
 		void upload_uniform_int(const std::string &name, int val);
 
@@ -33,6 +39,7 @@ namespace elm {
 
 	private:
 		uint32_t m_renderer_id;
+		std::string m_name;
 		std::unordered_map<std::string, int> m_location_map;
 	};
 }

@@ -52,8 +52,8 @@ example_layer::example_layer(void)
 		m_square_va->set_index_buffer(ib);
 	}
 
-	m_flat_color_shader = elm::shader::create("content/shaders/flat_color.glsl");
-	m_texture_shader = elm::shader::create("content/shaders/texture.glsl");
+	m_flat_color_shader = m_shader_library.load("content/shaders/flat_color.glsl");
+	m_texture_shader = m_shader_library.load("content/shaders/texture.glsl");
 
 	m_texture = elm::texture_2d::create("content/textures/dev/checkerboard.png");
 	m_texture2 = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png");
@@ -125,7 +125,7 @@ void example_layer::on_imgui_render(void)
 	ImGui::Begin("Test");
 
 	ImGui::DragFloat("Camera move speeed", &m_camera_move_speed, 0.1f, 0.1f, 5.0f);
-	ImGui::DragFloat("Camera rotation speeed", &m_camera_rot_speed, 0.5f, 0.5f, 100.0f);
+	ImGui::DragFloat("Camera rotation speeed", &m_camera_rot_speed, 0.5f, 0.5f, 200.0f);
 
 	ImGui::End();
 }

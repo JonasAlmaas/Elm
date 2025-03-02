@@ -15,8 +15,13 @@ namespace elm {
 		virtual void bind(void) const = 0;
 		virtual void unbind(void) const = 0;
 
+		virtual const std::string &get_name(void) const = 0;
+
 	public:
 		static std::shared_ptr<shader> create(const std::string &fpath);
-		static std::shared_ptr<shader> create(const std::string &vertex_src, const std::string &fragment_src);
+		static std::shared_ptr<shader> create(
+			const std::string &name,
+			const std::string &vertex_src,
+			const std::string &fragment_src);
 	};
 }
