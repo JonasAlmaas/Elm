@@ -8,7 +8,7 @@
 
 example_layer::example_layer(void)
 	: layer("ExampleLayer"),
-	m_camera(-1.0f, 1.0f, -1.0f, 1.0f)
+	m_camera(-1.6f, 1.6f, -0.9f, 0.9f)
 {
 	// Triangle
 	{
