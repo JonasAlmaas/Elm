@@ -1,6 +1,7 @@
 #pragma once
 
 #include "elm/core/base.h"
+#include <memory>
 #include <stdint.h>
 
 namespace elm {
@@ -16,7 +17,7 @@ namespace elm {
 		virtual uint32_t get_count(void) const = 0;
 
 	public:
-		static index_buffer *create(const uint32_t *indices, uint32_t count);
+		static std::shared_ptr<index_buffer> create(const uint32_t *indices, uint32_t count);
 
 	};
 }

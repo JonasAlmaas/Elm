@@ -2,6 +2,7 @@
 
 #include "elm/core/base.h"
 #include <glm/glm.hpp>
+#include <memory>
 #include <string>
 
 namespace elm {
@@ -15,7 +16,7 @@ namespace elm {
 		virtual void unbind(void) const = 0;
 
 	public:
-		static shader *create(const std::string &vertex_src, const std::string &fragment_src);
+		static std::shared_ptr<shader> create(const std::string &vertex_src, const std::string &fragment_src);
 
 	};
 }

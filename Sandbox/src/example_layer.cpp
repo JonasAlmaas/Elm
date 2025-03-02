@@ -12,7 +12,7 @@ example_layer::example_layer(void)
 {
 	// Triangle
 	{
-		m_triangle_va.reset(elm::vertex_array::create());
+		m_triangle_va = elm::vertex_array::create();
 
 		float vertices[7 * 3] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
@@ -34,7 +34,7 @@ example_layer::example_layer(void)
 
 	// Square
 	{
-		m_square_va.reset(elm::vertex_array::create());
+		m_square_va = elm::vertex_array::create();
 
 		float vertices[7 * 4] = {
 			-0.75f, -0.75f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
@@ -89,7 +89,7 @@ void main()
 }
 )";
 
-	m_shader.reset(elm::shader::create(vertex_src, fragment_src));
+	m_shader = elm::shader::create(vertex_src, fragment_src);
 }
 
 void example_layer::on_update(elm::timestep ts)

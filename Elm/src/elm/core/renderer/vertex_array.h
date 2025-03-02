@@ -23,7 +23,7 @@ namespace elm {
 		virtual const std::shared_ptr<index_buffer> &get_index_buffer(void) const = 0;
 
 	public:
-		static vertex_array *create(void);
+		static std::shared_ptr<vertex_array> create(void);
 
 	};
 }

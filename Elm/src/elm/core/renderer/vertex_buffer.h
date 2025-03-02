@@ -2,6 +2,7 @@
 
 #include "elm/core/base.h"
 #include "vertex_buffer_layout.h"
+#include <memory>
 #include <stdint.h>
 
 namespace elm {
@@ -18,7 +19,7 @@ namespace elm {
 		virtual void set_layout(const vertex_buffer_layout *layout) = 0;
 
 	public:
-		static vertex_buffer *create(const void *vertices, uint32_t size);
+		static std::shared_ptr<vertex_buffer> create(const void *vertices, uint32_t size);
 
 	};
 }
