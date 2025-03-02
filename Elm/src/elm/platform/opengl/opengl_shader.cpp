@@ -101,15 +101,56 @@ namespace elm {
 		glUseProgram(0);
 	}
 
-	void opengl_shader::upload_uniform_float4(const std::string &name, const glm::vec4 &vec) const
+	int opengl_shader::get_location(const std::string &name)
 	{
-		GLint location = glGetUniformLocation(m_renderer_id, name.c_str());
+		if (m_location_map.find(name) != m_location_map.end()) {
+			return m_location_map[name];
+		} else {
+			GLint location = glGetUniformLocation(m_renderer_id, name.c_str());
+			m_location_map[name] = location;
+			return location;
+		}
+	}
+
+	void opengl_shader::upload_uniform_int(const std::string &name, int val)
+	{
+		GLint location = get_location(name);
+		glUniform1i(location, val);
+	}
+
+	void opengl_shader::upload_uniform_float(const std::string &name, float val)
+	{
+		GLint location = get_location(name);
+		glUniform1f(location, val);
+	}
+
+	void opengl_shader::upload_uniform_float2(const std::string &name, const glm::vec2 &vec)
+	{
+		GLint location = get_location(name);
+		glUniform2f(location, vec.x, vec.y);
+	}
+
+	void opengl_shader::upload_uniform_float3(const std::string &name, const glm::vec3 &vec)
+	{
+		GLint location = get_location(name);
+		glUniform3f(location, vec.x, vec.y, vec.z);
+	}
+
+	void opengl_shader::upload_uniform_float4(const std::string &name, const glm::vec4 &vec)
+	{
+		GLint location = get_location(name);
 		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
 	}
 
-	void opengl_shader::upload_uniform_mat4(const std::string &name, const glm::mat4 &mat) const
+	void opengl_shader::upload_uniform_mat3(const std::string &name, const glm::mat3 &mat)
 	{
-		GLint location = glGetUniformLocation(m_renderer_id, name.c_str());
+		GLint location = get_location(name);
+		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(mat));
+	}
+
+	void opengl_shader::upload_uniform_mat4(const std::string &name, const glm::mat4 &mat)
+	{
+		GLint location = get_location(name);
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	}
 }
