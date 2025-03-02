@@ -23,7 +23,7 @@ namespace elm {
 	{
 		std::string result;
 
-		std::ifstream fs(fpath, std::ios::in, std::ios::binary);
+		std::ifstream fs(fpath, std::ios::in | std::ios::binary);
 		if (fs) {
 			fs.seekg(0, std::ios::end);
 			result.resize(fs.tellg());
