@@ -127,9 +127,9 @@ void example_layer::on_update(elm::timestep ts)
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 			if ((y % 2 == 0 && x % 2 == 0)
 					|| (y % 2 != 0 && x % 2 != 0)) {
-				((elm::opengl_shader *)m_shader.get())->upload_uniform_float4("u_color", color_red);
+				std::dynamic_pointer_cast<elm::opengl_shader>(m_shader)->upload_uniform_float4("u_color", color_red);
 			} else {
-				((elm::opengl_shader *)m_shader.get())->upload_uniform_float4("u_color", color_blue);
+				std::dynamic_pointer_cast<elm::opengl_shader>(m_shader)->upload_uniform_float4("u_color", color_blue);
 			}
 			elm::renderer::submit(m_shader, m_square_va, transform);
 		}

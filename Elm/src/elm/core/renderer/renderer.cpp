@@ -24,8 +24,8 @@ namespace elm {
 		const glm::mat4 &transform)
 	{
 		shader->bind();
-		((elm::opengl_shader *)shader.get())->upload_uniform_mat4("u_view_projection", s_scene_data->view_projection_matrix);
-		((elm::opengl_shader *)shader.get())->upload_uniform_mat4("u_transform", transform);
+		std::dynamic_pointer_cast<opengl_shader>(shader)->upload_uniform_mat4("u_view_projection", s_scene_data->view_projection_matrix);
+		std::dynamic_pointer_cast<opengl_shader>(shader)->upload_uniform_mat4("u_transform", transform);
 
 		vertex_array->bind();
 		render_command::draw_indexed(vertex_array);
