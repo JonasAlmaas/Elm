@@ -170,6 +170,7 @@ namespace elm {
 
 		for (auto shader : glshader_ids) {
 			glDetachShader(program, shader);
+			glDeleteShader(shader);
 		}
 
 		m_renderer_id = program;
