@@ -8,7 +8,7 @@
 
 example_layer::example_layer(void)
 	: layer("ExampleLayer"),
-	m_camera(-1.6f, 1.6f, -0.9f, 0.9f)
+	m_camera_controller(16.0f / 9.0f, true)
 {
 	// Triangle
 	{
@@ -64,28 +64,12 @@ example_layer::example_layer(void)
 
 void example_layer::on_update(elm::timestep ts)
 {
-	if (elm::input::is_key_pressed(elm::key::A)) {
-		m_camera.set_position(m_camera.get_position() + glm::vec3(-m_camera_move_speed * ts.get_seconds(), 0.0f, 0.0f));
-	} else if (elm::input::is_key_pressed(elm::key::D)) {
-		m_camera.set_position(m_camera.get_position() + glm::vec3(m_camera_move_speed * ts.get_seconds(), 0.0f, 0.0f));
-	}
-
-	if (elm::input::is_key_pressed(elm::key::W)) {
-		m_camera.set_position(m_camera.get_position() + glm::vec3(0.0f, m_camera_move_speed * ts.get_seconds(), 0.0f));
-	} else if (elm::input::is_key_pressed(elm::key::S)) {
-		m_camera.set_position(m_camera.get_position() + glm::vec3(0.0f, -m_camera_move_speed * ts.get_seconds(), 0.0f));
-	}
-
-	if (elm::input::is_key_pressed(elm::key::Q)) {
-		m_camera.set_rotation_deg(m_camera.get_rotation_deg() - m_camera_rot_speed * ts.get_seconds());
-	} else if (elm::input::is_key_pressed(elm::key::E)) {
-		m_camera.set_rotation_deg(m_camera.get_rotation_deg() + m_camera_rot_speed * ts.get_seconds());
-	}
+	m_camera_controller.on_update(ts);
 
 	elm::render_command::set_clear_color({ 0.1f, 0.1f, 0.1f, 1 });
 	elm::render_command::clear();
 
-	elm::renderer::begin_scene(&m_camera);
+	elm::renderer::begin_scene(m_camera_controller.get_camera());
 
 	glm::vec4 color_red(0.8f, 0.2f, 0.3f, 1.0f);
 	glm::vec4 color_blue(0.2f, 0.3f, 0.8f, 1.0f);
@@ -116,18 +100,14 @@ void example_layer::on_update(elm::timestep ts)
 
 void example_layer::on_event(elm::event &e)
 {
+	m_camera_controller.on_event(e);
+
 	elm::event_dispatcher dispatcher(e);
 	dispatcher.dispatch<elm::key_pressed_event>(ELM_BIND_EVENT_FN(example_layer::on_key_pressed));
 }
 
 void example_layer::on_imgui_render(void)
 {
-	ImGui::Begin("Test");
-
-	ImGui::DragFloat("Camera move speeed", &m_camera_move_speed, 0.1f, 0.1f, 5.0f);
-	ImGui::DragFloat("Camera rotation speeed", &m_camera_rot_speed, 0.5f, 0.5f, 200.0f);
-
-	ImGui::End();
 }
 
 bool example_layer::on_key_pressed(elm::key_pressed_event &e)

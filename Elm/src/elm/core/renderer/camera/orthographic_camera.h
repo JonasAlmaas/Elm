@@ -11,6 +11,8 @@ namespace elm {
 	public:
 		orthographic_camera(float left, float right, float bottom, float top);
 
+		void set_projection(float left, float right, float bottom, float top);
+
 		inline const glm::vec3 &get_position(void) const { return m_position; }
 		void set_position(const glm::vec3 &pos);
 
@@ -27,9 +29,9 @@ namespace elm {
 	private:
 		glm::mat4 m_projection_matrix;
 		glm::mat4 m_view_matrix;
-		glm::mat4 m_view_projection_matrix; /* Cached (m_view_matrix * m_projection_matrix)*/
+		glm::mat4 m_view_projection_matrix; /* Cached (m_projection_matrix * m_view_matrix)*/
 
-		glm::vec3 m_position;
+		glm::vec3 m_position = { 0.0f, 0.0f, 0.0f };
 		float m_rotation_deg = 0.0f;
 	};
 }
