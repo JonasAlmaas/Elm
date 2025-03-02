@@ -15,6 +15,9 @@ namespace elm {
 		void on_update(timestep ts);
 		void on_event(event &e);
 
+		inline float get_zoom_level(void) const { return m_zoom_level; }
+		inline void set_zoom_level(float level) { m_zoom_level = level; }
+
 		inline orthographic_camera *get_camera(void) { return &m_camera; }
 		inline const orthographic_camera *get_camera(void) const { return &m_camera; }
 

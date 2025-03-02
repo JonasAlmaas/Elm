@@ -33,10 +33,12 @@ namespace elm {
 		shutdown();
 	}
 
-	void windows_window::on_update(void)
+	void windows_window::on_update(bool minimized)
 	{
 		glfwPollEvents();
-		m_context->swap_buffers();
+		if (!minimized) {
+			m_context->swap_buffers();
+		}
 	}
 
 	void windows_window::set_event_callback(const event_callback_fn& cb)

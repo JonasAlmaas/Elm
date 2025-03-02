@@ -22,7 +22,7 @@ namespace elm {
 
 		virtual ~window(void) = default;
 
-		virtual void on_update(void) = 0;
+		virtual void on_update(bool minimized) = 0;
 
 		virtual uint32_t get_width(void) const = 0;
 		virtual uint32_t get_height(void) const = 0;

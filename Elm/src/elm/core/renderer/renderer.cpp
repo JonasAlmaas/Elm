@@ -13,6 +13,11 @@ namespace elm {
 		render_command::init();
 	}
 
+	void renderer::on_window_resize(uint32_t width, uint32_t height)
+	{
+		render_command::set_viewport(0, 0, width, height);
+	}
+
 	void renderer::begin_scene(const camera *camera)
 	{
 		s_scene_data->view_projection_matrix = camera->get_view_projection_matrix();

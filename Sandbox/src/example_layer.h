@@ -14,9 +14,6 @@ public:
 	virtual void on_imgui_render(void) override;
 
 private:
-	bool on_key_pressed(elm::key_pressed_event &e);
-
-private:
 	elm::orthographic_camera_controller m_camera_controller;
 
 	std::shared_ptr<elm::vertex_array> m_triangle_va;

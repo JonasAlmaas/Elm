@@ -33,8 +33,10 @@ namespace elm {
 			timestep timestep(time - m_last_frame_time_sec);
 			m_last_frame_time_sec = time;
 
-			for (auto layer : m_layer_stack) {
-				layer->on_update(timestep);
+			if (!m_minimized) {
+				for (auto layer : m_layer_stack) {
+					layer->on_update(timestep);
+				}
 			}
 
 			m_imgui_layer->begin();
@@ -43,7 +45,7 @@ namespace elm {
 			}
 			m_imgui_layer->end();
 
-			m_window->on_update();
+			m_window->on_update(m_minimized);
 		}
 	}
 
@@ -61,6 +63,7 @@ namespace elm {
 	{
 		event_dispatcher dispatcher(e);
 		dispatcher.dispatch<window_close_event>(ELM_BIND_EVENT_FN(application::on_window_close));
+		dispatcher.dispatch<window_resize_event>(ELM_BIND_EVENT_FN(application::on_window_resize));
 
 		for (auto it = m_layer_stack.end(); it != m_layer_stack.begin(); ) {
 			(*--it)->on_event(e);
@@ -70,9 +73,26 @@ namespace elm {
 		}
 	}
 
-	bool application::on_window_close(window_close_event& e)
+	bool application::on_window_close(window_close_event &e)
 	{
 		m_running = false;
 		return true;
+	}
+
+	bool application::on_window_resize(window_resize_event &e)
+	{
+		uint32_t width = e.get_width();
+		uint32_t height = e.get_height();
+
+		if (width == 0 || height == 0) {
+			m_minimized = true;
+			return false;
+		}
+
+		m_minimized = false;
+
+		renderer::on_window_resize(width, height);
+
+		return false;
 	}
 }

@@ -100,17 +100,9 @@ void example_layer::on_update(elm::timestep ts)
 
 void example_layer::on_event(elm::event &e)
 {
-	elm::event_dispatcher dispatcher(e);
-	dispatcher.dispatch<elm::key_pressed_event>(ELM_BIND_EVENT_FN(example_layer::on_key_pressed));
-
 	m_camera_controller.on_event(e);
 }
 
 void example_layer::on_imgui_render(void)
 {
-}
-
-bool example_layer::on_key_pressed(elm::key_pressed_event &e)
-{
-	return false;
 }

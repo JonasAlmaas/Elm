@@ -31,10 +31,12 @@ namespace elm {
 
 	private:
 		void on_event(event& e);
-		bool on_window_close(window_close_event& e);
+		bool on_window_close(window_close_event &e);
+		bool on_window_resize(window_resize_event &e);
 
 	private:
 		bool m_running = true;
+		bool m_minimized = false;
 		std::unique_ptr<window> m_window;
 		layer_stack m_layer_stack;
 		imgui_layer *m_imgui_layer;

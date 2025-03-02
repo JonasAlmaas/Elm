@@ -17,7 +17,7 @@ namespace elm {
 		windows_window(const window_specification& spec);
 		virtual ~windows_window();
 
-		virtual void on_update(void) override;
+		virtual void on_update(bool minimized) override;
 
 		virtual inline uint32_t get_width(void) const override { return m_data.width; }
 		virtual inline uint32_t get_height(void) const override { return m_data.width; }
