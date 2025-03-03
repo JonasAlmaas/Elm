@@ -10,6 +10,7 @@ namespace elm {
 
 	struct renderer_2d_storage {
 		std::shared_ptr<shader> flat_color_shader;
+		std::shared_ptr<shader> texture_shader;
 		std::shared_ptr<vertex_array> vertex_array;
 	};
 
@@ -21,15 +22,16 @@ namespace elm {
 
 		s_data->vertex_array = elm::vertex_array::create();
 
-		float vertices[3 * 4] = {
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f };
+		float vertices[7 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f };
 
 		auto vb = elm::vertex_buffer::create((void *)vertices, sizeof vertices);
 		elm::vertex_buffer_layout layout = {
-			{ elm::shader_data_type::Float3, "a_position" } };
+			{ elm::shader_data_type::Float3, "a_position" },
+			{ elm::shader_data_type::Float2, "a_uv" } };
 		vb->set_layout(&layout);
 		s_data->vertex_array->add_vertex_buffer(vb);
 
@@ -38,6 +40,10 @@ namespace elm {
 		s_data->vertex_array->set_index_buffer(ib);
 
 		s_data->flat_color_shader = elm::shader::create("content/shaders/flat_color.glsl");
+
+		s_data->texture_shader = elm::shader::create("content/shaders/texture.glsl");
+		s_data->texture_shader->bind();
+		s_data->texture_shader->set_int("u_texture", 0);
 	}
 
 	void renderer_2d::shutdown(void)
@@ -49,6 +55,9 @@ namespace elm {
 	{
 		s_data->flat_color_shader->bind();
 		s_data->flat_color_shader->set_mat4("u_view_projection", camera->get_view_projection_matrix());
+
+		s_data->texture_shader->bind();
+		s_data->texture_shader->set_mat4("u_view_projection", camera->get_view_projection_matrix());
 	}
 
 	void renderer_2d::end_scene(void)
@@ -70,5 +79,22 @@ namespace elm {
 	void renderer_2d::draw_quad(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color)
 	{
 		draw_quad(glm::vec3(position, 0.0f), size, color);
+	}
+
+	void renderer_2d::draw_quad(const glm::vec3 &position, const glm::vec2 &size, const std::shared_ptr<texture> &texture)
+	{
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size, 1.0f });
+
+		s_data->texture_shader->bind();
+		s_data->texture_shader->set_mat4("u_transform", transform);
+		texture->bind();
+
+		s_data->vertex_array->bind();
+		render_command::draw_indexed(s_data->vertex_array);
+	}
+
+	void renderer_2d::draw_quad(const glm::vec2 &position, const glm::vec2 &size, const std::shared_ptr<texture> &texture)
+	{
+		draw_quad(glm::vec3(position, 0.0f), size, texture);
 	}
 }

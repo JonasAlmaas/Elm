@@ -19,4 +19,5 @@ public:
 private:
 	elm::orthographic_camera_controller m_camera_controller;
 
+	std::shared_ptr<elm::texture_2d> m_texture;
 };
