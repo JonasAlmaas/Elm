@@ -19,9 +19,4 @@ public:
 private:
 	elm::orthographic_camera_controller m_camera_controller;
 
-	// Temp
-	std::shared_ptr<elm::shader> m_shader;
-	std::shared_ptr<elm::vertex_array> m_vertex_array;
-
-	glm::vec4 m_color = { 0.2f, 0.2f, 0.8f, 1.0f };
 };

@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "renderer_2d.h"
 #include "render_command.h"
 
 // Temporary
@@ -11,6 +12,7 @@ namespace elm {
 	void renderer::init(void)
 	{
 		render_command::init();
+		renderer_2d::init();
 	}
 
 	void renderer::on_window_resize(uint32_t width, uint32_t height)
@@ -25,7 +27,6 @@ namespace elm {
 
 	void renderer::end_scene(void)
 	{
-
 	}
 
 	void renderer::submit(

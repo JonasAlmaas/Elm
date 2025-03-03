@@ -20,6 +20,7 @@
 
 // --- Core - Renderer ------
 #include <elm/core/renderer/renderer.h>
+#include <elm/core/renderer/renderer_2d.h>
 #include <elm/core/renderer/render_command.h>
 
 #include <elm/core/renderer/shader.h>
