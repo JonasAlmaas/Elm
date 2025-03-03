@@ -22,6 +22,17 @@ namespace elm {
 
 		inline virtual const std::string &get_name(void) const override { return m_name; }
 
+		virtual void set_int(const std::string &name, int val) override;
+
+		virtual void set_float(const std::string &name, float val) override;
+		virtual void set_float2(const std::string &name, const glm::vec2 &vec) override;
+		virtual void set_float3(const std::string &name, const glm::vec3 &vec) override;
+		virtual void set_float4(const std::string &name, const glm::vec4 &vec) override;
+
+		virtual void set_mat3(const std::string &name, const glm::mat3 &mat) override;
+		virtual void set_mat4(const std::string &name, const glm::mat4 &mat) override;
+
+	public:
 		void upload_uniform_int(const std::string &name, int val);
 
 		void upload_uniform_float(const std::string &name, float val);

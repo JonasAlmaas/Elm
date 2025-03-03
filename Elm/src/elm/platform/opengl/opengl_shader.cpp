@@ -187,6 +187,41 @@ namespace elm {
 		}
 	}
 
+	void opengl_shader::set_int(const std::string &name, int val)
+	{
+		upload_uniform_int(name, val);
+	}
+
+	void opengl_shader::set_float(const std::string &name, float val)
+	{
+		upload_uniform_float(name, val);
+	}
+
+	void opengl_shader::set_float2(const std::string &name, const glm::vec2 &vec)
+	{
+		upload_uniform_float2(name, vec);
+	}
+
+	void opengl_shader::set_float3(const std::string &name, const glm::vec3 &vec)
+	{
+		upload_uniform_float3(name, vec);
+	}
+
+	void opengl_shader::set_float4(const std::string &name, const glm::vec4 &vec)
+	{
+		upload_uniform_float4(name, vec);
+	}
+
+	void opengl_shader::set_mat3(const std::string &name, const glm::mat3 &mat)
+	{
+		upload_uniform_mat3(name, mat);
+	}
+
+	void opengl_shader::set_mat4(const std::string &name, const glm::mat4 &mat)
+	{
+		upload_uniform_mat4(name, mat);
+	}
+
 	void opengl_shader::upload_uniform_int(const std::string &name, int val)
 	{
 		GLint location = get_location(name);

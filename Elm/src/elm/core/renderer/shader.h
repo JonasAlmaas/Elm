@@ -17,6 +17,16 @@ namespace elm {
 
 		virtual const std::string &get_name(void) const = 0;
 
+		virtual void set_int(const std::string &name, int val) = 0;
+
+		virtual void set_float(const std::string &name, float val) = 0;
+		virtual void set_float2(const std::string &name, const glm::vec2 &vec) = 0;
+		virtual void set_float3(const std::string &name, const glm::vec3 &vec) = 0;
+		virtual void set_float4(const std::string &name, const glm::vec4 &vec) = 0;
+
+		virtual void set_mat3(const std::string &name, const glm::mat3 &mat) = 0;
+		virtual void set_mat4(const std::string &name, const glm::mat4 &mat) = 0;
+
 	public:
 		static std::shared_ptr<shader> create(const std::string &fpath);
 		static std::shared_ptr<shader> create(

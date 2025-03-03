@@ -6,9 +6,6 @@
 #include "elm/core/renderer/vertex_array.h"
 #include <glm/gtc/type_ptr.hpp>
 
-// Temporary
-#include "elm/platform/opengl/opengl_shader.h"
-
 namespace elm {
 
 	struct renderer_2d_storage {
@@ -51,7 +48,7 @@ namespace elm {
 	void renderer_2d::begin_scene(const orthographic_camera *camera)
 	{
 		s_data->flat_color_shader->bind();
-		std::dynamic_pointer_cast<opengl_shader>(s_data->flat_color_shader)->upload_uniform_mat4("u_view_projection", camera->get_view_projection_matrix());
+		s_data->flat_color_shader->set_mat4("u_view_projection", camera->get_view_projection_matrix());
 	}
 
 	void renderer_2d::end_scene(void)
@@ -63,8 +60,8 @@ namespace elm {
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size, 1.0f });
 
 		s_data->flat_color_shader->bind();
-		std::dynamic_pointer_cast<elm::opengl_shader>(s_data->flat_color_shader)->upload_uniform_float4("u_color", color);
-		std::dynamic_pointer_cast<opengl_shader>(s_data->flat_color_shader)->upload_uniform_mat4("u_transform", transform);
+		s_data->flat_color_shader->set_mat4("u_transform", transform);
+		s_data->flat_color_shader->set_float4("u_color", color);
 
 		s_data->vertex_array->bind();
 		render_command::draw_indexed(s_data->vertex_array);

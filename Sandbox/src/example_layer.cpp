@@ -3,9 +3,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <imgui.h>
 
-// Temporary
-#include <elm/platform/opengl/opengl_shader.h>
-
 example_layer::example_layer(void)
 	: layer("ExampleLayer"), m_camera_controller(16.0f / 9.0f, true)
 {
@@ -57,8 +54,8 @@ example_layer::example_layer(void)
 	m_texture = elm::texture_2d::create("content/textures/dev/checkerboard.png");
 	m_texture2 = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png");
 
-	std::dynamic_pointer_cast<elm::opengl_shader>(m_texture_shader)->bind();
-	std::dynamic_pointer_cast<elm::opengl_shader>(m_texture_shader)->upload_uniform_int("u_texture", 0);
+	m_texture_shader->bind();
+	m_texture_shader->set_int("u_texture", 0);
 }
 
 void example_layer::on_update(elm::timestep ts)
@@ -79,9 +76,7 @@ void example_layer::on_update(elm::timestep ts)
 			glm::vec3 pos(x * 0.2f, y * 0.2f, 0.0f);
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 			m_flat_color_shader->bind();
-			std::dynamic_pointer_cast<elm::opengl_shader>(m_flat_color_shader)->upload_uniform_float4(
-				"u_color",
-				(y%2==0 && x%2==0) || (y%2!=0 && x%2!=0) ? color_red : color_blue);
+			m_flat_color_shader->set_float4("u_color", (y%2==0 && x%2==0) || (y%2!=0 && x%2!=0) ? color_red : color_blue);
 			elm::renderer::submit(m_flat_color_shader, m_square_va, transform);
 		}
 	}
