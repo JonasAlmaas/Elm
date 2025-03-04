@@ -8,6 +8,8 @@ namespace elm {
 	opengl_texture_2d::opengl_texture_2d(uint32_t width, uint32_t height)
 		: m_width(width), m_height(height), m_fpath("<BUFFER>")
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		m_internal_format = GL_RGBA8;
 		m_data_format = GL_RGBA;
 
@@ -24,6 +26,8 @@ namespace elm {
 	opengl_texture_2d::opengl_texture_2d(const std::string &fpath)
 		: m_fpath(fpath)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(1);
 		stbi_uc *data = stbi_load(fpath.c_str(), &width, &height, &channels, 0);
@@ -65,6 +69,8 @@ namespace elm {
 
 	opengl_texture_2d::~opengl_texture_2d(void)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		glDeleteTextures(1, &m_renderer_id);
 	}
 
@@ -75,6 +81,8 @@ namespace elm {
 
 	void opengl_texture_2d::set_data(void *data, uint32_t size)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		uint32_t channel_size = m_data_format == GL_RGBA ? 4 : 3;
 		ELM_ASSERT(size == m_width * m_height * channel_size, "Data must match texture size");
 

@@ -29,11 +29,15 @@ namespace elm {
 
 	opengl_vertex_array::opengl_vertex_array()
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		glGenVertexArrays(1, &m_renderer_id);
 	}
 
 	opengl_vertex_array::~opengl_vertex_array()
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		glDeleteBuffers(1, &m_renderer_id);
 	}
 
@@ -49,6 +53,8 @@ namespace elm {
 
 	void opengl_vertex_array::add_vertex_buffer(const std::shared_ptr<vertex_buffer> &vertex_buffer)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		glBindVertexArray(m_renderer_id);
 		vertex_buffer->bind();
 
@@ -73,6 +79,8 @@ namespace elm {
 
 	void opengl_vertex_array::set_index_buffer(const std::shared_ptr<index_buffer> &index_buffer)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		glBindVertexArray(m_renderer_id);
 		index_buffer->bind();
 

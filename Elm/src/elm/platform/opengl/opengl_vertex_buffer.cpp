@@ -6,6 +6,8 @@ namespace elm {
 
 	opengl_vertex_buffer::opengl_vertex_buffer(const void *vertices, uint32_t size)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		glCreateBuffers(1, &m_renderer_id);
 		glBindBuffer(GL_ARRAY_BUFFER, m_renderer_id);
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
@@ -13,6 +15,8 @@ namespace elm {
 
 	opengl_vertex_buffer::~opengl_vertex_buffer()
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		glDeleteBuffers(1, &m_renderer_id);
 	}
 
