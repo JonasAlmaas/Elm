@@ -26,20 +26,28 @@ namespace elm {
 
 	void application::run(void)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		while (m_running) {
+			ELM_PROFILE_SCOPE("application::run() - Run loop");
+
 			float time = (float)glfwGetTime();
 			timestep timestep(time - m_last_frame_time_sec);
 			m_last_frame_time_sec = time;
 
 			if (!m_minimized) {
+				ELM_PROFILE_SCOPE("application::run() - Layer stack on_update()");
 				for (auto layer : m_layer_stack) {
 					layer->on_update(timestep);
 				}
 			}
 
 			m_imgui_layer->begin();
-			for (auto layer : m_layer_stack) {
-				layer->on_imgui_render();
+			{
+				ELM_PROFILE_SCOPE("application::run() - Layer stack on_imgui_render()");
+				for (auto layer : m_layer_stack) {
+					layer->on_imgui_render();
+				}
 			}
 			m_imgui_layer->end();
 

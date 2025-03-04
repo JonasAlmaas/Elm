@@ -203,91 +203,91 @@ namespace elm {
 
 	void opengl_shader::set_int(const std::string &name, int val)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		upload_uniform_int(name, val);
 	}
 
 	void opengl_shader::set_float(const std::string &name, float val)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		upload_uniform_float(name, val);
 	}
 
 	void opengl_shader::set_float2(const std::string &name, const glm::vec2 &vec)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		upload_uniform_float2(name, vec);
 	}
 
 	void opengl_shader::set_float3(const std::string &name, const glm::vec3 &vec)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		upload_uniform_float3(name, vec);
 	}
 
 	void opengl_shader::set_float4(const std::string &name, const glm::vec4 &vec)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		upload_uniform_float4(name, vec);
 	}
 
 	void opengl_shader::set_mat3(const std::string &name, const glm::mat3 &mat)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		upload_uniform_mat3(name, mat);
 	}
 
 	void opengl_shader::set_mat4(const std::string &name, const glm::mat4 &mat)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		upload_uniform_mat4(name, mat);
 	}
 
 	void opengl_shader::upload_uniform_int(const std::string &name, int val)
 	{
-		ELM_PROFILE_RENDERER_FUNCTION();
-
 		GLint location = get_location(name);
 		glUniform1i(location, val);
 	}
 
 	void opengl_shader::upload_uniform_float(const std::string &name, float val)
 	{
-		ELM_PROFILE_RENDERER_FUNCTION();
-
 		GLint location = get_location(name);
 		glUniform1f(location, val);
 	}
 
 	void opengl_shader::upload_uniform_float2(const std::string &name, const glm::vec2 &vec)
 	{
-		ELM_PROFILE_RENDERER_FUNCTION();
-
 		GLint location = get_location(name);
 		glUniform2f(location, vec.x, vec.y);
 	}
 
 	void opengl_shader::upload_uniform_float3(const std::string &name, const glm::vec3 &vec)
 	{
-		ELM_PROFILE_RENDERER_FUNCTION();
-
 		GLint location = get_location(name);
 		glUniform3f(location, vec.x, vec.y, vec.z);
 	}
 
 	void opengl_shader::upload_uniform_float4(const std::string &name, const glm::vec4 &vec)
 	{
-		ELM_PROFILE_RENDERER_FUNCTION();
-
 		GLint location = get_location(name);
 		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
 	}
 
 	void opengl_shader::upload_uniform_mat3(const std::string &name, const glm::mat3 &mat)
 	{
-		ELM_PROFILE_RENDERER_FUNCTION();
-
 		GLint location = get_location(name);
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	}
 
 	void opengl_shader::upload_uniform_mat4(const std::string &name, const glm::mat4 &mat)
 	{
-		ELM_PROFILE_RENDERER_FUNCTION();
-
 		GLint location = get_location(name);
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	}
