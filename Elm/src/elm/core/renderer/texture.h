@@ -14,6 +14,8 @@ namespace elm {
 
 		virtual void bind(uint32_t slot = 0) = 0;
 
+		virtual void set_data(void *data, uint32_t size) = 0;
+
 		virtual uint32_t get_width(void) const = 0;
 		virtual uint32_t get_height(void) const = 0;
 	};
@@ -24,6 +26,7 @@ namespace elm {
 		virtual ~texture_2d(void) = default;
 
 	public:
+		static std::shared_ptr<texture_2d> create(uint32_t width, uint32_t height);
 		static std::shared_ptr<texture_2d> create(const std::string &fpath);
 	};
 }
