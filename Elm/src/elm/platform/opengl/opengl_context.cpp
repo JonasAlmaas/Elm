@@ -13,6 +13,8 @@ namespace elm {
 
 	void opengl_context::init(void)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		glfwMakeContextCurrent(m_window);
 
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -28,6 +30,8 @@ namespace elm {
 
 	void opengl_context::swap_buffers(void)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		glfwSwapBuffers(m_window);
 	}
 }

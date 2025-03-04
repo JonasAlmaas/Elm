@@ -9,4 +9,7 @@
 bin/
 bin-int/
 
+# Profiler output
+**/profile-*.json
+
 **/imgui.ini

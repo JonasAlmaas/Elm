@@ -36,6 +36,8 @@ namespace elm {
 
 	void windows_window::on_update(bool minimized)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		glfwPollEvents();
 		if (!minimized) {
 			m_context->swap_buffers();
@@ -49,17 +51,20 @@ namespace elm {
 
 	void windows_window::set_vsync(bool enabled)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		glfwSwapInterval(enabled ? 1 : 0);
 		m_data.vsync = enabled;
 	}
 
 	void windows_window::init(const window_specification& spec)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		m_data.title = spec.title;
 		m_data.width = spec.width;
 		m_data.height = spec.height;
 		m_data.vsync = spec.vsync;
-
 
 		ELM_CORE_TRACE("Creating window \"{0}\" ({1}, {2})", spec.title, spec.width, spec.height);
 
@@ -155,6 +160,8 @@ namespace elm {
 
 	void windows_window::shutdown(void)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		glfwDestroyWindow(m_window);
 		--s_glfw_window_count;
 

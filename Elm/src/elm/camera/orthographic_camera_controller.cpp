@@ -14,6 +14,8 @@ namespace elm {
 
 	void orthographic_camera_controller::on_update(timestep ts)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		if (input::is_key_pressed(key::A)) {
 			glm::vec3 pos = m_camera.get_position();
 			pos.x -= glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
@@ -50,6 +52,8 @@ namespace elm {
 
 	void orthographic_camera_controller::on_event(event &e)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		event_dispatcher dispatcher(e);
 		dispatcher.dispatch<mouse_scrolled_event>(ELM_BIND_EVENT_FN(orthographic_camera_controller::on_mouse_scrolled));
 		dispatcher.dispatch<window_resize_event>(ELM_BIND_EVENT_FN(orthographic_camera_controller::on_window_resize_event));
@@ -57,6 +61,8 @@ namespace elm {
 
 	bool orthographic_camera_controller::on_mouse_scrolled(mouse_scrolled_event &e)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		m_zoom_level -= e.get_offset_y() * 0.25f;
 		m_zoom_level = std::max(m_zoom_level, 0.25f);
 		m_camera.set_projection(-m_aspect_ratio * m_zoom_level, m_aspect_ratio * m_zoom_level, -m_zoom_level, m_zoom_level);
@@ -69,6 +75,8 @@ namespace elm {
 
 	bool orthographic_camera_controller::on_window_resize_event(window_resize_event &e)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		m_aspect_ratio = (float)e.get_width() / (float)e.get_height();
 		m_camera.set_projection(-m_aspect_ratio * m_zoom_level, m_aspect_ratio * m_zoom_level, -m_zoom_level, m_zoom_level);
 		return false;

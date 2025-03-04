@@ -10,6 +10,8 @@ namespace elm {
 
 	application::application(void)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		ELM_CORE_ASSERT(!s_instance, "Application already exists");
 		s_instance = this;
 
@@ -47,16 +49,22 @@ namespace elm {
 
 	void application::push_layer(layer* layer)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		m_layer_stack.push_layer(layer);
 	}
 
 	void application::push_overlay(layer* layer)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		m_layer_stack.push_overlay(layer);
 	}
 
 	void application::on_event(event& e)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		event_dispatcher dispatcher(e);
 		dispatcher.dispatch<window_close_event>(ELM_BIND_EVENT_FN(application::on_window_close));
 		dispatcher.dispatch<window_resize_event>(ELM_BIND_EVENT_FN(application::on_window_resize));
@@ -71,12 +79,16 @@ namespace elm {
 
 	bool application::on_window_close(window_close_event &e)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		m_running = false;
 		return true;
 	}
 
 	bool application::on_window_resize(window_resize_event &e)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		uint32_t width = e.get_width();
 		uint32_t height = e.get_height();
 

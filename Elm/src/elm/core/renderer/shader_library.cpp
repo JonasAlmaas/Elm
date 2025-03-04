@@ -4,6 +4,8 @@ namespace elm {
 
 	void shader_library::add(const std::string &name, const std::shared_ptr<shader> &shader)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		ELM_CORE_ASSERT(!contains(name), "Shader already exists");
 		m_shaders[name] = shader;
 	}
@@ -15,6 +17,8 @@ namespace elm {
 
 	std::shared_ptr<shader> shader_library::load(const std::string &fpath)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		auto shader = shader::create(fpath);
 		add(shader);
 		return shader;
@@ -22,6 +26,8 @@ namespace elm {
 
 	std::shared_ptr<shader> shader_library::load(const std::string &name, const std::string &fpath)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		auto shader = shader::create(fpath);
 		add(name, shader);
 		return shader;

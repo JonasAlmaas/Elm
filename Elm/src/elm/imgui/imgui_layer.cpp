@@ -22,6 +22,8 @@ namespace elm {
 
 	void imgui_layer::on_attach(void)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		IMGUI_CHECKVERSION();
 
 		ImGui::CreateContext();
@@ -50,6 +52,8 @@ namespace elm {
 
 	void imgui_layer::on_detach(void)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
@@ -57,6 +61,8 @@ namespace elm {
 
 	void imgui_layer::on_event(event& e)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		if (!m_block_events) {
 			return;
 		}
@@ -68,6 +74,8 @@ namespace elm {
 
 	void imgui_layer::begin(void)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
@@ -75,6 +83,8 @@ namespace elm {
 
 	void imgui_layer::end(void)
 	{
+		ELM_PROFILE_FUNCTION();
+
 		auto app = application::get();
 
 		ImGuiIO& io = ImGui::GetIO();

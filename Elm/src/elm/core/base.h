@@ -41,6 +41,9 @@
 
 #ifdef ELM_DEBUG
 	#define ELM_ENABLE_ASSERTS 1
+
+	#define ELM_ENABLE_PROFILING 0
+	#define ELM_ENABLE_PROFILING_RENDERER 0
 #else
 	#define ELM_ENABLE_ASSERTS 0
 #endif
@@ -74,3 +77,4 @@
 
 #include "elm/core/log.h"
 #include "elm/core/assert.h"
+#include "elm/debug/instrumentor.h"

@@ -21,6 +21,8 @@ namespace elm {
 
 	static std::string read_file(const std::string &fpath)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		std::string result;
 
 		std::ifstream fs(fpath, std::ios::in | std::ios::binary);
@@ -39,6 +41,8 @@ namespace elm {
 
 	static std::unordered_map<GLenum, std::string> preprocess(const std::string &src)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> result;
 
 		const char *token_type = "#type";
@@ -64,6 +68,8 @@ namespace elm {
 	opengl_shader::opengl_shader(const std::string &fpath)
 		: m_renderer_id(UINT32_MAX)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		std::string shader_source = read_file(fpath);
 		auto shader_sources = preprocess(shader_source);
 		compile(shader_sources);
@@ -85,6 +91,8 @@ namespace elm {
 			const std::string &fragment_src)
 		: m_renderer_id(UINT32_MAX), m_name(name)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> shader_sources = {
 			{ GL_VERTEX_SHADER, vertex_src },
 			{ GL_FRAGMENT_SHADER, fragment_src }};
@@ -93,6 +101,8 @@ namespace elm {
 
 	opengl_shader::~opengl_shader(void)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		glDeleteProgram(m_renderer_id);
 	}
 
@@ -108,6 +118,8 @@ namespace elm {
 
 	void opengl_shader::compile(std::unordered_map<GLenum, std::string> &shader_sources)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		ELM_CORE_ASSERT(shader_sources.size() <= 2, "More than two shader sources are not supported");
 		std::array<GLenum, 2> glshader_ids;
 		int glshader_id_ix = 0;
@@ -178,6 +190,8 @@ namespace elm {
 
 	int opengl_shader::get_location(const std::string &name)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		if (m_location_map.find(name) != m_location_map.end()) {
 			return m_location_map[name];
 		} else {
@@ -224,42 +238,56 @@ namespace elm {
 
 	void opengl_shader::upload_uniform_int(const std::string &name, int val)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		GLint location = get_location(name);
 		glUniform1i(location, val);
 	}
 
 	void opengl_shader::upload_uniform_float(const std::string &name, float val)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		GLint location = get_location(name);
 		glUniform1f(location, val);
 	}
 
 	void opengl_shader::upload_uniform_float2(const std::string &name, const glm::vec2 &vec)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		GLint location = get_location(name);
 		glUniform2f(location, vec.x, vec.y);
 	}
 
 	void opengl_shader::upload_uniform_float3(const std::string &name, const glm::vec3 &vec)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		GLint location = get_location(name);
 		glUniform3f(location, vec.x, vec.y, vec.z);
 	}
 
 	void opengl_shader::upload_uniform_float4(const std::string &name, const glm::vec4 &vec)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		GLint location = get_location(name);
 		glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
 	}
 
 	void opengl_shader::upload_uniform_mat3(const std::string &name, const glm::mat3 &mat)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		GLint location = get_location(name);
 		glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	}
 
 	void opengl_shader::upload_uniform_mat4(const std::string &name, const glm::mat4 &mat)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		GLint location = get_location(name);
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(mat));
 	}

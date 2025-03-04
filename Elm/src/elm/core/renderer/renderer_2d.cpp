@@ -19,6 +19,8 @@ namespace elm {
 
 	void renderer_2d::init(void)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		s_data = new renderer_2d_storage();
 
 		// Load shader
@@ -54,11 +56,15 @@ namespace elm {
 
 	void renderer_2d::shutdown(void)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		delete s_data;
 	}
 
 	void renderer_2d::begin_scene(const orthographic_camera *camera)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		s_data->shader->bind();
 		s_data->shader->set_mat4("u_view_projection", camera->get_view_projection_matrix());
 	}
@@ -73,6 +79,8 @@ namespace elm {
 		const std::shared_ptr<texture> &texture,
 		const glm::vec4 &color)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size, 1.0f });
 
 		texture->bind();
