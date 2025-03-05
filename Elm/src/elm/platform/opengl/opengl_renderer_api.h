@@ -14,6 +14,6 @@ namespace elm {
 		virtual void set_clear_color(const glm::vec4 &color) override;
 		virtual void clear(void) override;
 
-		virtual void draw_indexed(const std::shared_ptr<vertex_array> &vertex_array) override;
+		virtual void draw_indexed(const std::shared_ptr<vertex_array> &vertex_array, uint32_t count = 0) override;
 	};
 }

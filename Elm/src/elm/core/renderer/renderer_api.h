@@ -23,7 +23,7 @@ namespace elm {
 		virtual void set_clear_color(const glm::vec4 &color) = 0;
 		virtual void clear(void) = 0;
 
-		virtual void draw_indexed(const std::shared_ptr<vertex_array> &vertex_array) = 0;
+		virtual void draw_indexed(const std::shared_ptr<vertex_array> &vertex_array, uint32_t count = 0) = 0;
 
 	public:
 		inline static api get_api(void) { return s_api; }

@@ -35,10 +35,12 @@ namespace elm {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void opengl_renderer_api::draw_indexed(const std::shared_ptr<vertex_array> &vertex_array)
+	void opengl_renderer_api::draw_indexed(const std::shared_ptr<vertex_array> &vertex_array, uint32_t count)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		glDrawElements(GL_TRIANGLES, vertex_array->get_index_buffer()->get_count(), GL_UNSIGNED_INT, nullptr);
+		uint32_t index_count = count == 0 ? vertex_array->get_index_buffer()->get_count() : count;
+		ELM_CORE_ASSERT(index_count <= vertex_array->get_index_buffer()->get_count(), "Trying to draw more indicies than index buffer contains");
+		glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, nullptr);
 	}
 }

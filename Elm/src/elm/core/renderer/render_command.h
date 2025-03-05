@@ -30,9 +30,9 @@ namespace elm {
 			s_renderer_api->clear();
 		}
 
-		inline static void draw_indexed(const std::shared_ptr<vertex_array> &vertex_array)
+		inline static void draw_indexed(const std::shared_ptr<vertex_array> &vertex_array, uint32_t count = 0)
 		{
-			s_renderer_api->draw_indexed(vertex_array);
+			s_renderer_api->draw_indexed(vertex_array, count);
 		}
 
 	private:

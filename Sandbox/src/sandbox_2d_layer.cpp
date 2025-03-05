@@ -34,6 +34,17 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 
 	elm::renderer_2d::begin_scene(m_camera_controller.get_camera());
 
+	for (int y = 0; y < 100; ++y) {
+		for (int x = 0; x < 100; ++x) {
+			elm::renderer_2d::draw_quad(
+				{ 2.0f + x, 2.0f + y },
+				{ 1.0f, 1.0f },
+				(y % 2 == 0 && x % 2 == 0) || (y % 2 != 0 && x % 2 != 0)
+					? glm::vec4(0.8f, 0.2f, 0.3f, 1.0f)
+					: glm::vec4(0.2f, 0.3f, 0.8f, 1.0f));
+		}
+	}
+
 	elm::renderer_2d::draw_quad({ 1.0f, 1.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 	elm::renderer_2d::draw_quad({ 0.0f, 1.0f }, { 1.0f, 1.0f }, { 0.2f, 0.3f, 0.8f, 1.0f });
 
@@ -41,7 +52,6 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 
 	static float s_rotation = 0.0f;
 	s_rotation += 50.0f * ts.get_seconds();
-
 	elm::renderer_2d::draw_rotated_quad({ 2.0f, 0.0f }, { 1.5f, 1.0f }, glm::radians(s_rotation), m_texture);
 
 	elm::renderer_2d::end_scene();

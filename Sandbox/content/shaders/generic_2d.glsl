@@ -3,16 +3,18 @@
 
 layout(location = 0) in vec3 a_position;
 layout(location = 1) in vec2 a_uv;
+layout(location = 2) in vec4 a_color;
 
 uniform mat4 u_view_projection;
-uniform mat4 u_transform;
 
 out vec2 v_uv;
+out vec4 v_color;
 
 void main()
 {
 	v_uv = a_uv;
-	gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
+	v_color = a_color;
+	gl_Position = u_view_projection * vec4(a_position, 1.0);
 }
 
 #type fragment
@@ -21,12 +23,12 @@ void main()
 layout(location = 0) out vec4 o_color;
 
 in vec2 v_uv;
+in vec4 v_color;
 
-uniform vec4 u_color;
 uniform sampler2D u_texture;
 uniform float u_texture_tiling_factor;
 
 void main()
 {
-	o_color = texture(u_texture, v_uv * u_texture_tiling_factor) * u_color;
+	o_color = texture(u_texture, v_uv * u_texture_tiling_factor) * v_color;
 }
