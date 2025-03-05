@@ -20,4 +20,8 @@ private:
 	elm::orthographic_camera_controller m_camera_controller;
 
 	std::shared_ptr<elm::texture_2d> m_texture;
+
+	uint32_t m_frame_time_acc_ix = 0u;
+	float m_frame_time_acc = 0.0f;
+	float m_avg_frame_delta = 0.0f;
 };
