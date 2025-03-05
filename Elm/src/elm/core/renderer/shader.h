@@ -3,6 +3,7 @@
 #include "elm/core/base.h"
 #include <glm/glm.hpp>
 #include <memory>
+#include <stdint.h>
 #include <string>
 
 namespace elm {
@@ -18,6 +19,7 @@ namespace elm {
 		virtual const std::string &get_name(void) const = 0;
 
 		virtual void set_int(const std::string &name, int val) = 0;
+		virtual void set_int_array(const std::string &name, int *vals, uint32_t count) = 0;
 
 		virtual void set_float(const std::string &name, float val) = 0;
 		virtual void set_float2(const std::string &name, const glm::vec2 &vec) = 0;

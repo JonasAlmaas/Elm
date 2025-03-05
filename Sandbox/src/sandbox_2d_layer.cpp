@@ -35,7 +35,7 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 	elm::renderer_2d::begin_scene(m_camera_controller.get_camera());
 
 	for (int y = 0; y < 100; ++y) {
-		for (int x = 0; x < 100; ++x) {
+		for (int x = 0; x < 1000; ++x) {
 			elm::renderer_2d::draw_quad(
 				{ 2.0f + x, 2.0f + y },
 				{ 1.0f, 1.0f },

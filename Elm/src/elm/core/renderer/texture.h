@@ -18,6 +18,8 @@ namespace elm {
 
 		virtual uint32_t get_width(void) const = 0;
 		virtual uint32_t get_height(void) const = 0;
+
+		virtual bool equal(const texture *other) const = 0;
 	};
 
 	class texture_2d : public texture

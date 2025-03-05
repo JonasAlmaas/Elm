@@ -208,6 +208,13 @@ namespace elm {
 		upload_uniform_int(name, val);
 	}
 
+	void opengl_shader::set_int_array(const std::string &name, int *vals, uint32_t count)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		upload_uniform_int_array(name, vals, count);
+	}
+
 	void opengl_shader::set_float(const std::string &name, float val)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
@@ -254,6 +261,12 @@ namespace elm {
 	{
 		GLint location = get_location(name);
 		glUniform1i(location, val);
+	}
+
+	void opengl_shader::upload_uniform_int_array(const std::string &name, int *vals, uint32_t count)
+	{
+		GLint location = get_location(name);
+		glUniform1iv(location, count, vals);
 	}
 
 	void opengl_shader::upload_uniform_float(const std::string &name, float val)
