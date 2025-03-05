@@ -18,7 +18,7 @@ namespace elm {
 	};
 
 	struct renderer_2d_data {
-		static const uint32_t max_quads = 10000u;
+		static const uint32_t max_quads = 20000u;
 		static const uint32_t max_verticies = max_quads * 4;
 		static const uint32_t max_indices = max_quads * 6;
 		static const uint32_t max_texture_slots = 32; // TODO: Render Capabilities
