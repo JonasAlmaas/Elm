@@ -17,12 +17,18 @@ public:
 	virtual void on_imgui_render(void) override;
 
 private:
+	void calculate_fps(elm::timestep ts);
+	void tick(void);
+
+private:
 	elm::orthographic_camera_controller m_camera_controller;
 
-	std::shared_ptr<elm::texture_2d> m_texture_grass_tileset;
-	std::shared_ptr<elm::texture_2d> m_texture_checkerboard;
-
-	uint32_t m_frame_time_acc_ix = 0u;
-	float m_frame_time_acc = 0.0f;
 	float m_avg_frame_delta = 0.0f;
+	uint32_t m_water_ix = 0;
+
+	std::shared_ptr<elm::texture_2d> m_texture_grass_tileset;
+	std::shared_ptr<elm::texture_2d> m_texture_water_tileset;
+
+	std::array<std::shared_ptr<elm::texture_atlas_sprite>, 55> m_texture_atlas_grass_tileset;
+	std::array<std::shared_ptr<elm::texture_atlas_sprite>, 4> m_texture_sprite_water;
 };

@@ -145,6 +145,7 @@ namespace elm {
 	void renderer_2d::draw_quad_transform(
 		const glm::mat4 &transform,
 		const std::shared_ptr<texture_2d> &texture,
+		const std::array<glm::vec2, 4> *uvs,
 		const glm::vec2 &texture_tiling_factor,
 		const glm::vec4 &color)
 	{
@@ -168,26 +169,27 @@ namespace elm {
 			texture_slot = s_data.texture_slot_ix++;
 		}
 
+
 		s_data.batch_quad_vertex_buf_ptr->position = transform * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
-		s_data.batch_quad_vertex_buf_ptr->uv = glm::vec2(0.0f, 0.0f) * texture_tiling_factor;
+		s_data.batch_quad_vertex_buf_ptr->uv = (uvs ? (*uvs)[0] : glm::vec2(0.0f, 0.0f)) * texture_tiling_factor;
 		s_data.batch_quad_vertex_buf_ptr->color = color;
 		s_data.batch_quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
 		++s_data.batch_quad_vertex_buf_ptr;
 
 		s_data.batch_quad_vertex_buf_ptr->position = transform * glm::vec4(0.5f, -0.5f, 0.0f, 1.0f);
-		s_data.batch_quad_vertex_buf_ptr->uv = glm::vec2(1.0f, 0.0f) * texture_tiling_factor;
+		s_data.batch_quad_vertex_buf_ptr->uv = (uvs ? (*uvs)[1] : glm::vec2(1.0f, 0.0f)) * texture_tiling_factor;
 		s_data.batch_quad_vertex_buf_ptr->color = color;
 		s_data.batch_quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
 		++s_data.batch_quad_vertex_buf_ptr;
 
 		s_data.batch_quad_vertex_buf_ptr->position = transform * glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
-		s_data.batch_quad_vertex_buf_ptr->uv = glm::vec2(1.0f, 1.0f) * texture_tiling_factor;
+		s_data.batch_quad_vertex_buf_ptr->uv = (uvs ? (*uvs)[2] : glm::vec2(1.0f, 1.0f)) * texture_tiling_factor;
 		s_data.batch_quad_vertex_buf_ptr->color = color;
 		s_data.batch_quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
 		++s_data.batch_quad_vertex_buf_ptr;
 
 		s_data.batch_quad_vertex_buf_ptr->position = transform * glm::vec4(-0.5f, 0.5f, 0.0f, 1.0f);
-		s_data.batch_quad_vertex_buf_ptr->uv = glm::vec2(0.0f, 1.0f) * texture_tiling_factor;
+		s_data.batch_quad_vertex_buf_ptr->uv = (uvs ? (*uvs)[3] : glm::vec2(0.0f, 1.0f)) * texture_tiling_factor;
 		s_data.batch_quad_vertex_buf_ptr->color = color;
 		s_data.batch_quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
 		++s_data.batch_quad_vertex_buf_ptr;
@@ -207,6 +209,7 @@ namespace elm {
 		const glm::vec3 &position,
 		const glm::vec2 &size,
 		const std::shared_ptr<texture_2d> &texture,
+		const std::array<glm::vec2, 4> *uvs,
 		const glm::vec2 &texture_tiling_factor,
 		const glm::vec4 &color)
 	{
@@ -214,7 +217,7 @@ namespace elm {
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::scale(glm::mat4(1.0f), { size, 1.0f });
-		draw_quad_transform(transform, texture, texture_tiling_factor, color);
+		draw_quad_transform(transform, texture, uvs, texture_tiling_factor, color);
 	}
 
 	/// <summary>
@@ -225,6 +228,7 @@ namespace elm {
 		const glm::vec2 &size,
 		float rotation_rad,
 		const std::shared_ptr<texture_2d> &texture,
+		const std::array<glm::vec2, 4> *uvs,
 		const glm::vec2 &texture_tiling_factor,
 		const glm::vec4 &color)
 	{
@@ -233,7 +237,7 @@ namespace elm {
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::rotate(glm::mat4(1.0f), rotation_rad, { 0.0f, 0.0f, 1.0f })
 			* glm::scale(glm::mat4(1.0f), { size, 1.0f });
-		draw_quad_transform(transform, texture, texture_tiling_factor, color);
+		draw_quad_transform(transform, texture, uvs, texture_tiling_factor, color);
 	}
 
 	void renderer_2d::draw_quad(
@@ -241,7 +245,7 @@ namespace elm {
 		const glm::vec2 &size,
 		const glm::vec4 &color)
 	{
-		draw_quad_super(position, size, s_data.texture_blank, glm::vec2(1.0f), color);
+		draw_quad_super(position, size, s_data.texture_blank, nullptr, glm::vec2(1.0f), color);
 	}
 
 	void renderer_2d::draw_quad(
@@ -249,7 +253,7 @@ namespace elm {
 		const glm::vec2 &size,
 		const glm::vec4 &color)
 	{
-		draw_quad_super(glm::vec3(position, 0.0f), size, s_data.texture_blank, glm::vec2(1.0f), color);
+		draw_quad_super(glm::vec3(position, 0.0f), size, s_data.texture_blank, nullptr, glm::vec2(1.0f), color);
 	}
 
 	void renderer_2d::draw_quad(
@@ -258,7 +262,7 @@ namespace elm {
 		const std::shared_ptr<texture_2d> &texture,
 		const glm::vec4 &color)
 	{
-		draw_quad_super(position, size, texture, glm::vec2(1.0f), color);
+		draw_quad_super(position, size, texture, nullptr, glm::vec2(1.0f), color);
 	}
 
 	void renderer_2d::draw_quad(
@@ -267,7 +271,7 @@ namespace elm {
 		const std::shared_ptr<texture_2d> &texture,
 		const glm::vec4 &color)
 	{
-		draw_quad_super(glm::vec3(position, 0.0f), size, texture, glm::vec2(1.0f), color);
+		draw_quad_super(glm::vec3(position, 0.0f), size, texture, nullptr, glm::vec2(1.0f), color);
 	}
 
 	void renderer_2d::draw_quad(
@@ -277,7 +281,7 @@ namespace elm {
 		float texture_tiling_factor,
 		const glm::vec4 &color)
 	{
-		draw_quad_super(position, size, texture, { texture_tiling_factor, texture_tiling_factor }, color);
+		draw_quad_super(position, size, texture, nullptr, { texture_tiling_factor, texture_tiling_factor }, color);
 	}
 
 	void renderer_2d::draw_quad(
@@ -287,7 +291,25 @@ namespace elm {
 		float texture_tiling_factor,
 		const glm::vec4 &color)
 	{
-		draw_quad_super(glm::vec3(position, 0.0f), size, texture, { texture_tiling_factor, texture_tiling_factor }, color);
+		draw_quad_super(glm::vec3(position, 0.0f), size, texture, nullptr, { texture_tiling_factor, texture_tiling_factor }, color);
+	}
+
+	void renderer_2d::draw_quad(
+		const glm::vec3 &position,
+		const glm::vec2 &size,
+		const std::shared_ptr<texture_atlas_sprite> &texture_sprite,
+		const glm::vec4 &color)
+	{
+		draw_quad_super(position, size, texture_sprite->texture, &texture_sprite->uvs, glm::vec2(1.0f), color);
+	}
+
+	void renderer_2d::draw_quad(
+		const glm::vec2 &position,
+		const glm::vec2 &size,
+		const std::shared_ptr<texture_atlas_sprite> &texture_sprite,
+		const glm::vec4 &color)
+	{
+		draw_quad_super(glm::vec3(position, 0.0f), size, texture_sprite->texture, &texture_sprite->uvs, glm::vec2(1.0f), color);
 	}
 
 	void renderer_2d::draw_rotated_quad(
@@ -296,7 +318,7 @@ namespace elm {
 		float rotation_rad,
 		const glm::vec4 &color)
 	{
-		draw_quad_super_rotated(position, size, rotation_rad, s_data.texture_blank, glm::vec2(1.0f), color);
+		draw_quad_super_rotated(position, size, rotation_rad, s_data.texture_blank, nullptr, glm::vec2(1.0f), color);
 	}
 
 	void renderer_2d::draw_rotated_quad(
@@ -305,7 +327,7 @@ namespace elm {
 		float rotation_rad,
 		const glm::vec4 &color)
 	{
-		draw_quad_super_rotated(glm::vec3(position, 0.0f), size, rotation_rad, s_data.texture_blank, glm::vec2(1.0f), color);
+		draw_quad_super_rotated(glm::vec3(position, 0.0f), size, rotation_rad, s_data.texture_blank, nullptr, glm::vec2(1.0f), color);
 	}
 
 	void renderer_2d::draw_rotated_quad(
@@ -315,7 +337,7 @@ namespace elm {
 		const std::shared_ptr<texture_2d> &texture,
 		const glm::vec4 &color)
 	{
-		draw_quad_super_rotated(position, size, rotation_rad, texture, glm::vec2(1.0f), color);
+		draw_quad_super_rotated(position, size, rotation_rad, texture, nullptr, glm::vec2(1.0f), color);
 	}
 
 	void renderer_2d::draw_rotated_quad(
@@ -325,7 +347,7 @@ namespace elm {
 		const std::shared_ptr<texture_2d> &texture,
 		const glm::vec4 &color)
 	{
-		draw_quad_super_rotated(glm::vec3(position, 0.0f), size, rotation_rad, texture, glm::vec2(1.0f), color);
+		draw_quad_super_rotated(glm::vec3(position, 0.0f), size, rotation_rad, texture, nullptr, glm::vec2(1.0f), color);
 	}
 
 	void renderer_2d::draw_rotated_quad(
@@ -336,7 +358,7 @@ namespace elm {
 		float texture_tiling_factor,
 		const glm::vec4 &color)
 	{
-		draw_quad_super_rotated(position, size, rotation_rad, texture, { texture_tiling_factor, texture_tiling_factor }, color);
+		draw_quad_super_rotated(position, size, rotation_rad, texture, nullptr, { texture_tiling_factor, texture_tiling_factor }, color);
 	}
 
 	void renderer_2d::draw_rotated_quad(
@@ -347,7 +369,27 @@ namespace elm {
 		float texture_tiling_factor,
 		const glm::vec4 &color)
 	{
-		draw_quad_super_rotated(glm::vec3(position, 0.0f), size, rotation_rad, texture, { texture_tiling_factor, texture_tiling_factor }, color);
+		draw_quad_super_rotated(glm::vec3(position, 0.0f), size, rotation_rad, texture, nullptr, { texture_tiling_factor, texture_tiling_factor }, color);
+	}
+
+	void renderer_2d::draw_rotated_quad(
+		const glm::vec3 &position,
+		const glm::vec2 &size,
+		float rotation_rad,
+		const std::shared_ptr<texture_atlas_sprite> &texture_sprite,
+		const glm::vec4 &color)
+	{
+		draw_quad_super_rotated(position, size, rotation_rad, texture_sprite->texture, &texture_sprite->uvs, glm::vec2(1.0f), color);
+	}
+
+	void renderer_2d::draw_rotated_quad(
+		const glm::vec2 &position,
+		const glm::vec2 &size,
+		float rotation_rad,
+		const std::shared_ptr<texture_atlas_sprite> &texture_sprite,
+		const glm::vec4 &color)
+	{
+		draw_quad_super_rotated(glm::vec3(position, 0.0f), size, rotation_rad, texture_sprite->texture, &texture_sprite->uvs, glm::vec2(1.0f), color);
 	}
 
 	renderer_2d::statistics renderer_2d::get_stats(void)

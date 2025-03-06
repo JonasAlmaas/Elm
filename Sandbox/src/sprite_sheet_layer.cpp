@@ -3,23 +3,61 @@
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
+enum {
+	MAP_SIZE = 30,
+};
+static uint32_t s_map[MAP_SIZE * MAP_SIZE] = {
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 23, 24, 24, 24, 24, 25,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 12, 13, 13, 13, 13, 17, 24, 25,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0, 23, 18, 13, 13, 13, 13, 13, 13, 17, 24, 25,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 14,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 14,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 14,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  1, 29, 13, 13, 13, 13, 13, 13, 13, 13, 14,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 12, 13, 13, 13, 13, 13, 13, 13, 13, 14,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  2, 29, 13, 13, 13, 28,  2,  2,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  2,  2,  2,  3,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+};
+
 sprite_sheet_layer::sprite_sheet_layer(void)
-	: layer("Sandbox2D"), m_camera_controller(16.0f / 9.0f, true)
+	: layer("Sandbox2D"), m_camera_controller(16.0f / 9.0f, false)
 {
 }
 
 void sprite_sheet_layer::on_attach(void)
 {
 	m_texture_grass_tileset = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png");
+	m_texture_water_tileset = elm::texture_2d::create("content/textures/sprout-lands/water_tileset.png");
 
-	uint32_t checkerboard_data[8 * 8];
-	for (int y = 0; y < 8; ++y) {
-		for (int x = 0; x < 8; ++x) {
-			checkerboard_data[y * 8 + x] = (x + y) % 2 == 0 ? 0xFFFFFFFF : 0xFFCCCCCC;
+	for (int y = 0; y < 5; ++y) {
+		for (int x = 0; x < 11; ++x) {
+			m_texture_atlas_grass_tileset[y * 11 + x] = elm::texture_atlas_sprite::create(m_texture_grass_tileset, 16, 16, x, y);
 		}
 	}
-	m_texture_checkerboard = elm::texture_2d::create(8, 8);
-	m_texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
+
+	for (int x = 0; x < 4; ++x) {
+		m_texture_sprite_water[x] = elm::texture_atlas_sprite::create(m_texture_water_tileset, 16, 16, x, 0);
+	}
 }
 
 void sprite_sheet_layer::on_detach(void)
@@ -28,15 +66,16 @@ void sprite_sheet_layer::on_detach(void)
 
 void sprite_sheet_layer::on_update(elm::timestep ts)
 {
-	m_frame_time_acc += ts.get_seconds();
-	++m_frame_time_acc_ix;
-	if (m_frame_time_acc_ix >= 30) {
-		m_avg_frame_delta = m_frame_time_acc / (float)m_frame_time_acc_ix;
-		m_frame_time_acc = 0.0f;
-		m_frame_time_acc_ix = 0;
-	}
+	calculate_fps(ts);
 
 	m_camera_controller.on_update(ts);
+
+	static float prev_tick_time_s = 0.0f;
+	float time = elm::time::get_seconds();
+	if (time - prev_tick_time_s >= 1.0f / 4.0f) {
+		prev_tick_time_s = time;
+		tick();
+	}
 
 	elm::render_command::set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
 	elm::render_command::clear();
@@ -44,25 +83,27 @@ void sprite_sheet_layer::on_update(elm::timestep ts)
 	elm::renderer_2d::reset_stats();
 	elm::renderer_2d::begin_scene(m_camera_controller.get_camera());
 
-	for (int y = 0; y < 200; ++y) {
-		for (int x = 0; x < 200; ++x) {
-			elm::renderer_2d::draw_quad(
-				{ 2.0f + x, 2.0f + y },
-				{ 1.0f, 1.0f },
-				(x + y) % 2 == 0
-				? glm::vec4(0.8f, 0.2f, 0.3f, 1.0f)
-				: glm::vec4(0.2f, 0.3f, 0.8f, 1.0f));
+	for (int y = 0; y < MAP_SIZE; ++y) {
+		for (int x = 0; x < MAP_SIZE; ++x) {
+			uint32_t tile = s_map[y * MAP_SIZE + x];
+			glm::vec2 pos = { (x - MAP_SIZE / 2) * 0.25f,  (y - MAP_SIZE / 2) * 0.25f };
+			glm::vec2 size = { 0.25f, 0.25f };
+
+			if (tile != 13) {
+				elm::renderer_2d::draw_quad(glm::vec3(pos, -0.1f), size, m_texture_sprite_water[m_water_ix]);
+			}
+
+			if (tile) {
+				elm::renderer_2d::draw_quad(pos, size, m_texture_atlas_grass_tileset[tile - 1]);
+			}
 		}
 	}
 
-	elm::renderer_2d::draw_quad({ 1.0f, 1.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-	elm::renderer_2d::draw_quad({ 0.0f, 1.0f }, { 1.0f, 1.0f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-
-	elm::renderer_2d::draw_quad({ 0.0f, 0.0f }, { 1.5f, 1.0f }, m_texture_grass_tileset);
-
-	static float s_rotation = 0.0f;
-	s_rotation += 50.0f * ts.get_seconds();
-	elm::renderer_2d::draw_rotated_quad({ 2.0f, 0.0f }, { 1.0f, 1.0f }, glm::radians(s_rotation), m_texture_checkerboard, 5.0f);
+	/*for (int y = 0; y < 5; ++y) {
+		for (int x = 0; x < 11; ++x) {
+			elm::renderer_2d::draw_quad({ x, 5 - y }, { 1.0f, 1.0f }, m_texture_atlas_grass_tileset[y * 11 + x]);
+		}
+	}*/
 
 	elm::renderer_2d::end_scene();
 }
@@ -93,4 +134,25 @@ void sprite_sheet_layer::on_imgui_render(void)
 	}
 
 	ImGui::End();
+}
+
+void sprite_sheet_layer::calculate_fps(elm::timestep ts)
+{
+	static uint32_t s_frame_time_acc_ix = 0u;
+	static float s_frame_time_acc = 0.0f;
+
+	s_frame_time_acc += ts.get_seconds();
+	++s_frame_time_acc_ix;
+	if (s_frame_time_acc_ix >= 30) {
+		m_avg_frame_delta = s_frame_time_acc / (float)s_frame_time_acc_ix;
+		s_frame_time_acc = 0.0f;
+		s_frame_time_acc_ix = 0;
+	}
+}
+
+void sprite_sheet_layer::tick(void)
+{
+	if (++m_water_ix > 3) {
+		m_water_ix = 0;
+	}
 }

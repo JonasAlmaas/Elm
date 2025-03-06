@@ -6,6 +6,7 @@
 #include <elm/core/application.h>
 #include <elm/core/layer.h>
 #include <elm/core/log.h>
+#include <elm/core/time.h>
 #include <elm/core/timestep.h>
 
 #include <elm/core/event/event.h>
@@ -36,6 +37,8 @@
 // --- Renderer -------------
 #include <elm/renderer/renderer.h>
 #include <elm/renderer/renderer_2d.h>
+
+#include <elm/renderer/texture_atlas.h>
 
 #include <elm/camera/orthographic_camera.h>
 #include <elm/camera/orthographic_camera_controller.h>

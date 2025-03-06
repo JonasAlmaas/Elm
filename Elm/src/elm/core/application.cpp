@@ -1,8 +1,6 @@
 #include "application.h"
-#include "elm/core/renderer/renderer.h"
-
-// Temp (used to get time)
-#include <GLFW/glfw3.h>
+#include "elm/renderer/renderer.h"
+#include "elm/core/time.h"
 
 namespace elm {
 
@@ -31,7 +29,7 @@ namespace elm {
 		while (m_running) {
 			ELM_PROFILE_SCOPE("application::run() - Run loop");
 
-			float time = (float)glfwGetTime();
+			float time = time::get_seconds();
 			timestep timestep(time - m_last_frame_time_sec);
 			m_last_frame_time_sec = time;
 
