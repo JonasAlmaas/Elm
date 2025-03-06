@@ -19,7 +19,8 @@ public:
 private:
 	elm::orthographic_camera_controller m_camera_controller;
 
-	std::shared_ptr<elm::texture_2d> m_texture;
+	std::shared_ptr<elm::texture_2d> m_texture_grass_tileset;
+	std::shared_ptr<elm::texture_2d> m_texture_checkerboard;
 
 	uint32_t m_frame_time_acc_ix = 0u;
 	float m_frame_time_acc = 0.0f;

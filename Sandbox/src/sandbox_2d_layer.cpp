@@ -10,7 +10,16 @@ sandbox_2d_layer::sandbox_2d_layer(void)
 
 void sandbox_2d_layer::on_attach(void)
 {
-	m_texture = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png");
+	m_texture_grass_tileset = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png");
+
+	uint32_t checkerboard_data[8 * 8];
+	for (int y = 0; y < 8; ++y) {
+		for (int x = 0; x < 8; ++x) {
+			checkerboard_data[y * 8 + x] = (x + y) % 2 == 0 ? 0xFFFFFFFF : 0xFFCCCCCC;
+		}
+	}
+	m_texture_checkerboard = elm::texture_2d::create(8, 8);
+	m_texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
 }
 
 void sandbox_2d_layer::on_detach(void)
@@ -39,7 +48,7 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 			elm::renderer_2d::draw_quad(
 				{ 2.0f + x, 2.0f + y },
 				{ 1.0f, 1.0f },
-				(y % 2 == 0 && x % 2 == 0) || (y % 2 != 0 && x % 2 != 0)
+				(x + y) % 2 == 0
 					? glm::vec4(0.8f, 0.2f, 0.3f, 1.0f)
 					: glm::vec4(0.2f, 0.3f, 0.8f, 1.0f));
 		}
@@ -48,11 +57,11 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 	elm::renderer_2d::draw_quad({ 1.0f, 1.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 	elm::renderer_2d::draw_quad({ 0.0f, 1.0f }, { 1.0f, 1.0f }, { 0.2f, 0.3f, 0.8f, 1.0f });
 
-	elm::renderer_2d::draw_quad({ 0.0f, 0.0f }, { 1.5f, 1.0f }, m_texture);
+	elm::renderer_2d::draw_quad({ 0.0f, 0.0f }, { 1.5f, 1.0f }, m_texture_grass_tileset);
 
 	static float s_rotation = 0.0f;
 	s_rotation += 50.0f * ts.get_seconds();
-	elm::renderer_2d::draw_rotated_quad({ 2.0f, 0.0f }, { 1.5f, 1.0f }, glm::radians(s_rotation), m_texture);
+	elm::renderer_2d::draw_rotated_quad({ 2.0f, 0.0f }, { 1.0f, 1.0f }, glm::radians(s_rotation), m_texture_checkerboard, 5.0f);
 
 	elm::renderer_2d::end_scene();
 }
