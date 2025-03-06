@@ -41,10 +41,11 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 	elm::render_command::set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
 	elm::render_command::clear();
 
+	elm::renderer_2d::reset_stats();
 	elm::renderer_2d::begin_scene(m_camera_controller.get_camera());
 
-	for (int y = 0; y < 100; ++y) {
-		for (int x = 0; x < 1000; ++x) {
+	for (int y = 0; y < 200; ++y) {
+		for (int x = 0; x < 200; ++x) {
 			elm::renderer_2d::draw_quad(
 				{ 2.0f + x, 2.0f + y },
 				{ 1.0f, 1.0f },
@@ -73,7 +74,23 @@ void sandbox_2d_layer::on_event(elm::event &e)
 
 void sandbox_2d_layer::on_imgui_render(void)
 {
+	elm::renderer_2d::statistics stats = elm::renderer_2d::get_stats();
+
 	ImGui::Begin("Statistics");
-	ImGui::Text("FPS: %.3f", 1.0f / m_avg_frame_delta);
+	ImGui::Text("FPS: %.2f", 1.0f / m_avg_frame_delta);
+	ImGui::Text("Quad count: %d", stats.quad_count);
+	ImGui::Text("Draw calls: %d", stats.draw_calls);
+
+	uint32_t mem_usage = stats.get_memory_usage();
+	if (mem_usage < 1000) {
+		ImGui::Text("Memory usage: %d B", mem_usage);
+	} else if (mem_usage < 1'000'000) {
+		ImGui::Text("Memory usage: %.2f KB", (float)mem_usage / 1000.0f);
+	} else if (mem_usage < 1'000'000'000) {
+		ImGui::Text("Memory usage: %.2f MB", (float)mem_usage / 1'000'000.0f);
+	} else {
+		ImGui::Text("Memory usage: %.2f GB", (float)mem_usage / 1'000'000'000.0f);
+	}
+
 	ImGui::End();
 }

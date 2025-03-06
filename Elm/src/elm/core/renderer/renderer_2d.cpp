@@ -19,22 +19,24 @@ namespace elm {
 
 	struct renderer_2d_data {
 		static const uint32_t max_quads = 20000u;
-		static const uint32_t max_verticies = max_quads * 4;
-		static const uint32_t max_indices = max_quads * 6;
+		static const uint32_t max_quad_verticies = max_quads * 4;
+		static const uint32_t max_quad_indices = max_quads * 6;
+
 		static const uint32_t max_texture_slots = 32; // TODO: Render Capabilities
 
 		std::shared_ptr<shader> shader;
 		std::shared_ptr<texture_2d> texture_blank; // Texture slot 0
 
-		std::shared_ptr<vertex_array> quad_vertex_array;
-		std::shared_ptr<vertex_buffer> quad_vertex_buffer;
-
-		uint32_t quad_count = 0;
-		quad_vertex *quad_vertex_buf_base = nullptr;
-		quad_vertex *quad_vertex_buf_ptr = nullptr;
+		std::shared_ptr<vertex_array> batch_quad_vertex_array;
+		std::shared_ptr<vertex_buffer> batch_quad_vertex_buffer;
+		uint32_t batch_quad_count = 0;
+		quad_vertex *batch_quad_vertex_buf_base = nullptr;
+		quad_vertex *batch_quad_vertex_buf_ptr = nullptr;
 
 		std::array<std::shared_ptr<texture_2d>, max_texture_slots> texture_slots;
 		uint32_t texture_slot_ix = 1u; // 0 = blank texture
+
+		renderer_2d::statistics stats;
 	};
 
 	static renderer_2d_data s_data;
@@ -59,20 +61,20 @@ namespace elm {
 		s_data.texture_slots[0] = s_data.texture_blank;
 
 		// -- Quad vertex array --
-		s_data.quad_vertex_array = elm::vertex_array::create();
+		s_data.batch_quad_vertex_array = elm::vertex_array::create();
 
-		s_data.quad_vertex_buffer = elm::vertex_buffer::create(renderer_2d_data::max_verticies * sizeof(quad_vertex));
+		s_data.batch_quad_vertex_buffer = elm::vertex_buffer::create(renderer_2d_data::max_quad_verticies * sizeof(quad_vertex));
 		elm::vertex_buffer_layout layout = {
 			{ elm::shader_data_type::Float3, "a_position" },
 			{ elm::shader_data_type::Float2, "a_uv" },
 			{ elm::shader_data_type::Float4, "a_color" },
 			{ elm::shader_data_type::Float, "a_texture_slot" } };
-		s_data.quad_vertex_buffer->set_layout(&layout);
-		s_data.quad_vertex_array->add_vertex_buffer(s_data.quad_vertex_buffer);
+		s_data.batch_quad_vertex_buffer->set_layout(&layout);
+		s_data.batch_quad_vertex_array->add_vertex_buffer(s_data.batch_quad_vertex_buffer);
 
-		s_data.quad_vertex_buf_base = new quad_vertex[renderer_2d_data::max_verticies];
+		s_data.batch_quad_vertex_buf_base = new quad_vertex[renderer_2d_data::max_quad_verticies];
 
-		uint32_t *quad_indices = new uint32_t[renderer_2d_data::max_indices];
+		uint32_t *quad_indices = new uint32_t[renderer_2d_data::max_quad_indices];
 		for (uint32_t i = 0u; i < renderer_2d_data::max_quads; ++i) {
 			quad_indices[i * 6 + 0] = i * 4 + 0;
 			quad_indices[i * 6 + 1] = i * 4 + 1;
@@ -81,8 +83,8 @@ namespace elm {
 			quad_indices[i * 6 + 4] = i * 4 + 2;
 			quad_indices[i * 6 + 5] = i * 4 + 3;
 		}
-		auto quad_ib = elm::index_buffer::create(quad_indices, renderer_2d_data::max_indices);
-		s_data.quad_vertex_array->set_index_buffer(quad_ib);
+		auto quad_ib = elm::index_buffer::create(quad_indices, renderer_2d_data::max_quad_indices);
+		s_data.batch_quad_vertex_array->set_index_buffer(quad_ib);
 		delete[] quad_indices;
 	}
 
@@ -90,9 +92,9 @@ namespace elm {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		delete[] s_data.quad_vertex_buf_base;
-		s_data.quad_vertex_buf_base = nullptr;
-		s_data.quad_vertex_buf_ptr = nullptr;
+		delete[] s_data.batch_quad_vertex_buf_base;
+		s_data.batch_quad_vertex_buf_base = nullptr;
+		s_data.batch_quad_vertex_buf_ptr = nullptr;
 	}
 
 	void renderer_2d::begin_scene(const orthographic_camera *camera)
@@ -104,8 +106,8 @@ namespace elm {
 
 		s_data.texture_slots[0]->bind(0); // Blank texture
 
-		s_data.quad_count = 0u;
-		s_data.quad_vertex_buf_ptr = s_data.quad_vertex_buf_base;
+		s_data.batch_quad_count = 0u;
+		s_data.batch_quad_vertex_buf_ptr = s_data.batch_quad_vertex_buf_base;
 		s_data.texture_slot_ix = 1u;
 	}
 
@@ -118,24 +120,26 @@ namespace elm {
 
 	void renderer_2d::flush(void)
 	{
-		if (s_data.quad_count == 0) {
+		if (s_data.batch_quad_count == 0) {
 			return;
 		}
 
-		uint32_t data_size = (uint32_t)((uint8_t *)s_data.quad_vertex_buf_ptr - (uint8_t *)s_data.quad_vertex_buf_base);
-		s_data.quad_vertex_buffer->set_data(s_data.quad_vertex_buf_base, data_size);
+		uint32_t data_size = (uint32_t)((uint8_t *)s_data.batch_quad_vertex_buf_ptr - (uint8_t *)s_data.batch_quad_vertex_buf_base);
+		s_data.batch_quad_vertex_buffer->set_data(s_data.batch_quad_vertex_buf_base, data_size);
 
 		// First slot is the blank texture, bound in begin_scene()
 		for (uint32_t i = 1u; i < s_data.texture_slot_ix; ++i) {
 			s_data.texture_slots[i]->bind(i);
 		}
 
-		s_data.quad_vertex_array->bind();
-		render_command::draw_indexed(s_data.quad_vertex_array, s_data.quad_count * 6);
+		s_data.batch_quad_vertex_array->bind();
+		render_command::draw_indexed(s_data.batch_quad_vertex_array, s_data.batch_quad_count * 6);
 
-		s_data.quad_count = 0;
-		s_data.quad_vertex_buf_ptr = s_data.quad_vertex_buf_base;
+		s_data.batch_quad_count = 0;
+		s_data.batch_quad_vertex_buf_ptr = s_data.batch_quad_vertex_buf_base;
 		s_data.texture_slot_ix = 1;
+
+		++s_data.stats.draw_calls;
 	}
 
 	void renderer_2d::draw_quad_transform(
@@ -164,34 +168,36 @@ namespace elm {
 			texture_slot = s_data.texture_slot_ix++;
 		}
 
-		s_data.quad_vertex_buf_ptr->position = transform * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
-		s_data.quad_vertex_buf_ptr->uv = glm::vec2(0.0f, 0.0f) * texture_tiling_factor;
-		s_data.quad_vertex_buf_ptr->color = color;
-		s_data.quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
-		++s_data.quad_vertex_buf_ptr;
+		s_data.batch_quad_vertex_buf_ptr->position = transform * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
+		s_data.batch_quad_vertex_buf_ptr->uv = glm::vec2(0.0f, 0.0f) * texture_tiling_factor;
+		s_data.batch_quad_vertex_buf_ptr->color = color;
+		s_data.batch_quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
+		++s_data.batch_quad_vertex_buf_ptr;
 
-		s_data.quad_vertex_buf_ptr->position = transform * glm::vec4(0.5f, -0.5f, 0.0f, 1.0f);
-		s_data.quad_vertex_buf_ptr->uv = glm::vec2(1.0f, 0.0f) * texture_tiling_factor;
-		s_data.quad_vertex_buf_ptr->color = color;
-		s_data.quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
-		++s_data.quad_vertex_buf_ptr;
+		s_data.batch_quad_vertex_buf_ptr->position = transform * glm::vec4(0.5f, -0.5f, 0.0f, 1.0f);
+		s_data.batch_quad_vertex_buf_ptr->uv = glm::vec2(1.0f, 0.0f) * texture_tiling_factor;
+		s_data.batch_quad_vertex_buf_ptr->color = color;
+		s_data.batch_quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
+		++s_data.batch_quad_vertex_buf_ptr;
 
-		s_data.quad_vertex_buf_ptr->position = transform * glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
-		s_data.quad_vertex_buf_ptr->uv = glm::vec2(1.0f, 1.0f) * texture_tiling_factor;
-		s_data.quad_vertex_buf_ptr->color = color;
-		s_data.quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
-		++s_data.quad_vertex_buf_ptr;
+		s_data.batch_quad_vertex_buf_ptr->position = transform * glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
+		s_data.batch_quad_vertex_buf_ptr->uv = glm::vec2(1.0f, 1.0f) * texture_tiling_factor;
+		s_data.batch_quad_vertex_buf_ptr->color = color;
+		s_data.batch_quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
+		++s_data.batch_quad_vertex_buf_ptr;
 
-		s_data.quad_vertex_buf_ptr->position = transform * glm::vec4(-0.5f, 0.5f, 0.0f, 1.0f);
-		s_data.quad_vertex_buf_ptr->uv = glm::vec2(0.0f, 1.0f) * texture_tiling_factor;
-		s_data.quad_vertex_buf_ptr->color = color;
-		s_data.quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
-		++s_data.quad_vertex_buf_ptr;
+		s_data.batch_quad_vertex_buf_ptr->position = transform * glm::vec4(-0.5f, 0.5f, 0.0f, 1.0f);
+		s_data.batch_quad_vertex_buf_ptr->uv = glm::vec2(0.0f, 1.0f) * texture_tiling_factor;
+		s_data.batch_quad_vertex_buf_ptr->color = color;
+		s_data.batch_quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
+		++s_data.batch_quad_vertex_buf_ptr;
 
-		++s_data.quad_count;
-		if (s_data.quad_count >= renderer_2d_data::max_quads) {
+		++s_data.batch_quad_count;
+		if (s_data.batch_quad_count >= renderer_2d_data::max_quads) {
 			flush();
 		}
+
+		++s_data.stats.quad_count;
 	}
 
 	/// <summary>
@@ -342,5 +348,21 @@ namespace elm {
 		const glm::vec4 &color)
 	{
 		draw_quad_super_rotated(glm::vec3(position, 0.0f), size, rotation_rad, texture, { texture_tiling_factor, texture_tiling_factor }, color);
+	}
+
+	renderer_2d::statistics renderer_2d::get_stats(void)
+	{
+		return s_data.stats;
+	}
+
+	void renderer_2d::reset_stats(void)
+	{
+		memset(&s_data.stats, 0, sizeof s_data.stats);
+	}
+
+	uint32_t renderer_2d::statistics::get_memory_usage(void) const
+	{
+		return sizeof(quad_vertex) * get_vertex_count()
+			+ sizeof(uint32_t) * get_index_count();
 	}
 }

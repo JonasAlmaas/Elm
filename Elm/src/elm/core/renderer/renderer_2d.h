@@ -57,5 +57,17 @@ namespace elm {
 
 		static void draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<texture_2d> &texture, float texture_tiling_factor = 1.0f, const glm::vec4 &color = glm::vec4(1.0f));
 		static void draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<texture_2d> &texture, float texture_tiling_factor = 1.0f, const glm::vec4 &color = glm::vec4(1.0f));
+
+	public:
+		struct statistics {
+			uint32_t draw_calls = 0u;
+			uint32_t quad_count = 0u;
+
+			inline uint32_t get_vertex_count(void) const { return quad_count * 4u; }
+			inline uint32_t get_index_count(void) const { return quad_count * 6u; }
+			uint32_t get_memory_usage(void) const;
+		};
+		static statistics get_stats(void);
+		static void reset_stats(void);
 	};
 }
