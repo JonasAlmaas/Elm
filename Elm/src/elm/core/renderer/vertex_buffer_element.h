@@ -35,8 +35,8 @@ namespace elm {
 			case elm::shader_data_type::Float2: return 2;
 			case elm::shader_data_type::Float3: return 3;
 			case elm::shader_data_type::Float4: return 4;
-			case elm::shader_data_type::Mat3: return 3 * 3;
-			case elm::shader_data_type::Mat4: return 4 * 4;
+			case elm::shader_data_type::Mat3: return 3; // 3 * float3
+			case elm::shader_data_type::Mat4: return 4; // 4 * float3
 			}
 
 			ELM_CORE_ASSERT(false, "Unknown shader data type");

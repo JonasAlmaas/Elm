@@ -61,17 +61,48 @@ namespace elm {
 		const auto layout = vertex_buffer->get_layout();
 		ELM_CORE_ASSERT(layout->get_elements().size(), "Unable to add vertex buffer without layout to vertex array");
 
-		uint32_t ix = 0;
+		uint32_t vb_ix = 0;
 		for (const auto &el : *layout) {
-			glEnableVertexAttribArray(ix);
-			glVertexAttribPointer(
-				ix,
-				el.get_component_count(),
-				shader_data_type_to_opengl_base_type(el.type),
-				el.normalized ? GL_TRUE : GL_FALSE,
-				layout->get_stride(),
-				(const void *)el.offset);
-			++ix;
+			switch (el.type) {
+			case shader_data_type::Float:
+			case shader_data_type::Float2:
+			case shader_data_type::Float3:
+			case shader_data_type::Float4:
+			case shader_data_type::Int:
+			case shader_data_type::Int2:
+			case shader_data_type::Int3:
+			case shader_data_type::Int4:
+			case shader_data_type::Bool:
+				glEnableVertexAttribArray(vb_ix);
+				glVertexAttribPointer(vb_ix,
+					el.get_component_count(),
+					shader_data_type_to_opengl_base_type(el.type),
+					el.normalized ? GL_TRUE : GL_FALSE,
+					layout->get_stride(),
+					(const void *)el.offset);
+				++vb_ix;
+				break;
+			case shader_data_type::Mat3:
+			case shader_data_type::Mat4:
+			{
+				uint32_t count = el.get_component_count();
+				for (uint32_t i = 0; i < count; ++i) {
+					glEnableVertexAttribArray(vb_ix);
+					glVertexAttribPointer(vb_ix,
+						count,
+						shader_data_type_to_opengl_base_type(el.type),
+						el.normalized ? GL_TRUE : GL_FALSE,
+						layout->get_stride(),
+						(const void *)(sizeof(float) * count * i));
+					glVertexAttribDivisor(vb_ix, 1);
+					++vb_ix;
+				}
+				break;
+			}
+			default:
+				ELM_CORE_ASSERT(false, "Unknown shader_data_type");
+				break;
+			}
 		}
 
 		m_vertex_buffers.push_back(vertex_buffer);

@@ -39,7 +39,7 @@ namespace elm {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		uint32_t index_count = count == 0 ? vertex_array->get_index_buffer()->get_count() : count;
+		uint32_t index_count = count ? count : vertex_array->get_index_buffer()->get_count();
 		ELM_CORE_ASSERT(index_count <= vertex_array->get_index_buffer()->get_count(), "Trying to draw more indicies than index buffer contains");
 		glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, nullptr);
 	}

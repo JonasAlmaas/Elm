@@ -120,6 +120,8 @@ namespace elm {
 
 	void renderer_2d::flush(void)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		if (s_data.batch_quad_count == 0) {
 			return;
 		}

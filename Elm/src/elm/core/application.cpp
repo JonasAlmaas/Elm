@@ -76,10 +76,10 @@ namespace elm {
 		dispatcher.dispatch<window_resize_event>(ELM_BIND_EVENT_FN(application::on_window_resize));
 
 		for (auto it = m_layer_stack.end(); it != m_layer_stack.begin(); ) {
-			(*--it)->on_event(e);
 			if (e.handled) {
 				break;
 			}
+			(*--it)->on_event(e);
 		}
 	}
 
