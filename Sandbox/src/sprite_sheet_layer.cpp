@@ -51,12 +51,12 @@ void sprite_sheet_layer::on_attach(void)
 
 	for (int y = 0; y < 5; ++y) {
 		for (int x = 0; x < 11; ++x) {
-			m_texture_atlas_grass_tileset[y * 11 + x] = elm::texture_atlas_sprite::create(m_texture_grass_tileset, 16, 16, x, y);
+			m_texture_atlas_grass_tileset[y * 11 + x] = elm::sub_texture_2d::from_atlas(m_texture_grass_tileset, 16, 16, x, y);
 		}
 	}
 
 	for (int x = 0; x < 4; ++x) {
-		m_texture_sprite_water[x] = elm::texture_atlas_sprite::create(m_texture_water_tileset, 16, 16, x, 0);
+		m_texture_sprite_water[x] = elm::sub_texture_2d::from_atlas(m_texture_water_tileset, 16, 16, x, 0);
 	}
 }
 

@@ -297,19 +297,19 @@ namespace elm {
 	void renderer_2d::draw_quad(
 		const glm::vec3 &position,
 		const glm::vec2 &size,
-		const std::shared_ptr<texture_atlas_sprite> &texture_sprite,
+		const std::shared_ptr<sub_texture_2d> &sub_texture,
 		const glm::vec4 &color)
 	{
-		draw_quad_super(position, size, texture_sprite->texture, &texture_sprite->uvs, glm::vec2(1.0f), color);
+		draw_quad_super(position, size, sub_texture->texture, &sub_texture->uvs, glm::vec2(1.0f), color);
 	}
 
 	void renderer_2d::draw_quad(
 		const glm::vec2 &position,
 		const glm::vec2 &size,
-		const std::shared_ptr<texture_atlas_sprite> &texture_sprite,
+		const std::shared_ptr<sub_texture_2d> &sub_texture,
 		const glm::vec4 &color)
 	{
-		draw_quad_super(glm::vec3(position, 0.0f), size, texture_sprite->texture, &texture_sprite->uvs, glm::vec2(1.0f), color);
+		draw_quad_super(glm::vec3(position, 0.0f), size, sub_texture->texture, &sub_texture->uvs, glm::vec2(1.0f), color);
 	}
 
 	void renderer_2d::draw_rotated_quad(
@@ -376,20 +376,20 @@ namespace elm {
 		const glm::vec3 &position,
 		const glm::vec2 &size,
 		float rotation_rad,
-		const std::shared_ptr<texture_atlas_sprite> &texture_sprite,
+		const std::shared_ptr<sub_texture_2d> &sub_texture,
 		const glm::vec4 &color)
 	{
-		draw_quad_super_rotated(position, size, rotation_rad, texture_sprite->texture, &texture_sprite->uvs, glm::vec2(1.0f), color);
+		draw_quad_super_rotated(position, size, rotation_rad, sub_texture->texture, &sub_texture->uvs, glm::vec2(1.0f), color);
 	}
 
 	void renderer_2d::draw_rotated_quad(
 		const glm::vec2 &position,
 		const glm::vec2 &size,
 		float rotation_rad,
-		const std::shared_ptr<texture_atlas_sprite> &texture_sprite,
+		const std::shared_ptr<sub_texture_2d> &sub_texture,
 		const glm::vec4 &color)
 	{
-		draw_quad_super_rotated(glm::vec3(position, 0.0f), size, rotation_rad, texture_sprite->texture, &texture_sprite->uvs, glm::vec2(1.0f), color);
+		draw_quad_super_rotated(glm::vec3(position, 0.0f), size, rotation_rad, sub_texture->texture, &sub_texture->uvs, glm::vec2(1.0f), color);
 	}
 
 	renderer_2d::statistics renderer_2d::get_stats(void)

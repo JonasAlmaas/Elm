@@ -38,8 +38,6 @@
 #include <elm/renderer/renderer.h>
 #include <elm/renderer/renderer_2d.h>
 
-#include <elm/renderer/texture_atlas.h>
-
 #include <elm/camera/orthographic_camera.h>
 #include <elm/camera/orthographic_camera_controller.h>
 // --------------------------

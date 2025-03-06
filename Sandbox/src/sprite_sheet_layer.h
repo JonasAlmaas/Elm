@@ -29,6 +29,6 @@ private:
 	std::shared_ptr<elm::texture_2d> m_texture_grass_tileset;
 	std::shared_ptr<elm::texture_2d> m_texture_water_tileset;
 
-	std::array<std::shared_ptr<elm::texture_atlas_sprite>, 55> m_texture_atlas_grass_tileset;
-	std::array<std::shared_ptr<elm::texture_atlas_sprite>, 4> m_texture_sprite_water;
+	std::array<std::shared_ptr<elm::sub_texture_2d>, 55> m_texture_atlas_grass_tileset;
+	std::array<std::shared_ptr<elm::sub_texture_2d>, 4> m_texture_sprite_water;
 };
