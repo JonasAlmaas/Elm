@@ -4,6 +4,8 @@
 
 namespace elm {
 
+	static const uint32_t s_max_frame_buffer_size = 16384u;
+
 	opengl_frame_buffer::opengl_frame_buffer(const struct frame_buffer_specification &spec)
 		: m_spec(spec)
 	{
@@ -12,6 +14,8 @@ namespace elm {
 
 	opengl_frame_buffer::~opengl_frame_buffer(void)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		glDeleteFramebuffers(1, &m_renderer_id);
 		glDeleteTextures(1, &m_color_attachment);
 		glDeleteTextures(1, &m_depth_attachment);
@@ -30,6 +34,13 @@ namespace elm {
 
 	void opengl_frame_buffer::resize(uint32_t width, uint32_t height)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		if (width == 0 || height == 0 || width > s_max_frame_buffer_size || height > s_max_frame_buffer_size) {
+			ELM_CORE_WARN("Atempted to resize frame buffer to {} {}", width, height);
+			return;
+		}
+
 		m_spec.width = width;
 		m_spec.height = height;
 
@@ -38,6 +49,8 @@ namespace elm {
 
 	void opengl_frame_buffer::invalidate(void)
 	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
 		if (m_renderer_id) {
 			glDeleteFramebuffers(1, &m_renderer_id);
 			glDeleteTextures(1, &m_color_attachment);
