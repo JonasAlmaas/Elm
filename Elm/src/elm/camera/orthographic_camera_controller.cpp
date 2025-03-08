@@ -2,13 +2,14 @@
 
 #include "elm/core/input/input.h"
 #include "elm/core/input/key_code.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace elm {
 
-	orthographic_camera_controller::orthographic_camera_controller(float aspect_ratio, bool rotation)
+	orthographic_camera_controller::orthographic_camera_controller(float aspect_ratio, bool enable_rotation)
 		: m_aspect_ratio(aspect_ratio),
 		m_camera(-m_aspect_ratio * m_zoom_level, m_aspect_ratio * m_zoom_level, -m_zoom_level, m_zoom_level),
-		m_rotation(rotation)
+		m_enable_rotation(enable_rotation)
 	{
 	}
 
@@ -16,37 +17,46 @@ namespace elm {
 	{
 		ELM_PROFILE_FUNCTION();
 
+		bool dirty_view = false;
+
 		if (input::is_key_pressed(key::A)) {
-			glm::vec3 pos = m_camera.get_position();
-			pos.x -= glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
-			pos.y -= glm::sin(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
-			m_camera.set_position(pos);
+			m_position.x -= glm::cos(glm::radians(m_rotation_deg)) * m_translation_speed * ts.get_seconds();
+			m_position.y -= glm::sin(glm::radians(m_rotation_deg)) * m_translation_speed * ts.get_seconds();
+			dirty_view = true;
 		} else if (elm::input::is_key_pressed(elm::key::D)) {
-			glm::vec3 pos = m_camera.get_position();
-			pos.x += glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
-			pos.y += glm::sin(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
-			m_camera.set_position(pos);
+			m_position.x += glm::cos(glm::radians(m_rotation_deg)) * m_translation_speed * ts.get_seconds();
+			m_position.y += glm::sin(glm::radians(m_rotation_deg)) * m_translation_speed * ts.get_seconds();
+			dirty_view = true;
 		}
 
 		if (elm::input::is_key_pressed(elm::key::W)) {
-			glm::vec3 pos = m_camera.get_position();
-			pos.x += -glm::sin(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
-			pos.y += glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
-			m_camera.set_position(pos);
+			m_position.x += -glm::sin(glm::radians(m_rotation_deg)) * m_translation_speed * ts.get_seconds();
+			m_position.y += glm::cos(glm::radians(m_rotation_deg)) * m_translation_speed * ts.get_seconds();
+			dirty_view = true;
 		} else if (elm::input::is_key_pressed(elm::key::S)) {
-			glm::vec3 pos = m_camera.get_position();
-			pos.x -= -glm::sin(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
-			pos.y -= glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
-			m_camera.set_position(pos);
+			m_position.x -= -glm::sin(glm::radians(m_rotation_deg)) * m_translation_speed * ts.get_seconds();
+			m_position.y -= glm::cos(glm::radians(m_rotation_deg)) * m_translation_speed * ts.get_seconds();
+			dirty_view = true;
 		}
 
-		if (m_rotation) {
+		if (m_enable_rotation) {
 			if (elm::input::is_key_pressed(elm::key::Q)) {
-				m_camera.set_rotation_deg(m_camera.get_rotation_deg() + m_rotation_speed * ts.get_seconds());
+				m_rotation_deg += m_rotation_speed * ts.get_seconds();
+				dirty_view = true;
+			} else if (elm::input::is_key_pressed(elm::key::E)) {
+				m_rotation_deg -= m_rotation_speed * ts.get_seconds();
+				dirty_view = true;
 			}
-			else if (elm::input::is_key_pressed(elm::key::E)) {
-				m_camera.set_rotation_deg(m_camera.get_rotation_deg() - m_rotation_speed * ts.get_seconds());
+		}
+
+		if (dirty_view) {
+			if (m_rotation_deg > 180.0f) {
+				m_rotation_deg -= 360.0f;
+			} else if (m_rotation_deg <= -180.0f) {
+				m_rotation_deg += 360.0f;
 			}
+
+			recalculate_view_matrix();
 		}
 	}
 
@@ -78,5 +88,14 @@ namespace elm {
 		m_translation_speed = m_zoom_level;
 
 		return false;
+	}
+
+	void orthographic_camera_controller::recalculate_view_matrix(void)
+	{
+		ELM_PROFILE_FUNCTION();
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_position)
+			* glm::rotate(glm::mat4(1.0f), glm::radians(m_rotation_deg), { 0.0f, 0.0f, 1.0f });
+		m_camera.set_view_matrix(glm::inverse(transform));
 	}
 }

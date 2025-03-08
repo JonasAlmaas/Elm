@@ -10,7 +10,7 @@ namespace elm {
 	class orthographic_camera_controller
 	{
 	public:
-		orthographic_camera_controller(float aspect_ratio, bool rotation = false);
+		orthographic_camera_controller(float aspect_ratio, bool enable_rotation = false);
 
 		void on_update(timestep ts);
 		void on_event(event &e);
@@ -26,12 +26,16 @@ namespace elm {
 	private:
 		bool on_mouse_scrolled(mouse_scrolled_event &e);
 
+		void recalculate_view_matrix(void);
+
 	private:
 		float m_aspect_ratio;
 		float m_zoom_level = 1.0f;
 		orthographic_camera m_camera;
+		bool m_enable_rotation;
 
-		bool m_rotation;
+		glm::vec3 m_position = { 0.0f, 0.0f, 0.0f };
+		float m_rotation_deg = 0.0f; // Anti-clockwise
 
 		float m_translation_speed = 1.0f;
 		float m_rotation_speed = 50.0f;
