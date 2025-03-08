@@ -29,6 +29,9 @@ namespace elm {
 		virtual void set_vsync(bool enabled) override;
 		virtual inline bool is_vsync(void) const override { return m_data.vsync; }
 
+		virtual void enable_cursor(void) override;
+		virtual void disable_cursor(void) override;
+
 		virtual void *get_native_window(void) override { return (void *)m_window; }
 
 	private:

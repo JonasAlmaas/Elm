@@ -7,7 +7,9 @@
 sandbox_3d_layer::sandbox_3d_layer(void)
 	: layer("Sandbox3D"), m_camera_controller(60.0f, 16.0f / 9.0f)
 {
-	m_camera_controller.set_position({ 0.0f, 0.0f, 4.0f });
+	m_camera_controller.set_position({ -1.5f, -1.5f, 1.5f });
+	m_camera_controller.set_pitch_deg(-55.0f);
+	m_camera_controller.set_yaw_deg(45.0f);
 
 	m_shader = elm::shader::create("content/shaders/texture.glsl");
 	m_shader->bind();
@@ -142,6 +144,18 @@ void sandbox_3d_layer::on_imgui_render(void)
 	auto camera_pos = m_camera_controller.get_position();
 	if (ImGui::DragFloat3("Camera position", glm::value_ptr(camera_pos), 0.1f)) {
 		m_camera_controller.set_position(camera_pos);
+	}
+	float pitch = m_camera_controller.get_pitch_deg();
+	if (ImGui::DragFloat("Camera pitch", &pitch, 0.01f)) {
+		m_camera_controller.set_pitch_deg(pitch);
+	}
+	float yaw = m_camera_controller.get_yaw_deg();
+	if (ImGui::DragFloat("Camera yaw", &yaw, 0.01f)) {
+		m_camera_controller.set_yaw_deg(yaw);
+	}
+	float roll = m_camera_controller.get_roll_deg();
+	if (ImGui::DragFloat("Camera roll", &roll, 0.01f)) {
+		m_camera_controller.set_roll_deg(roll);
 	}
 
 	ImGui::End();

@@ -19,9 +19,6 @@ namespace elm {
 		inline virtual const glm::mat4 &get_view_projection_matrix(void) const override { return m_view_projection_matrix; }
 
 	private:
-		void recalculate_view_matrix(void);
-
-	private:
 		glm::mat4 m_projection_matrix;
 		glm::mat4 m_view_matrix;
 		glm::mat4 m_view_projection_matrix; /* Cached (m_projection_matrix * m_view_matrix)*/
