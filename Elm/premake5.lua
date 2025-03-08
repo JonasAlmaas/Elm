@@ -19,6 +19,7 @@ project "Elm"
 	includedirs {
 		"src",
 
+		"%{IncludeDir.entt}",
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.glfw}",

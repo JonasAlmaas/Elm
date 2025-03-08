@@ -18,6 +18,7 @@ project "Sandbox"
 		"../Elm/include",
 		"../Elm/src",
 
+		"%{IncludeDir.entt}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.imgui}",
