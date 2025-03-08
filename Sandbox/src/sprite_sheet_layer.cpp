@@ -111,6 +111,10 @@ void sprite_sheet_layer::on_update(elm::timestep ts)
 void sprite_sheet_layer::on_event(elm::event &e)
 {
 	m_camera_controller.on_event(e);
+
+	elm::event_dispatcher dispatcher(e);
+
+	dispatcher.dispatch<elm::window_resize_event>(ELM_BIND_EVENT_FN(sprite_sheet_layer::on_window_resize));
 }
 
 void sprite_sheet_layer::on_imgui_render(void)
@@ -155,4 +159,10 @@ void sprite_sheet_layer::tick(void)
 	if (++m_water_ix > 3) {
 		m_water_ix = 0;
 	}
+}
+
+bool sprite_sheet_layer::on_window_resize(elm::window_resize_event &e)
+{
+	m_camera_controller.resize_viewport(e.get_width(), e.get_height());
+	return false;
 }

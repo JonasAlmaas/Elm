@@ -70,6 +70,10 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 void sandbox_2d_layer::on_event(elm::event &e)
 {
 	m_camera_controller.on_event(e);
+
+	elm::event_dispatcher dispatcher(e);
+
+	dispatcher.dispatch<elm::window_resize_event>(ELM_BIND_EVENT_FN(sandbox_2d_layer::on_window_resize));
 }
 
 void sandbox_2d_layer::on_imgui_render(void)
@@ -93,4 +97,10 @@ void sandbox_2d_layer::on_imgui_render(void)
 	}
 
 	ImGui::End();
+}
+
+bool sandbox_2d_layer::on_window_resize(elm::window_resize_event &e)
+{
+	m_camera_controller.resize_viewport(e.get_width(), e.get_height());
+	return false;
 }

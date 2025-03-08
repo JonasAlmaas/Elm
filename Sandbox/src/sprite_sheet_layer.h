@@ -21,6 +21,9 @@ private:
 	void tick(void);
 
 private:
+	bool on_window_resize(elm::window_resize_event &e);
+
+private:
 	elm::orthographic_camera_controller m_camera_controller;
 
 	float m_avg_frame_delta = 0.0f;

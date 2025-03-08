@@ -75,13 +75,16 @@ void dockspace_layer::on_imgui_render(void)
 	ImGui::Image(m_texture_checkerboard->get_renderer_id(), { 256.0f, 256.0f }, { 0.0f, 1.0f }, { 1.0f, 0.0f });
 	ImGui::End();
 
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });
 	ImGui::Begin("Viewport");
 	ImVec2 viewport_panel_size = ImGui::GetContentRegionAvail();
 	if (m_viewport_size.x != viewport_panel_size.x
 			|| m_viewport_size.y != viewport_panel_size.y) {
 		m_viewport_size = { viewport_panel_size.x, viewport_panel_size.y };
 		m_frame_buffer->resize((uint32_t)m_viewport_size.x, (uint32_t)m_viewport_size.y);
+		m_camera_controller.resize_viewport((uint32_t)m_viewport_size.x, (uint32_t)m_viewport_size.y);
 	}
 	ImGui::Image(m_frame_buffer->get_color_attachment_renderer_id(), { m_viewport_size.x, m_viewport_size.y }, {0.0f, 1.0f}, {1.0f, 0.0f});
 	ImGui::End();
+	ImGui::PopStyleVar();
 }

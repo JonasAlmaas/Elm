@@ -21,9 +21,10 @@ namespace elm {
 		inline orthographic_camera *get_camera(void) { return &m_camera; }
 		inline const orthographic_camera *get_camera(void) const { return &m_camera; }
 
+		void resize_viewport(uint32_t width, uint32_t height);
+
 	private:
 		bool on_mouse_scrolled(mouse_scrolled_event &e);
-		bool on_window_resize_event(window_resize_event &e);
 
 	private:
 		float m_aspect_ratio;

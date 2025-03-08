@@ -56,7 +56,14 @@ namespace elm {
 
 		event_dispatcher dispatcher(e);
 		dispatcher.dispatch<mouse_scrolled_event>(ELM_BIND_EVENT_FN(orthographic_camera_controller::on_mouse_scrolled));
-		dispatcher.dispatch<window_resize_event>(ELM_BIND_EVENT_FN(orthographic_camera_controller::on_window_resize_event));
+	}
+
+	void orthographic_camera_controller::resize_viewport(uint32_t width, uint32_t height)
+	{
+		ELM_PROFILE_FUNCTION();
+
+		m_aspect_ratio = (float)width / (float)height;
+		m_camera.set_projection(-m_aspect_ratio * m_zoom_level, m_aspect_ratio * m_zoom_level, -m_zoom_level, m_zoom_level);
 	}
 
 	bool orthographic_camera_controller::on_mouse_scrolled(mouse_scrolled_event &e)
@@ -70,15 +77,6 @@ namespace elm {
 		// Maybe use some kinda curve?
 		m_translation_speed = m_zoom_level;
 
-		return false;
-	}
-
-	bool orthographic_camera_controller::on_window_resize_event(window_resize_event &e)
-	{
-		ELM_PROFILE_FUNCTION();
-
-		m_aspect_ratio = (float)e.get_width() / (float)e.get_height();
-		m_camera.set_projection(-m_aspect_ratio * m_zoom_level, m_aspect_ratio * m_zoom_level, -m_zoom_level, m_zoom_level);
 		return false;
 	}
 }

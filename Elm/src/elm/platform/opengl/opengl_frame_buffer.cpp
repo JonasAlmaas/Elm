@@ -20,6 +20,7 @@ namespace elm {
 	void opengl_frame_buffer::bind(void)
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_renderer_id);
+		glViewport(0, 0, m_spec.width, m_spec.height);
 	}
 
 	void opengl_frame_buffer::unbind(void)
