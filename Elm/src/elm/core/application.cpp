@@ -105,7 +105,7 @@ namespace elm {
 
 		m_minimized = false;
 
-		renderer::on_window_resize(width, height);
+		renderer::on_viewport_resize(width, height);
 
 		return false;
 	}

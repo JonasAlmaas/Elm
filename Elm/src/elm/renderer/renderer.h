@@ -14,7 +14,7 @@ namespace elm {
 	public:
 		static void init(void);
 
-		static void on_window_resize(uint32_t width, uint32_t height);
+		static void on_viewport_resize(uint32_t width, uint32_t height);
 
 		static void begin_scene(const camera *camera);
 		static void end_scene(void);

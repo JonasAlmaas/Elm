@@ -14,7 +14,7 @@ namespace elm {
 		renderer_2d::init();
 	}
 
-	void renderer::on_window_resize(uint32_t width, uint32_t height)
+	void renderer::on_viewport_resize(uint32_t width, uint32_t height)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
