@@ -21,6 +21,8 @@ namespace elm {
 
 		void run(void);
 
+		inline void close(void) { m_running = false; }
+
 		void push_layer(layer *layer);
 		void push_overlay(layer *layer);
 

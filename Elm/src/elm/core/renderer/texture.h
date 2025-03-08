@@ -16,10 +16,12 @@ namespace elm {
 
 		virtual void bind(uint32_t slot = 0) = 0;
 
-		virtual void set_data(void *data, uint32_t size) = 0;
-
 		virtual uint32_t get_width(void) const = 0;
 		virtual uint32_t get_height(void) const = 0;
+
+		virtual uint32_t get_renderer_id(void) const = 0;
+
+		virtual void set_data(void *data, uint32_t size) = 0;
 
 		virtual bool equal(const texture *other) const = 0;
 	};

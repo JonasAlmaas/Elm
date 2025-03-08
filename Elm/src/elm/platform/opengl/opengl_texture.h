@@ -13,14 +13,16 @@ namespace elm {
 
 		virtual void bind(uint32_t slot = 0) override;
 
+		inline virtual uint32_t get_width(void) const override { return m_width; }
+		inline virtual uint32_t get_height(void) const override { return m_height; }
+
+		inline virtual uint32_t get_renderer_id(void) const override { return m_renderer_id; }
+
 		virtual void set_data(void *data, uint32_t size) override;
 
 		inline virtual bool equal(const texture *other) const override {
 			return m_renderer_id == ((opengl_texture_2d *)other)->m_renderer_id;
 		}
-
-		inline virtual uint32_t get_width(void) const override { return m_width; }
-		inline virtual uint32_t get_height(void) const override { return m_height; }
 
 	private:
 		uint32_t m_width, m_height;
