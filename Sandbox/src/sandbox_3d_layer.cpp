@@ -137,6 +137,8 @@ void sandbox_3d_layer::on_imgui_render(void)
 {
 	ImGui::Begin("Misc");
 
+	ImGui::Text("FPS: %.2f", elm::application::get()->get_telemetry()->get_fps());
+
 	auto camera_pos = m_camera_controller.get_position();
 	if (ImGui::DragFloat3("Camera position", glm::value_ptr(camera_pos), 0.1f)) {
 		m_camera_controller.set_position(camera_pos);

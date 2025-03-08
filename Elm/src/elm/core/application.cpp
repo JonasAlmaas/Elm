@@ -39,6 +39,8 @@ namespace elm {
 			m_last_frame_time_sec = time;
 
 			if (!m_minimized) {
+				m_telemetry.on_update(timestep);
+
 				ELM_PROFILE_SCOPE("application::run() - Layer stack on_update()");
 				for (auto layer : m_layer_stack) {
 					layer->on_update(timestep);
