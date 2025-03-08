@@ -15,28 +15,44 @@ namespace elm {
 
 	void perspective_camera_controller::on_update(timestep ts)
 	{
-		if (input::is_key_pressed(key::A)) {
+		if (!is_moving_right && input::is_key_pressed(key::A)) {
+			is_moving_left = true;
 			/*m_position.x -= glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
 			m_position.y -= glm::sin(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();*/
 			m_position.x -= m_translation_speed * ts.get_seconds();
 			recalculate_view_matrix();
-		} else if (elm::input::is_key_pressed(elm::key::D)) {
+		} else {
+			is_moving_left = false;
+		}
+
+		if (!is_moving_left && elm::input::is_key_pressed(elm::key::D)) {
+			is_moving_right = true;
 			/*pos.x += glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
 			pos.y += glm::sin(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();*/
 			m_position.x += m_translation_speed * ts.get_seconds();
 			recalculate_view_matrix();
+		} else {
+			is_moving_right = false;
 		}
 
-		if (elm::input::is_key_pressed(elm::key::W)) {
+		if (!is_moving_backwards && elm::input::is_key_pressed(elm::key::W)) {
+			is_moving_forward = true;
 			/*m_position.x += -glm::sin(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
 			m_position.y += glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();*/
 			m_position.y += m_translation_speed * ts.get_seconds();
 			recalculate_view_matrix();
-		} else if (elm::input::is_key_pressed(elm::key::S)) {
+		} else {
+			is_moving_forward = false;
+		}
+
+		if (!is_moving_forward && elm::input::is_key_pressed(elm::key::S)) {
+			is_moving_backwards = true;
 			/*m_position.x -= -glm::sin(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();
 			m_position.y -= glm::cos(glm::radians(m_camera.get_rotation_deg())) * m_translation_speed * ts.get_seconds();*/
 			m_position.y -= m_translation_speed * ts.get_seconds();
 			recalculate_view_matrix();
+		} else {
+			is_moving_backwards = false;
 		}
 	}
 

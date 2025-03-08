@@ -46,5 +46,10 @@ namespace elm {
 		float m_pitch_rad = 0.0f;
 		float m_yaw_rad = 0.0f;
 		float m_roll_rad = 0.0f;
+
+		bool is_moving_left = false;
+		bool is_moving_right = false;
+		bool is_moving_forward = false;
+		bool is_moving_backwards = false;
 	};
 }
