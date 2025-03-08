@@ -16,6 +16,9 @@ namespace elm {
 		inline static float get_mouse_x(void) { return s_instance->get_mouse_x_impl(); }
 		inline static float get_mouse_y(void) { return s_instance->get_mouse_y_impl(); }
 
+	public:
+		virtual ~input(void) = default;
+
 	protected:
 		virtual bool is_key_pressed_impl(key_code key_code) const = 0;
 		virtual bool is_mouse_button_pressed_impl(mouse_code button) const = 0;
