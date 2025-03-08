@@ -17,7 +17,7 @@ public:
 	virtual void on_imgui_render(void) override;
 
 private:
-	elm::orthographic_camera m_camera;
+	elm::orthographic_camera_controller m_camera_controller;
 	std::shared_ptr<elm::texture_2d> m_texture_checkerboard;
 
 	std::shared_ptr<elm::frame_buffer> m_frame_buffer;

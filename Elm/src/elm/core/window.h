@@ -10,8 +10,8 @@ namespace elm {
 	struct window_specification
 	{
 		std::string title = "Elm engine";
-		uint32_t width = 1920u;
-		uint32_t height = 1080u;
+		uint32_t width = 1280u;
+		uint32_t height = 720u;
 		bool vsync = true;
 	};
 

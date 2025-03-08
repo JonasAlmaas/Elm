@@ -12,9 +12,9 @@
 namespace elm {
 
 	struct application_specification {
-		std::string name;
-		uint32_t window_width = 1280;
-		uint32_t window_height = 720;
+		std::string name = "Elm";
+		uint32_t window_width = 1280u;
+		uint32_t window_height = 720u;
 		bool vsync = true;
 	};
 
