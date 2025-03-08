@@ -9,7 +9,7 @@ namespace elm {
 	class perspective_camera : public camera
 	{
 	public:
-		perspective_camera(void) = default;
+		perspective_camera(void) = delete;
 		perspective_camera(float fov, float aspect_ratio, float near_clip, float far_clip);
 
 		inline float get_fov(void) const { return m_fov; }
