@@ -40,6 +40,7 @@
 #include <elm/camera/orthographic_camera.h>
 #include <elm/camera/orthographic_camera_controller.h>
 #include <elm/camera/perspective_camera.h>
+#include <elm/camera/perspective_camera_controller.h>
 // --------------------------
 
 // --- Scene ----------------

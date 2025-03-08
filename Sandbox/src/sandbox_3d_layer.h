@@ -18,8 +18,7 @@ private:
 	bool on_window_resize(elm::window_resize_event &e);
 
 private:
-	elm::perspective_camera m_camera;
-	glm::vec3 m_camera_position = { 0.0f, 0.0f, 4.0f };
+	elm::perspective_camera_controller m_camera_controller;
 
 	std::shared_ptr<elm::scene> m_scene;
 

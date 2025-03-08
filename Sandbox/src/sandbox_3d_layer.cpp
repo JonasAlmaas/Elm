@@ -5,9 +5,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 sandbox_3d_layer::sandbox_3d_layer(void)
-	: layer("Sandbox3D"), m_camera(60.0f, 16.0f / 9.0f, 0.01f, 10'000.0f)
+	: layer("Sandbox3D"), m_camera_controller(60.0f, 16.0f / 9.0f)
 {
-	m_camera.set_position(m_camera_position);
+	m_camera_controller.set_position({ 0.0f, 0.0f, 4.0f });
 
 	m_shader = elm::shader::create("content/shaders/texture.glsl");
 	m_shader->bind();
@@ -108,10 +108,12 @@ void sandbox_3d_layer::on_detach(void)
 
 void sandbox_3d_layer::on_update(elm::timestep ts)
 {
+	m_camera_controller.on_update(ts);
+
 	elm::render_command::set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
 	elm::render_command::clear();
 
-	elm::renderer::begin_scene(&m_camera);
+	elm::renderer::begin_scene(m_camera_controller.get_camera());
 
 	m_texture_checkerboard->bind();
 	elm::renderer::submit(m_shader, m_vertex_array);
@@ -124,14 +126,20 @@ void sandbox_3d_layer::on_update(elm::timestep ts)
 
 void sandbox_3d_layer::on_event(elm::event &e)
 {
+	m_camera_controller.on_event(e);
+
+	elm::event_dispatcher dispatcher(e);
+
+	dispatcher.dispatch<elm::window_resize_event>(ELM_BIND_EVENT_FN(sandbox_3d_layer::on_window_resize));
 }
 
 void sandbox_3d_layer::on_imgui_render(void)
 {
 	ImGui::Begin("Misc");
 
-	if (ImGui::DragFloat3("Camera position", glm::value_ptr(m_camera_position), 0.1f)) {
-		m_camera.set_position(m_camera_position);
+	auto camera_pos = m_camera_controller.get_position();
+	if (ImGui::DragFloat3("Camera position", glm::value_ptr(camera_pos), 0.1f)) {
+		m_camera_controller.set_position(camera_pos);
 	}
 
 	ImGui::End();
@@ -139,5 +147,6 @@ void sandbox_3d_layer::on_imgui_render(void)
 
 bool sandbox_3d_layer::on_window_resize(elm::window_resize_event &e)
 {
+	m_camera_controller.resize_viewport(e.get_width(), e.get_height());
 	return false;
 }
