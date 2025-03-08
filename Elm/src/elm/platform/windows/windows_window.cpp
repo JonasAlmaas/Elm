@@ -39,7 +39,7 @@ namespace elm {
 		}
 	}
 
-	void windows_window::set_event_callback(const event_callback_fn& cb)
+	void windows_window::set_event_callback(const std::function<void(event &)> & cb)
 	{
 		m_data.event_callback = cb;
 	}
