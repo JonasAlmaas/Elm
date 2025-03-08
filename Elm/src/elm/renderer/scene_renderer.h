@@ -5,11 +5,7 @@
 #include "elm/scene/scene.h"
 #include <memory>
 
-namespace elm {
+namespace elm::scene_renderer {
 
-	class scene_renderer
-	{
-	public:
-		static void render(std::shared_ptr<scene> scene, const camera *camera);
-	};
+	extern void render(std::shared_ptr<scene> scene, const camera *camera);
 }

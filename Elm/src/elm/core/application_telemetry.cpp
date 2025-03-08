@@ -1,9 +1,9 @@
-#include "telemetry.h"
+#include "application_telemetry.h"
 #include <stdint.h>
 
 namespace elm {
 
-	void telemetry::on_update(timestep ts)
+	void application_telemetry::on_update(timestep ts)
 	{
 		static float frame_time_acc = 0.0f;
 		static uint32_t frame_time_acc_ix = 0u;

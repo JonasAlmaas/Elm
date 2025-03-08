@@ -9,20 +9,12 @@
 
 #include <memory>
 
-namespace elm {
+namespace elm::log {
 
-	class log
-	{
-	public:
-		static void init(void);
+	extern void init(void);
 
-		static inline std::shared_ptr<spdlog::logger>& get_core_logger() { return s_core_logger; }
-		static inline std::shared_ptr<spdlog::logger>& get_client_logger() { return s_client_logger; }
-
-	private:
-		static std::shared_ptr<spdlog::logger> s_core_logger;
-		static std::shared_ptr<spdlog::logger> s_client_logger;
-	};
+	extern std::shared_ptr<spdlog::logger> &get_core_logger();
+	extern std::shared_ptr<spdlog::logger> &get_client_logger();
 }
 
 #define ELM_CORE_TRACE(...)             ::elm::log::get_core_logger()->trace(__VA_ARGS__)

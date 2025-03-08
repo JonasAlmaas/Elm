@@ -4,9 +4,9 @@
 #include "renderer.h"
 #include "renderer_2d.h"
 
-namespace elm {
+namespace elm::scene_renderer {
 
-	void scene_renderer::render(std::shared_ptr<scene> scene, const camera *camera)
+	extern void render(std::shared_ptr<scene> scene, const camera *camera)
 	{
 		render_command::set_clear_color({ 1.0f, 0.0f, 1.0f, 1.0f });
 		render_command::clear();

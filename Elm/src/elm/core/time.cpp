@@ -3,9 +3,9 @@
 // Temp (used to get time)
 #include <GLFW/glfw3.h>
 
-namespace elm {
+namespace elm::time {
 
-	float time::get_seconds(void)
+	extern float get_seconds(void)
 	{
 		return (float)glfwGetTime();
 	}

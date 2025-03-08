@@ -2,11 +2,7 @@
 
 #include "elm/core/base.h"
 
-namespace elm {
+namespace elm::time {
 
-	class time
-	{
-	public:
-		static float get_seconds(void);
-	};
+	extern float get_seconds(void);
 }

@@ -5,23 +5,23 @@
 #include "elm/core/application.h"
 #include <GLFW/glfw3.h>
 
-namespace elm {
+namespace elm::input {
 
-	bool input::is_key_pressed(key_code key_code)
+	extern bool is_key_pressed(key_code key_code)
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(application::get()->get_window()->get_native_window());
 		int state = glfwGetKey(window, key_code);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	bool input::is_mouse_button_pressed(mouse_code button)
+	extern bool is_mouse_button_pressed(mouse_code button)
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(application::get()->get_window()->get_native_window());
 		int state = glfwGetMouseButton(window, button);
 		return state == GLFW_PRESS;
 	}
 
-	std::pair<float, float> input::get_mouse_pos(void)
+	extern std::pair<float, float> get_mouse_pos(void)
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(application::get()->get_window()->get_native_window());
 		double xpos, ypos;
@@ -29,13 +29,13 @@ namespace elm {
 		return { (float)xpos, (float)ypos };
 	}
 
-	float input::get_mouse_x(void)
+	extern float get_mouse_x(void)
 	{
 		auto [x, y] = get_mouse_pos();
 		return x;
 	}
 
-	float input::get_mouse_y(void)
+	extern float get_mouse_y(void)
 	{
 		auto [x, y] = get_mouse_pos();
 		return y;

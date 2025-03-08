@@ -4,7 +4,7 @@
 #include "elm/core/event/event.h"
 #include "elm/core/event/window_event.h"
 #include "elm/core/layer_stack.h"
-#include "elm/core/telemetry.h"
+#include "elm/core/application_telemetry.h"
 #include "elm/core/window.h"
 #include "elm/imgui/imgui_layer.h"
 #include <memory>
@@ -35,7 +35,7 @@ namespace elm {
 		void push_layer(layer *layer);
 		void push_overlay(layer *layer);
 
-		inline const telemetry *get_telemetry(void) const { return &m_telemetry; }
+		inline const application_telemetry *get_telemetry(void) const { return &m_telemetry; }
 		inline imgui_layer *get_imgui_layer(void) const { return m_imgui_layer; }
 		inline window *get_window(void) const { return m_window.get(); }
 
@@ -58,7 +58,7 @@ namespace elm {
 
 		float m_last_frame_time_sec = 0.0f;
 
-		telemetry m_telemetry;
+		application_telemetry m_telemetry;
 
 	private:
 		static application *s_instance;

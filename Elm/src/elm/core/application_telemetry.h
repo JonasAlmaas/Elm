@@ -5,7 +5,7 @@
 
 namespace elm {
 
-	class telemetry
+	class application_telemetry
 	{
 	public:
 		inline float get_fps(void) const { return 1.0f / m_smooth_frame_time; };
