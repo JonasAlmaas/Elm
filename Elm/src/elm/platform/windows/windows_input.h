@@ -1,21 +1,21 @@
 #pragma once
 
 #include "elm/core/base.h"
+#include "elm/core/input/key_code.h"
+#include "elm/core/input/mouse_code.h"
 
 #ifdef ELM_PLATFORM_WINDOWS
 
-#include "elm/core/input/input.h"
-
 namespace elm {
 
-	class windows_input : public input
+	class windows_input
 	{
-	protected:
-		virtual bool is_key_pressed_impl(key_code key_code) const override;
-		virtual bool is_mouse_button_pressed_impl(mouse_code button) const override;
-		virtual std::pair<float, float> get_mouse_pos_impl(void) const override;
-		virtual float get_mouse_x_impl(void) const override;
-		virtual float get_mouse_y_impl(void) const override;
+	public:
+		bool is_key_pressed(key_code key_code) const;
+		bool is_mouse_button_pressed(mouse_code button) const;
+		std::pair<float, float> get_mouse_pos(void) const;
+		float get_mouse_x(void) const;
+		float get_mouse_y(void) const;
 	};
 }
 
