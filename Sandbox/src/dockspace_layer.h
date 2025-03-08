@@ -23,4 +23,6 @@ private:
 	std::shared_ptr<elm::frame_buffer> m_frame_buffer;
 
 	glm::vec2 m_viewport_size = { 0.0f, 0.0f };
+	bool m_viewport_focused = false;
+	bool m_viewport_hovered = false;
 };

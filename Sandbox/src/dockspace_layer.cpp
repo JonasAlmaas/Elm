@@ -31,7 +31,9 @@ void dockspace_layer::on_detach(void)
 
 void dockspace_layer::on_update(elm::timestep ts)
 {
-	m_camera_controller.on_update(ts);
+	if (m_viewport_focused) {
+		m_camera_controller.on_update(ts);
+	}
 
 	m_frame_buffer->bind();
 
@@ -77,6 +79,9 @@ void dockspace_layer::on_imgui_render(void)
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });
 	ImGui::Begin("Viewport");
+	m_viewport_focused = ImGui::IsWindowFocused();
+	m_viewport_hovered = ImGui::IsWindowHovered();
+	elm::application::get()->get_imgui_layer()->set_block_events(m_viewport_focused || m_viewport_hovered);
 	ImVec2 viewport_panel_size = ImGui::GetContentRegionAvail();
 	if (m_viewport_size.x != viewport_panel_size.x
 			|| m_viewport_size.y != viewport_panel_size.y) {
