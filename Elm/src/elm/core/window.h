@@ -7,8 +7,7 @@
 
 namespace elm {
 
-	struct window_specification
-	{
+	struct window_specification {
 		std::string title = "Elm engine";
 		uint32_t width = 1280u;
 		uint32_t height = 720u;
