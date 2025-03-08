@@ -91,7 +91,7 @@ void dockspace_layer::on_imgui_render(void)
 
 	m_viewport_focused = ImGui::IsWindowFocused();
 	m_viewport_hovered = ImGui::IsWindowHovered();
-	elm::application::get()->get_imgui_layer()->set_block_events(m_viewport_focused || m_viewport_hovered);
+	elm::application::get()->get_imgui_layer()->set_block_events(!m_viewport_focused || !m_viewport_hovered);
 
 	ImVec2 viewport_panel_size = ImGui::GetContentRegionAvail();
 	m_viewport_size = { viewport_panel_size.x, viewport_panel_size.y };
