@@ -13,6 +13,8 @@ namespace elm {
 	opengl_frame_buffer::~opengl_frame_buffer(void)
 	{
 		glDeleteFramebuffers(1, &m_renderer_id);
+		glDeleteTextures(1, &m_color_attachment);
+		glDeleteTextures(1, &m_depth_attachment);
 	}
 
 	void opengl_frame_buffer::bind(void)
@@ -25,8 +27,22 @@ namespace elm {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	void opengl_frame_buffer::resize(uint32_t width, uint32_t height)
+	{
+		m_spec.width = width;
+		m_spec.height = height;
+
+		invalidate();
+	}
+
 	void opengl_frame_buffer::invalidate(void)
 	{
+		if (m_renderer_id) {
+			glDeleteFramebuffers(1, &m_renderer_id);
+			glDeleteTextures(1, &m_color_attachment);
+			glDeleteTextures(1, &m_depth_attachment);
+		}
+
 		glCreateFramebuffers(1, &m_renderer_id);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_renderer_id);
 

@@ -76,6 +76,12 @@ void dockspace_layer::on_imgui_render(void)
 	ImGui::End();
 
 	ImGui::Begin("Viewport");
-	ImGui::Image(m_frame_buffer->get_color_attachment_renderer_id(), { 1280.0f, 720.0f }, { 0.0f, 1.0f }, { 1.0f, 0.0f });
+	ImVec2 viewport_panel_size = ImGui::GetContentRegionAvail();
+	if (m_viewport_size.x != viewport_panel_size.x
+			|| m_viewport_size.y != viewport_panel_size.y) {
+		m_viewport_size = { viewport_panel_size.x, viewport_panel_size.y };
+		m_frame_buffer->resize((uint32_t)m_viewport_size.x, (uint32_t)m_viewport_size.y);
+	}
+	ImGui::Image(m_frame_buffer->get_color_attachment_renderer_id(), { m_viewport_size.x, m_viewport_size.y }, {0.0f, 1.0f}, {1.0f, 0.0f});
 	ImGui::End();
 }

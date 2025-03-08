@@ -21,4 +21,6 @@ private:
 	std::shared_ptr<elm::texture_2d> m_texture_checkerboard;
 
 	std::shared_ptr<elm::frame_buffer> m_frame_buffer;
+
+	glm::vec2 m_viewport_size;
 };
