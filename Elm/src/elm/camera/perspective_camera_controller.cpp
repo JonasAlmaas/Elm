@@ -54,7 +54,6 @@ namespace elm {
 
 	bool perspective_camera_controller::on_mouse_move_event(mouse_moved_event &e)
 	{
-		ELM_TRACE("{}, {}", e.get_x(), e.get_y());
 		return false;
 	}
 
