@@ -35,6 +35,6 @@ namespace elm {
 		virtual void *get_native_window(void) = 0;
 
 	public:
-		static window *create(const window_specification& spec = window_specification());
+		static std::unique_ptr<window> create(const window_specification& spec = window_specification());
 	};
 }

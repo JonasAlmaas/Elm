@@ -19,11 +19,6 @@ namespace elm {
 		ELM_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
-	window *window::create(const window_specification& spec)
-	{
-		return new windows_window(spec);
-	}
-
 	windows_window::windows_window(const window_specification& spec)
 	{
 		init(spec);

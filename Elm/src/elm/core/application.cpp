@@ -13,7 +13,7 @@ namespace elm {
 		ELM_CORE_ASSERT(!s_instance, "Application already exists");
 		s_instance = this;
 
-		m_window = std::unique_ptr<window>(window::create());
+		m_window = window::create();
 		m_window->set_event_callback(ELM_BIND_EVENT_FN(application::on_event));
 
 		renderer::init();
