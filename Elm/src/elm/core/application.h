@@ -7,13 +7,21 @@
 #include "elm/core/window.h"
 #include "elm/imgui/imgui_layer.h"
 #include <memory>
+#include <string>
 
 namespace elm {
+
+	struct application_specification {
+		std::string name;
+		uint32_t window_width = 1280;
+		uint32_t window_height = 720;
+		bool vsync = true;
+	};
 
 	class application
 	{
 	public:
-		application(void);
+		application(const struct application_specification &spec);
 		virtual ~application(void) = default;
 
 		// To be defined by the client
@@ -37,6 +45,8 @@ namespace elm {
 		bool on_window_resize(window_resize_event &e);
 
 	private:
+		struct application_specification m_spec;
+
 		bool m_running = true;
 		bool m_minimized = false;
 		std::unique_ptr<window> m_window;

@@ -5,5 +5,5 @@
 class sandbox : public elm::application
 {
 public:
-	sandbox();
+	sandbox(const struct elm::application_specification &spec);
 };

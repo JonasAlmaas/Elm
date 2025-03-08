@@ -4,7 +4,8 @@
 #include "sandbox_2d_layer.h"
 #include "sprite_sheet_layer.h"
 
-sandbox::sandbox()
+sandbox::sandbox(const struct elm::application_specification &spec)
+	: elm::application(spec)
 {
 	//push_layer(new example_layer());
 	//push_layer(new sandbox_2d_layer());

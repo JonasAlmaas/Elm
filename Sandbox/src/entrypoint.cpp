@@ -7,6 +7,8 @@ namespace elm {
 
 	application* application::create(void)
 	{
-		return new sandbox();
+		return new sandbox({
+			.name = "Sandbox",
+		});
 	}
 }
