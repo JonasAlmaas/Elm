@@ -80,7 +80,7 @@ namespace elm {
 		{
 			switch (foramt) {
 			case elm::frame_buffer_texture_format::RGBA8:
-			case elm::frame_buffer_texture_format::RED_INTEGER:
+			case elm::frame_buffer_texture_format::RED_INT:
 				return false;
 			case elm::frame_buffer_texture_format::DEPTH24STENCIL8:
 				return true;
@@ -94,7 +94,7 @@ namespace elm {
 		{
 			switch (foramt) {
 			case elm::frame_buffer_texture_format::RGBA8: return GL_RGBA8;
-			case elm::frame_buffer_texture_format::RED_INTEGER: return GL_RED_INTEGER;
+			case elm::frame_buffer_texture_format::RED_INT: return GL_RED_INTEGER;
 			default:
 				ELM_CORE_ASSERT(false, "Unknown frame buffer texture format");
 				return 0;
@@ -194,7 +194,7 @@ namespace elm {
 						m_color_attachment_specs[i],
 						(int)i);
 					break;
-				case frame_buffer_texture_format::RED_INTEGER:
+				case frame_buffer_texture_format::RED_INT:
 					utils::attach_color_texture(
 						m_color_attachments[i],
 						m_spec.samples,

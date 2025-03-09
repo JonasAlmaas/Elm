@@ -14,7 +14,7 @@ namespace elm {
 
 		// Color
 		RGBA8,
-		RED_INTEGER,
+		RED_INT,
 
 		// Depth / stencil
 		DEPTH24STENCIL8,
