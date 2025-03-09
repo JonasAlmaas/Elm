@@ -1,30 +1,32 @@
 #include "opengl_texture.h"
 
+#include "opengl_utils.h"
 #include <glad/glad.h>
 #include <stb_image.h>
 
 namespace elm {
 
-	opengl_texture_2d::opengl_texture_2d(uint32_t width, uint32_t height)
-		: m_width(width), m_height(height), m_fpath("<BUFFER>")
+	opengl_texture_2d::opengl_texture_2d(uint32_t width, uint32_t height, texture_2d_specification spec)
+		: m_width(width), m_height(height), m_spec(spec), m_fpath("<BUFFER>")
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
+		// TODO: Parameterize this
 		m_internal_format = GL_RGBA8;
 		m_data_format = GL_RGBA;
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_renderer_id);
 		glTextureStorage2D(m_renderer_id, 1, m_internal_format, m_width, m_height);
 
-		glTextureParameteri(m_renderer_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_renderer_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_renderer_id, GL_TEXTURE_MIN_FILTER, utils::texture_2d_filtering_to_gl(m_spec.min_filter));
+		glTextureParameteri(m_renderer_id, GL_TEXTURE_MAG_FILTER, utils::texture_2d_filtering_to_gl(m_spec.mag_filter));
 
-		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_S, utils::texture_2d_wrap_to_gl(m_spec.wrap_s));
+		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_T, utils::texture_2d_wrap_to_gl(m_spec.wrap_t));
 	}
 
-	opengl_texture_2d::opengl_texture_2d(const std::string &fpath)
-		: m_fpath(fpath)
+	opengl_texture_2d::opengl_texture_2d(const std::string &fpath, texture_2d_specification spec)
+		: m_fpath(fpath), m_spec(spec)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -56,11 +58,11 @@ namespace elm {
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_renderer_id);
 		glTextureStorage2D(m_renderer_id, 1, m_internal_format, m_width, m_height);
 
-		glTextureParameteri(m_renderer_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_renderer_id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_renderer_id, GL_TEXTURE_MIN_FILTER, utils::texture_2d_filtering_to_gl(m_spec.min_filter));
+		glTextureParameteri(m_renderer_id, GL_TEXTURE_MAG_FILTER, utils::texture_2d_filtering_to_gl(m_spec.mag_filter));
 
-		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_S, utils::texture_2d_wrap_to_gl(m_spec.wrap_s));
+		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_T, utils::texture_2d_wrap_to_gl(m_spec.wrap_t));
 
 		glTextureSubImage2D(m_renderer_id, 0, 0, 0, m_width, m_height, m_data_format, GL_UNSIGNED_BYTE, (const void *)data);
 

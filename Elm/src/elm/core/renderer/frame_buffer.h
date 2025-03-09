@@ -1,6 +1,7 @@
 #pragma once
 
 #include "elm/core/base.h"
+#include "texture.h"
 #include <memory>
 #include <stdint.h>
 #include <vector>
@@ -25,7 +26,11 @@ namespace elm {
 			: texture_format(format) {}
 
 		frame_buffer_texture_format texture_format = frame_buffer_texture_format::None;
-		// TODO: Filtering / Wrap
+		texture_2d_wrap wrap_r = texture_2d_wrap::CLAMP_TO_EDGE;
+		texture_2d_wrap wrap_s = texture_2d_wrap::CLAMP_TO_EDGE;
+		texture_2d_wrap wrap_t = texture_2d_wrap::CLAMP_TO_EDGE;
+		texture_2d_filter min_filter = texture_2d_filter::LINEAR;
+		texture_2d_filter mag_filter = texture_2d_filter::NEAREST;
 	};
 
 	struct frame_buffer_attachment_specification {

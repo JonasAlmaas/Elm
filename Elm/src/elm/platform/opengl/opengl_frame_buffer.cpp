@@ -1,5 +1,5 @@
 #include "opengl_frame_buffer.h"
-
+#include "opengl_utils.h"
 #include <glad/glad.h>
 
 namespace elm {
@@ -23,7 +23,15 @@ namespace elm {
 			glBindTexture(texture_traget(is_multisampled), id);
 		}
 
-		static void attach_color_texture(uint32_t id, int samples, GLenum internal_format, GLenum format, uint32_t width, uint32_t height, int index)
+		static void attach_color_texture(
+			uint32_t id,
+			int samples,
+			GLenum internal_format,
+			GLenum format,
+			uint32_t width,
+			uint32_t height,
+			const frame_buffer_texture_specification &spec,
+			int ix)
 		{
 			bool is_multisampled = samples > 1;
 
@@ -32,17 +40,24 @@ namespace elm {
 			} else {
 				glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0, format, GL_UNSIGNED_BYTE, nullptr);
 
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, utils::texture_2d_filtering_to_gl(spec.min_filter));
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, utils::texture_2d_filtering_to_gl(spec.mag_filter));
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, utils::texture_2d_wrap_to_gl(spec.wrap_r));
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, utils::texture_2d_wrap_to_gl(spec.wrap_s));
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, utils::texture_2d_wrap_to_gl(spec.wrap_t));
 			}
 
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + index, texture_traget(is_multisampled), id, 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + ix, texture_traget(is_multisampled), id, 0);
 		}
 
-		static void attach_depth_texture(uint32_t id, int samples, GLenum format, GLenum attachment_type, uint32_t width, uint32_t height)
+		static void attach_depth_texture(
+			uint32_t id,
+			int samples,
+			GLenum format,
+			GLenum attachment_type,
+			uint32_t width,
+			uint32_t height,
+			const frame_buffer_texture_specification &spec)
 		{
 			bool is_multisampled = samples > 1;
 
@@ -51,11 +66,11 @@ namespace elm {
 			} else {
 				glTexStorage2D(GL_TEXTURE_2D, 1, format, width, height);
 
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, utils::texture_2d_filtering_to_gl(spec.min_filter));
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, utils::texture_2d_filtering_to_gl(spec.mag_filter));
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, utils::texture_2d_wrap_to_gl(spec.wrap_r));
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, utils::texture_2d_wrap_to_gl(spec.wrap_s));
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, utils::texture_2d_wrap_to_gl(spec.wrap_t));
 			}
 
 			glFramebufferTexture2D(GL_FRAMEBUFFER, attachment_type, texture_traget(is_multisampled), id, 0);
@@ -97,6 +112,7 @@ namespace elm {
 			if (!utils::is_depth_format(spec.texture_format)) {
 				m_color_attachment_specs.emplace_back(spec);
 			} else {
+				ELM_CORE_ASSERT(m_depth_attachment_spec.texture_format == frame_buffer_texture_format::None, "Max 1 depth buffer per frame buffer");
 				m_depth_attachment_spec = spec;
 			}
 		}
@@ -167,8 +183,28 @@ namespace elm {
 				utils::bind_texture(is_multisampled, m_color_attachments[i]);
 
 				switch (m_color_attachment_specs[i].texture_format) {
-				case frame_buffer_texture_format::RGBA8: utils::attach_color_texture(m_color_attachments[i], m_spec.samples, GL_RGBA8, GL_RGBA, m_spec.width, m_spec.height, (int)i); break;
-				case frame_buffer_texture_format::RED_INTEGER: utils::attach_color_texture(m_color_attachments[i], m_spec.samples, GL_R32I, GL_RED_INTEGER, m_spec.width, m_spec.height, (int)i); break;
+				case frame_buffer_texture_format::RGBA8:
+					utils::attach_color_texture(
+						m_color_attachments[i],
+						m_spec.samples,
+						GL_RGBA8,
+						GL_RGBA,
+						m_spec.width,
+						m_spec.height,
+						m_color_attachment_specs[i],
+						(int)i);
+					break;
+				case frame_buffer_texture_format::RED_INTEGER:
+					utils::attach_color_texture(
+						m_color_attachments[i],
+						m_spec.samples,
+						GL_R32I,
+						GL_RED_INTEGER,
+						m_spec.width,
+						m_spec.height,
+						m_color_attachment_specs[i],
+						(int)i);
+					break;
 				default:
 					ELM_CORE_ASSERT(false, "Unknown frame buffer attachment texture format");
 					break;
@@ -183,7 +219,16 @@ namespace elm {
 			utils::bind_texture(is_multisampled, m_depth_attachment);
 
 			switch (m_depth_attachment_spec.texture_format) {
-			case frame_buffer_texture_format::DEPTH24STENCIL8: utils::attach_depth_texture(m_depth_attachment, m_spec.samples, GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT, m_spec.width, m_spec.height); break;
+			case frame_buffer_texture_format::DEPTH24STENCIL8:
+				utils::attach_depth_texture(
+					m_depth_attachment,
+					m_spec.samples,
+					GL_DEPTH24_STENCIL8,
+					GL_DEPTH_STENCIL_ATTACHMENT,
+					m_spec.width,
+					m_spec.height,
+					m_depth_attachment_spec);
+				break;
 			default:
 				ELM_CORE_ASSERT(false, "Unknown frame buffer attachment texture format");
 				break;

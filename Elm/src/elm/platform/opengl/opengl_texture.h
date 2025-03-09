@@ -7,8 +7,8 @@ namespace elm {
 	class opengl_texture_2d : public texture_2d
 	{
 	public:
-		opengl_texture_2d(uint32_t width, uint32_t height);
-		opengl_texture_2d(const std::string &fpath);
+		opengl_texture_2d(uint32_t width, uint32_t height, texture_2d_specification spec);
+		opengl_texture_2d(const std::string &fpath, texture_2d_specification spec);
 		virtual ~opengl_texture_2d(void);
 
 		virtual void bind(uint32_t slot = 0) override;
@@ -25,6 +25,7 @@ namespace elm {
 		}
 
 	private:
+		texture_2d_specification m_spec;
 		uint32_t m_width, m_height;
 		std::string m_fpath; // Debug info
 
