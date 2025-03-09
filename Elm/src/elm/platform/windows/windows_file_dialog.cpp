@@ -11,7 +11,7 @@
 
 namespace elm::file_dialog {
 
-	extern std::string open_file(const char *filter)
+	extern std::optional<std::string> open_file(const char *filter)
 	{
 		ELM_PROFILE_FUNCTION();
 
@@ -34,11 +34,11 @@ namespace elm::file_dialog {
 		if (GetOpenFileNameA(&ofn) == TRUE) {
 			return ofn.lpstrFile;
 		} else {
-			return std::string();
+			return std::nullopt;
 		}
 	}
 
-	extern std::string save_file(const char *filter)
+	extern std::optional<std::string> save_file(const char *filter)
 	{
 		ELM_PROFILE_FUNCTION();
 
@@ -64,7 +64,7 @@ namespace elm::file_dialog {
 		if (GetSaveFileNameA(&ofn) == TRUE) {
 			return ofn.lpstrFile;
 		} else {
-			return std::string();
+			return std::nullopt;
 		}
 	}
 }
