@@ -14,7 +14,7 @@ namespace elm::renderer_2d {
 		glm::vec3 position;
 		glm::vec2 uv;
 		glm::vec4 color;
-		float texture_slot;
+		int texture_slot;
 	};
 
 	struct renderer_2d_data {
@@ -68,7 +68,7 @@ namespace elm::renderer_2d {
 			{ elm::shader_data_type::Float3, "a_position" },
 			{ elm::shader_data_type::Float2, "a_uv" },
 			{ elm::shader_data_type::Float4, "a_color" },
-			{ elm::shader_data_type::Float, "a_texture_slot" } };
+			{ elm::shader_data_type::Int, "a_texture_slot" } };
 		s_data.batch_quad_vertex_buffer->set_layout(&layout);
 		s_data.batch_quad_vertex_array->add_vertex_buffer(s_data.batch_quad_vertex_buffer);
 
@@ -175,25 +175,25 @@ namespace elm::renderer_2d {
 		s_data.batch_quad_vertex_buf_ptr->position = transform * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
 		s_data.batch_quad_vertex_buf_ptr->uv = (uvs ? (*uvs)[0] : glm::vec2(0.0f, 0.0f)) * texture_tiling_factor;
 		s_data.batch_quad_vertex_buf_ptr->color = color;
-		s_data.batch_quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
+		s_data.batch_quad_vertex_buf_ptr->texture_slot = texture_slot;
 		++s_data.batch_quad_vertex_buf_ptr;
 
 		s_data.batch_quad_vertex_buf_ptr->position = transform * glm::vec4(0.5f, -0.5f, 0.0f, 1.0f);
 		s_data.batch_quad_vertex_buf_ptr->uv = (uvs ? (*uvs)[1] : glm::vec2(1.0f, 0.0f)) * texture_tiling_factor;
 		s_data.batch_quad_vertex_buf_ptr->color = color;
-		s_data.batch_quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
+		s_data.batch_quad_vertex_buf_ptr->texture_slot = texture_slot;
 		++s_data.batch_quad_vertex_buf_ptr;
 
 		s_data.batch_quad_vertex_buf_ptr->position = transform * glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
 		s_data.batch_quad_vertex_buf_ptr->uv = (uvs ? (*uvs)[2] : glm::vec2(1.0f, 1.0f)) * texture_tiling_factor;
 		s_data.batch_quad_vertex_buf_ptr->color = color;
-		s_data.batch_quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
+		s_data.batch_quad_vertex_buf_ptr->texture_slot = texture_slot;
 		++s_data.batch_quad_vertex_buf_ptr;
 
 		s_data.batch_quad_vertex_buf_ptr->position = transform * glm::vec4(-0.5f, 0.5f, 0.0f, 1.0f);
 		s_data.batch_quad_vertex_buf_ptr->uv = (uvs ? (*uvs)[3] : glm::vec2(0.0f, 1.0f)) * texture_tiling_factor;
 		s_data.batch_quad_vertex_buf_ptr->color = color;
-		s_data.batch_quad_vertex_buf_ptr->texture_slot = (float)texture_slot;
+		s_data.batch_quad_vertex_buf_ptr->texture_slot = texture_slot;
 		++s_data.batch_quad_vertex_buf_ptr;
 
 		++s_data.batch_quad_count;
