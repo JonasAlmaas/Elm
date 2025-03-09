@@ -3,16 +3,45 @@
 #include "elm/core/base.h"
 #include <memory>
 #include <stdint.h>
+#include <vector>
+#include <initializer_list>
 
 namespace elm {
+
+	enum class frame_buffer_texture_format {
+		None = 0,
+
+		// Color
+		RGBA8,
+		RED_INTEGER,
+
+		// Depth / stencil
+		DEPTH24STENCIL8,
+	};
+
+	struct frame_buffer_texture_specification {
+		frame_buffer_texture_specification(void) = default;
+		frame_buffer_texture_specification(frame_buffer_texture_format format)
+			: texture_format(format) {}
+
+		frame_buffer_texture_format texture_format = frame_buffer_texture_format::None;
+		// TODO: Filtering / Wrap
+	};
+
+	struct frame_buffer_attachment_specification {
+		frame_buffer_attachment_specification(void) = default;
+		frame_buffer_attachment_specification(std::initializer_list<frame_buffer_texture_specification> attachments)
+			: attachments(attachments) {}
+
+		std::vector<frame_buffer_texture_specification> attachments;
+	};
 
 	struct frame_buffer_specification {
 		uint32_t width;
 		uint32_t height;
-		//frame_buffer_format format;
-		/*uint32_t samples = 1;
-
-		bool is_swap_chain_target = false;*/
+		frame_buffer_attachment_specification attachments;
+		uint32_t samples = 1;
+		/*bool is_swap_chain_target = false;*/
 	};
 
 	class frame_buffer
@@ -25,7 +54,8 @@ namespace elm {
 
 		virtual void resize(uint32_t width, uint32_t height) = 0;
 
-		virtual uint32_t get_color_attachment_renderer_id(void) const = 0;
+		virtual uint32_t get_color_attachment_renderer_id(uint32_t ix) const = 0;
+		virtual uint32_t get_depth_attachment_renderer_id(void) const = 0;
 
 		virtual const struct frame_buffer_specification *get_spec(void) const = 0;
 

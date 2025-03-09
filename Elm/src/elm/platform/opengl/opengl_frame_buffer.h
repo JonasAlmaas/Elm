@@ -17,7 +17,17 @@ namespace elm {
 
 		virtual void resize(uint32_t width, uint32_t height) override;
 
-		virtual uint32_t get_color_attachment_renderer_id(void) const override { return m_color_attachment; }
+		virtual uint32_t get_color_attachment_renderer_id(uint32_t ix) const override
+		{
+			ELM_CORE_ASSERT(ix < m_color_attachments.size(), "Index out of range");
+			return m_color_attachments[ix];
+		}
+
+		virtual uint32_t get_depth_attachment_renderer_id(void) const override
+		{
+			ELM_CORE_ASSERT(m_depth_attachment, "No depth attachment in frame buffer");
+			return m_depth_attachment;
+		}
 
 		inline virtual const struct frame_buffer_specification *get_spec(void) const override { return &m_spec; }
 
@@ -26,7 +36,10 @@ namespace elm {
 
 		uint32_t m_renderer_id = 0;
 
-		uint32_t m_color_attachment = 0;
+		std::vector<frame_buffer_texture_specification> m_color_attachment_specs;
+		frame_buffer_texture_specification m_depth_attachment_spec;
+
+		std::vector<uint32_t> m_color_attachments;
 		uint32_t m_depth_attachment = 0;
 	};
 }

@@ -22,6 +22,10 @@ void dockspace_layer::on_attach(void)
 	m_frame_buffer = elm::frame_buffer::create({
 		.width = 1280,
 		.height = 720,
+		.attachments = {
+			elm::frame_buffer_texture_format::RGBA8,
+			elm::frame_buffer_texture_format::DEPTH24STENCIL8
+		}
 	});
 }
 
@@ -80,12 +84,19 @@ void dockspace_layer::on_imgui_render(void)
 		ImGui::EndMainMenuBar();
 	}
 
+	// -- My dockable window --
 	ImGui::Begin("My dockable window");
+
 	ImGui::Image(m_texture_checkerboard->get_renderer_id(), { 256.0f, 256.0f }, { 0.0f, 1.0f }, { 1.0f, 0.0f });
 	static char aaa[100] = {0};
 	ImGui::InputText("Text", aaa, 100);
+
+	float aspect_ratio = m_viewport_size.y / m_viewport_size.x;
+	ImGui::Image(m_frame_buffer->get_depth_attachment_renderer_id(), { 256.0f, 256.0f * aspect_ratio }, { 0.0f, 1.0f }, { 1.0f, 0.0f });
+
 	ImGui::End();
 
+	// -- Viewport --
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });
 	ImGui::Begin("Viewport");
 
@@ -95,7 +106,7 @@ void dockspace_layer::on_imgui_render(void)
 
 	ImVec2 viewport_panel_size = ImGui::GetContentRegionAvail();
 	m_viewport_size = { viewport_panel_size.x, viewport_panel_size.y };
-	ImGui::Image(m_frame_buffer->get_color_attachment_renderer_id(), { m_viewport_size.x, m_viewport_size.y }, {0.0f, 1.0f}, {1.0f, 0.0f});
+	ImGui::Image(m_frame_buffer->get_color_attachment_renderer_id(0), { m_viewport_size.x, m_viewport_size.y }, {0.0f, 1.0f}, {1.0f, 0.0f});
 
 	ImGui::End();
 	ImGui::PopStyleVar();
