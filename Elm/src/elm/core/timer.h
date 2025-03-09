@@ -26,7 +26,7 @@ namespace elm {
 
 		inline float elapsed_milliseconds(void) const
 		{
-			return elapsed_milliseconds() * 1000.0f;
+			return elapsed_seconds() * 1000.0f;
 		}
 
 	private:

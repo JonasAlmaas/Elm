@@ -2,7 +2,6 @@ project "Elm"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++23"
-	staticruntime "on"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -27,6 +26,7 @@ project "Elm"
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.stb}",
+		"%{IncludeDir.VulkanSDK}",
 	}
 
 	links {
@@ -46,12 +46,30 @@ project "Elm"
 		runtime "Debug"
 		symbols "on"
 
+		links {
+			"%{Library.ShaderC_Debug}",
+			"%{Library.SPIRV_Cross_Debug}",
+			"%{Library.SPIRV_Cross_GLSL_Debug}"
+		}
+
 	filter "configurations:Release"
 		defines "ELM_RELEASE"
 		runtime "Release"
 		optimize "on"
 
+		links {
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}
+
 	filter "configurations:Dist"
 		defines "ELM_DIST"
 		runtime "Release"
 		optimize "on"
+
+		links {
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}

@@ -25,6 +25,7 @@
 #include <elm/core/renderer/shader.h>
 #include <elm/core/renderer/shader_library.h>
 #include <elm/core/renderer/texture.h>
+#include <elm/core/renderer/uniform_buffer.h>
 #include <elm/core/renderer/vertex_array.h>
 #include <elm/core/renderer/vertex_buffer.h>
 #include <elm/core/renderer/vertex_buffer_element.h>

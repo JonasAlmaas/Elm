@@ -5,7 +5,7 @@
 
 namespace elm {
 
-	std::shared_ptr<shader> shader::create(const std::string &fpath)
+	std::shared_ptr<shader> shader::create(const std::filesystem::path &fpath)
 	{
 		switch (renderer_api::get_api()) {
 		case renderer_api::api::none: ELM_CORE_ASSERT(false, "renderer_api::api::none is not currently supported"); break;

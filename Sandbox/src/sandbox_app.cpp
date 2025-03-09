@@ -11,6 +11,6 @@ sandbox::sandbox(const struct elm::application_specification &spec, struct elm::
 	//push_layer(new example_layer());
 	//push_layer(new sandbox_2d_layer());
 	//push_layer(new sprite_sheet_layer());
-	//push_layer(new dockspace_layer());
-	push_layer(new sandbox_3d_layer());
+	push_layer(new dockspace_layer());
+	//push_layer(new sandbox_3d_layer());
 }

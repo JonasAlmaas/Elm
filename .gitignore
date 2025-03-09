@@ -12,4 +12,7 @@ bin-int/
 # Profiler output
 **/profile-*.json
 
+# Cache
+**/_shadercache
+
 **/imgui.ini

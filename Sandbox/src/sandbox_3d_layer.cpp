@@ -12,8 +12,6 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	m_camera_controller.set_yaw_deg(45.0f);
 
 	m_shader = elm::shader::create("content/shaders/texture.glsl");
-	m_shader->bind();
-	m_shader->set_int("u_texture", 0);
 
 	uint32_t checkerboard_data[8 * 8];
 	for (int y = 0; y < 8; ++y) {

@@ -46,9 +46,10 @@ namespace elm::renderer {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		shader->bind();
+		// TODO: Use uniform buffers
+		/*shader->bind();
 		shader->set_mat4("u_view_projection", s_scene_data.view_projection_matrix);
-		shader->set_mat4("u_transform", transform);
+		shader->set_mat4("u_transform", transform);*/
 
 		vertex_array->bind();
 		render_command::draw_indexed(vertex_array);

@@ -3,6 +3,7 @@
 #include "elm/core/renderer/render_command.h"
 #include "elm/core/renderer/shader.h"
 #include "elm/core/renderer/texture.h"
+#include "elm/core/renderer/uniform_buffer.h"
 #include "elm/core/renderer/vertex_array.h"
 #include "elm/renderer/renderer.h"
 #include <glm/gtc/type_ptr.hpp>
@@ -37,6 +38,12 @@ namespace elm::renderer_2d {
 		uint32_t texture_slot_ix = 1u; // 0 = blank texture
 
 		struct statistics stats;
+
+		struct camera_data {
+			glm::mat4 view_projection;
+		};
+		camera_data camera_buffer;
+		std::shared_ptr<uniform_buffer> camera_uniform_buffer;
 	};
 
 	static renderer_2d_data s_data;
@@ -47,12 +54,6 @@ namespace elm::renderer_2d {
 
 		// Load shader
 		s_data.shader = elm::shader::create("content/shaders/generic_2d.glsl");
-		s_data.shader->bind();
-		int sampler[renderer_2d_data::max_texture_slots];
-		for (int i = 0; i < renderer_2d_data::max_texture_slots; ++i) {
-			sampler[i] = i;
-		}
-		s_data.shader->set_int_array("u_textures", sampler, renderer_2d_data::max_texture_slots);
 
 		// Create blank white texture
 		s_data.texture_blank = texture_2d::create(1, 1);
@@ -86,6 +87,8 @@ namespace elm::renderer_2d {
 		auto quad_ib = elm::index_buffer::create(quad_indices, renderer_2d_data::max_quad_indices);
 		s_data.batch_quad_vertex_array->set_index_buffer(quad_ib);
 		delete[] quad_indices;
+
+		s_data.camera_uniform_buffer = uniform_buffer::create(sizeof(struct renderer_2d_data::camera_data), 0);
 	}
 
 	extern void shutdown(void)
@@ -101,8 +104,8 @@ namespace elm::renderer_2d {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		s_data.shader->bind();
-		s_data.shader->set_mat4("u_view_projection", camera->get_view_projection_matrix());
+		s_data.camera_buffer.view_projection = camera->get_view_projection_matrix();
+		s_data.camera_uniform_buffer->set_data((const void *)&s_data.camera_buffer, sizeof s_data.camera_buffer);
 
 		s_data.texture_slots[0]->bind(0); // Blank texture
 
@@ -134,6 +137,7 @@ namespace elm::renderer_2d {
 			s_data.texture_slots[i]->bind(i);
 		}
 
+		s_data.shader->bind();
 		s_data.batch_quad_vertex_array->bind();
 		render_command::draw_indexed(s_data.batch_quad_vertex_array, s_data.batch_quad_count * 6);
 
