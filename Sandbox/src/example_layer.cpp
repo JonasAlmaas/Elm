@@ -53,6 +53,8 @@ example_layer::example_layer(void)
 
 	m_texture = elm::texture_2d::create("content/textures/dev/checkerboard.png");
 	m_texture2 = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png");
+
+	m_color_uniform_buffer = elm::uniform_buffer::create(sizeof(glm::vec4), 2);
 }
 
 void example_layer::on_update(elm::timestep ts)
@@ -70,11 +72,13 @@ void example_layer::on_update(elm::timestep ts)
 	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 	for (int y = 0; y < 20; ++y) {
 		for (int x = 0; x < 20; ++x) {
+			if ((x + y) % 2 == 0) {
+				m_color_uniform_buffer->set_data(&color_red, sizeof(color_red));
+			} else {
+				m_color_uniform_buffer->set_data(&color_blue, sizeof(color_blue));
+			}
 			glm::vec3 pos(x * 0.2f, y * 0.2f, 0.0f);
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-			// TODO: Use uniform buffers
-			/*m_flat_color_shader->bind();
-			m_flat_color_shader->set_float4("u_color", (y%2==0 && x%2==0) || (y%2!=0 && x%2!=0) ? color_red : color_blue);*/
 			elm::renderer::submit(m_flat_color_shader, m_square_va, transform);
 		}
 	}

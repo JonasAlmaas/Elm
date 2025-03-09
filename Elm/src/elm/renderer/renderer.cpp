@@ -1,16 +1,25 @@
 #include "renderer.h"
 #include "renderer_2d.h"
+#include "elm/core/renderer/uniform_buffer.h"
 #include "elm/core/renderer/render_command.h"
 
 namespace elm::renderer {
 
-	struct scene_data {
-		glm::mat4 view_projection_matrix;
+	struct renderer_data {
+		struct camera_data {
+			glm::mat4 view_projection;
+		};
+		camera_data camera_buffer;
+		std::shared_ptr<uniform_buffer> camera_uniform_buffer;
+
+		struct model_data {
+			glm::mat4 transform;
+		};
+		model_data model_buffer;
+		std::shared_ptr<uniform_buffer> model_uniform_buffer;
 	};
 
-	static struct scene_data s_scene_data = {
-		.view_projection_matrix = glm::mat4(1.0f)
-	};
+	static struct renderer_data s_data;
 
 	extern void init(void)
 	{
@@ -18,6 +27,9 @@ namespace elm::renderer {
 
 		render_command::init();
 		renderer_2d::init();
+
+		s_data.camera_uniform_buffer = uniform_buffer::create(sizeof(struct renderer_data::camera_data), 0);
+		s_data.model_uniform_buffer = uniform_buffer::create(sizeof(struct renderer_data::model_data), 1);
 	}
 
 	extern void on_viewport_resize(uint32_t width, uint32_t height)
@@ -31,7 +43,8 @@ namespace elm::renderer {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		s_scene_data.view_projection_matrix = camera->get_view_projection_matrix();
+		s_data.camera_buffer.view_projection = camera->get_view_projection_matrix();
+		s_data.camera_uniform_buffer->set_data((const void *)&s_data.camera_buffer, sizeof s_data.camera_buffer);
 	}
 
 	extern void end_scene(void)
@@ -46,11 +59,10 @@ namespace elm::renderer {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		// TODO: Use uniform buffers
-		/*shader->bind();
-		shader->set_mat4("u_view_projection", s_scene_data.view_projection_matrix);
-		shader->set_mat4("u_transform", transform);*/
+		s_data.model_buffer.transform = transform;
+		s_data.model_uniform_buffer->set_data((const void *)&s_data.model_buffer, sizeof s_data.model_buffer);
 
+		shader->bind();
 		vertex_array->bind();
 		render_command::draw_indexed(vertex_array);
 	}

@@ -26,6 +26,7 @@ private:
 	elm::shader_library m_shader_library;
 	std::shared_ptr<elm::shader> m_flat_color_shader;
 	std::shared_ptr<elm::shader> m_texture_shader;
+	std::shared_ptr<elm::uniform_buffer> m_color_uniform_buffer;
 
 	std::shared_ptr<elm::texture_2d> m_texture;
 	std::shared_ptr<elm::texture_2d> m_texture2;

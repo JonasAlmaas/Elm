@@ -1,28 +1,36 @@
 #type vertex
 #version 450 core
 
-layout(location = 0) in vec3 a_position;
-layout(location = 1) in vec2 a_uv;
+layout (location = 0) in vec3 a_position;
+layout (location = 1) in vec2 a_uv;
 
-uniform mat4 u_view_projection;
-uniform mat4 u_transform;
+layout (std140, binding = 0) uniform camera
+{
+	mat4 view_projection;
+} u_camera;
 
-out vec2 v_uv;
+layout (std140, binding = 1) uniform model
+{
+	mat4 transform;
+} u_model;
+
+layout (location = 0) out vec2 v_uv;
 
 void main()
 {
 	v_uv = a_uv;
-	gl_Position = u_view_projection * u_transform * vec4(a_position, 1.0);
+
+	gl_Position = u_camera.view_projection * u_model.transform * vec4(a_position, 1.0);
 }
 
 #type fragment
 #version 450 core
 
-layout(location = 0) out vec4 o_color;
+layout (location = 0) out vec4 o_color;
 
-in vec2 v_uv;
+layout (location = 0) in vec2 v_uv;
 
-uniform sampler2D u_texture;
+layout (binding = 0) uniform sampler2D u_texture;
 
 void main()
 {
