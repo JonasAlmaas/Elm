@@ -20,6 +20,9 @@ namespace elm {
 		void set_block_events(bool block) { m_block_events = block; }
 
 	private:
+		void set_style(void);
+
+	private:
 		bool m_block_events = false;
 	};
 }

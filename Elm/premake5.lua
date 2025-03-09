@@ -18,6 +18,7 @@ project "Elm"
 
 	includedirs {
 		"src",
+		"resources",
 
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.glad}",
