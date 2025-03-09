@@ -1,5 +1,5 @@
 #type vertex
-#version 330 core
+#version 450 core
 
 layout(location = 0) in vec3 a_position;
 layout(location = 1) in vec2 a_uv;
@@ -10,7 +10,7 @@ uniform mat4 u_view_projection;
 
 out vec2 v_uv;
 out vec4 v_color;
-out float v_texture_slot;
+out flat float v_texture_slot;
 
 void main()
 {
@@ -21,13 +21,13 @@ void main()
 }
 
 #type fragment
-#version 330 core
+#version 450 core
 
 layout(location = 0) out vec4 o_color;
 
 in vec2 v_uv;
 in vec4 v_color;
-in float v_texture_slot;
+in flat float v_texture_slot;
 
 uniform sampler2D u_textures[32];
 
