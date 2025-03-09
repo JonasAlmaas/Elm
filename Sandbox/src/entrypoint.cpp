@@ -7,8 +7,10 @@ namespace elm {
 
 	application* application::create(struct application_command_line_args args)
 	{
-		return new sandbox({
-			.name = "Sandbox",
-		});
+		return new sandbox(
+			{
+				.name = "Sandbox"
+			},
+			args);
 	}
 }
