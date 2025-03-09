@@ -155,6 +155,24 @@ namespace elm {
 		invalidate();
 	}
 
+	int opengl_frame_buffer::read_px_int(uint32_t attachment_ix, int x, int y) const
+	{
+		ELM_CORE_ASSERT(attachment_ix < m_color_attachments.size(), "Index out of range");
+
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachment_ix);
+		int px_data;
+		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &px_data);
+		return px_data;
+	}
+
+	void opengl_frame_buffer::clear_attachment_int(uint32_t attachment_ix, int value)
+	{
+		ELM_CORE_ASSERT(attachment_ix < m_color_attachments.size(), "Index out of range");
+
+		auto &spec = m_color_attachment_specs[attachment_ix];
+		glClearTexImage(m_color_attachments[attachment_ix], 0, utils::frame_buffer_texture_format_to_gl(spec.texture_format), GL_INT, &value);
+	}
+
 	void opengl_frame_buffer::invalidate(void)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();

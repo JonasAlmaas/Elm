@@ -59,6 +59,9 @@ namespace elm {
 
 		virtual void resize(uint32_t width, uint32_t height) = 0;
 
+		virtual int read_px_int(uint32_t attachment_ix, int x, int y) const = 0;
+		virtual void clear_attachment_int(uint32_t attachment_ix, int value) = 0;
+
 		virtual uint32_t get_color_attachment_renderer_id(uint32_t ix) const = 0;
 		virtual uint32_t get_depth_attachment_renderer_id(void) const = 0;
 

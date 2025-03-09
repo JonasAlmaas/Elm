@@ -17,6 +17,9 @@ namespace elm {
 
 		virtual void resize(uint32_t width, uint32_t height) override;
 
+		virtual int read_px_int(uint32_t attachment_ix, int x, int y) const override;
+		virtual void clear_attachment_int(uint32_t attachment_ix, int value) override;
+
 		virtual uint32_t get_color_attachment_renderer_id(uint32_t ix) const override
 		{
 			ELM_CORE_ASSERT(ix < m_color_attachments.size(), "Index out of range");
