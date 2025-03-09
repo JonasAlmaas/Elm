@@ -4,6 +4,7 @@
 #include "renderer_api.h"
 #include <glm/glm.hpp>
 #include <memory>
+#include <string>
 
 namespace elm {
 
@@ -33,6 +34,22 @@ namespace elm {
 		inline static void draw_indexed(const std::shared_ptr<vertex_array> &vertex_array, uint32_t count = 0)
 		{
 			s_renderer_api->draw_indexed(vertex_array, count);
+		}
+
+	public:
+		inline static std::string get_vendor(void)
+		{
+			return s_renderer_api->get_vendor();
+		}
+
+		inline static std::string get_render(void)
+		{
+			return s_renderer_api->get_render();
+		}
+
+		inline static std::string get_render_version(void)
+		{
+			return s_renderer_api->get_render_version();
 		}
 
 	private:

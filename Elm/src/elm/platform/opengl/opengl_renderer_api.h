@@ -15,5 +15,10 @@ namespace elm {
 		virtual void clear(void) override;
 
 		virtual void draw_indexed(const std::shared_ptr<vertex_array> &vertex_array, uint32_t count = 0) override;
+
+	public:
+		virtual std::string get_vendor(void) override;
+		virtual std::string get_render(void) override;
+		virtual std::string get_render_version(void) override;
 	};
 }

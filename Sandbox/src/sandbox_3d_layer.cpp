@@ -137,9 +137,23 @@ void sandbox_3d_layer::on_event(elm::event &e)
 
 void sandbox_3d_layer::on_imgui_render(void)
 {
-	ImGui::Begin("Misc");
+	// -- Renderer --
+	ImGui::Begin("Renderer");
 
+	static std::string vendor = elm::render_command::get_vendor();
+	static std::string renderer = elm::render_command::get_render();
+	static std::string renderer_version = elm::render_command::get_render_version();
+
+	ImGui::Text("Vendor: %s", vendor.c_str());
+	ImGui::Text("Renderer: %s", renderer.c_str());
+	ImGui::Text("Version: %s", renderer_version.c_str());
+	ImGui::Text("Frame time: %.3fms", elm::application::get()->get_telemetry()->get_smooth_frame_time());
 	ImGui::Text("FPS: %.2f", elm::application::get()->get_telemetry()->get_fps());
+
+	ImGui::End();
+
+	// -- Misc --
+	ImGui::Begin("Misc");
 
 	auto camera_pos = m_camera_controller.get_position();
 	if (ImGui::DragFloat3("Camera position", glm::value_ptr(camera_pos), 0.1f)) {

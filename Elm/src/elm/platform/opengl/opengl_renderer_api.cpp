@@ -43,4 +43,19 @@ namespace elm {
 		ELM_CORE_ASSERT(index_count <= vertex_array->get_index_buffer()->get_count(), "Trying to draw more indicies than index buffer contains");
 		glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, nullptr);
 	}
+
+	std::string opengl_renderer_api::get_vendor(void)
+	{
+		return std::string((const char *)glGetString(GL_VENDOR));
+	}
+
+	std::string opengl_renderer_api::get_render(void)
+	{
+		return std::string((const char *)glGetString(GL_RENDERER));
+	}
+
+	std::string opengl_renderer_api::get_render_version(void)
+	{
+		return std::string((const char *)glGetString(GL_VERSION));
+	}
 }

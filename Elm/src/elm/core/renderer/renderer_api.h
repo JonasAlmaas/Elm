@@ -4,6 +4,7 @@
 #include "vertex_array.h"
 #include <glm/glm.hpp>
 #include <memory>
+#include <string>
 
 namespace elm {
 
@@ -26,6 +27,11 @@ namespace elm {
 		virtual void clear(void) = 0;
 
 		virtual void draw_indexed(const std::shared_ptr<vertex_array> &vertex_array, uint32_t count = 0) = 0;
+
+	public:
+		virtual std::string get_vendor(void) = 0;
+		virtual std::string get_render(void) = 0;
+		virtual std::string get_render_version(void) = 0;
 
 	public:
 		inline static api get_api(void) { return s_api; }
