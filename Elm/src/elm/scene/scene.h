@@ -11,6 +11,7 @@ namespace elm {
 	{
 	public:
 		entity create_entity(void);
+		void destroy_entity(entity entity);
 
 	public:
 		static std::shared_ptr<scene> create(void);

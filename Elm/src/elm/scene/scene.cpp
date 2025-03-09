@@ -11,4 +11,9 @@ namespace elm {
 	{
 		return entity(&m_registry);
 	}
+
+	void scene::destroy_entity(entity entity)
+	{
+		m_registry.destroy(entity);
+	}
 }
