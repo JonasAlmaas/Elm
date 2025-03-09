@@ -68,16 +68,26 @@ namespace elm {
 			case shader_data_type::Float2:
 			case shader_data_type::Float3:
 			case shader_data_type::Float4:
+				glEnableVertexAttribArray(vb_ix);
+				glVertexAttribPointer(
+					vb_ix,
+					el.get_component_count(),
+					shader_data_type_to_opengl_base_type(el.type),
+					el.normalized ? GL_TRUE : GL_FALSE,
+					layout->get_stride(),
+					(const void*)el.offset);
+				++vb_ix;
+				break;
 			case shader_data_type::Int:
 			case shader_data_type::Int2:
 			case shader_data_type::Int3:
 			case shader_data_type::Int4:
 			case shader_data_type::Bool:
 				glEnableVertexAttribArray(vb_ix);
-				glVertexAttribPointer(vb_ix,
+				glVertexAttribIPointer(
+					vb_ix,
 					el.get_component_count(),
 					shader_data_type_to_opengl_base_type(el.type),
-					el.normalized ? GL_TRUE : GL_FALSE,
 					layout->get_stride(),
 					(const void *)el.offset);
 				++vb_ix;
@@ -88,7 +98,8 @@ namespace elm {
 				uint32_t count = el.get_component_count();
 				for (uint32_t i = 0; i < count; ++i) {
 					glEnableVertexAttribArray(vb_ix);
-					glVertexAttribPointer(vb_ix,
+					glVertexAttribPointer(
+						vb_ix,
 						count,
 						shader_data_type_to_opengl_base_type(el.type),
 						el.normalized ? GL_TRUE : GL_FALSE,
