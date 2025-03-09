@@ -6,8 +6,8 @@ namespace elm {
 
 	application* application::s_instance = nullptr;
 
-	application::application(const struct application_specification &spec)
-		: m_spec(spec)
+	application::application(const struct application_specification &spec, struct application_command_line_args args)
+		: m_spec(spec), m_command_line_args(args)
 	{
 		ELM_PROFILE_FUNCTION();
 

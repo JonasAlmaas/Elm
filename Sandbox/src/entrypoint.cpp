@@ -5,7 +5,7 @@
 
 namespace elm {
 
-	application* application::create(void)
+	application* application::create(struct application_command_line_args args)
 	{
 		return new sandbox({
 			.name = "Sandbox",

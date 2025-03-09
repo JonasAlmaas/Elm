@@ -12,6 +12,17 @@
 
 namespace elm {
 
+	struct application_command_line_args {
+		int count = 0;
+		char **args = nullptr;
+
+		const char *operator[](int ix) const
+		{
+			ELM_CORE_ASSERT(ix < count, "Index out of range");
+			return args[ix];
+		}
+	};
+
 	struct application_specification {
 		std::string name = "Elm";
 		uint32_t window_width = 1280u;
@@ -22,11 +33,10 @@ namespace elm {
 	class application
 	{
 	public:
-		application(const struct application_specification &spec);
+		application(
+			const struct application_specification &spec,
+			struct application_command_line_args args = struct application_command_line_args());
 		virtual ~application(void) = default;
-
-		// To be defined by the client
-		static application *create(void);
 
 		void run(void);
 
@@ -35,6 +45,7 @@ namespace elm {
 		void push_layer(layer *layer);
 		void push_overlay(layer *layer);
 
+		inline struct application_command_line_args get_command_line_args(void) const { return m_cmd_line_args; };
 		inline const application_telemetry *get_telemetry(void) const { return &m_telemetry; }
 		inline imgui_layer *get_imgui_layer(void) const { return m_imgui_layer; }
 		inline window *get_window(void) const { return m_window.get(); }
@@ -49,6 +60,7 @@ namespace elm {
 
 	private:
 		struct application_specification m_spec;
+		struct application_command_line_args m_cmd_line_args;
 
 		bool m_running = true;
 		bool m_minimized = false;
@@ -62,5 +74,9 @@ namespace elm {
 
 	private:
 		static application *s_instance;
+
+	public:
+		// To be defined by the client
+		static application *create(struct application_command_line_args args);
 	};
 }

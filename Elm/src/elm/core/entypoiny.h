@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 	elm::log::init();
 
 	ELM_PROFILE_BEGIN_SESSION("Startup", "profile-startup.json");
-	auto app = elm::application::create();
+	auto app = elm::application::create({ argc, argv });
 	ELM_PROFILE_END_SESSION();
 
 	ELM_PROFILE_BEGIN_SESSION("Runtime", "profile-runtime.json");
