@@ -1,6 +1,7 @@
-#include "time.h"
+#include "elm/platform_utils/time.h"
 
-// Temp (used to get time)
+#ifdef ELM_PLATFORM_WINDOWS
+
 #include <GLFW/glfw3.h>
 
 namespace elm::time {
@@ -10,3 +11,5 @@ namespace elm::time {
 		return (float)glfwGetTime();
 	}
 }
+
+#endif // ELM_PLATFORM_WINDOWS

@@ -6,7 +6,6 @@
 #include <elm/core/application.h>
 #include <elm/core/layer.h>
 #include <elm/core/log.h>
-#include <elm/core/time.h>
 #include <elm/core/timestep.h>
 
 #include <elm/core/event/event.h>
@@ -49,3 +48,7 @@
 #include <elm/scene/components.h>
 // --------------------------
 
+// --- Platform utils -------
+#include <elm/platform_utils/file_dialog.h>
+#include <elm/platform_utils/time.h>
+// --------------------------

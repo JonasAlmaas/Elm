@@ -1,6 +1,6 @@
 #include "application.h"
 #include "elm/renderer/renderer.h"
-#include "elm/core/time.h"
+#include "elm/platform_utils/time.h"
 
 namespace elm {
 
