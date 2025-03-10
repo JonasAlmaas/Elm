@@ -38,12 +38,6 @@ namespace elm::renderer_2d {
 		uint32_t texture_slot_ix = 1u; // 0 = blank texture
 
 		struct statistics stats;
-
-		struct camera_data {
-			glm::mat4 view_projection;
-		};
-		camera_data camera_buffer;
-		std::shared_ptr<uniform_buffer> camera_uniform_buffer;
 	};
 
 	static renderer_2d_data s_data;
@@ -87,8 +81,6 @@ namespace elm::renderer_2d {
 		auto quad_ib = elm::index_buffer::create(quad_indices, renderer_2d_data::max_quad_indices);
 		s_data.batch_quad_vertex_array->set_index_buffer(quad_ib);
 		delete[] quad_indices;
-
-		s_data.camera_uniform_buffer = uniform_buffer::create(sizeof(struct renderer_2d_data::camera_data), 0);
 	}
 
 	extern void shutdown(void)
@@ -104,8 +96,7 @@ namespace elm::renderer_2d {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		s_data.camera_buffer.view_projection = camera->get_view_projection_matrix();
-		s_data.camera_uniform_buffer->set_data((const void *)&s_data.camera_buffer, sizeof s_data.camera_buffer);
+		renderer::begin_scene(camera);
 
 		s_data.texture_slots[0]->bind(0); // Blank texture
 
@@ -119,6 +110,8 @@ namespace elm::renderer_2d {
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		flush();
+
+		renderer::end_scene();
 	}
 
 	extern void flush(void)
