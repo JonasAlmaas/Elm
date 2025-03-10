@@ -12,7 +12,7 @@ namespace elm {
 		++frame_time_acc_ix;
 
 		if (frame_time_acc_ix >= 30) {
-			m_smooth_frame_time = frame_time_acc / (float)frame_time_acc_ix;
+			m_smooth_frame_time_s = frame_time_acc / (float)frame_time_acc_ix;
 			frame_time_acc = 0.0f;
 			frame_time_acc_ix = 0;
 		}

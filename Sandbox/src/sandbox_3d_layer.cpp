@@ -145,7 +145,7 @@ void sandbox_3d_layer::on_imgui_render(void)
 	ImGui::Text("Vendor: %s", vendor.c_str());
 	ImGui::Text("Renderer: %s", renderer.c_str());
 	ImGui::Text("Version: %s", renderer_version.c_str());
-	ImGui::Text("Frame time: %.3fms", elm::application::get()->get_telemetry()->get_smooth_frame_time());
+	ImGui::Text("Frame time: %.3fms", elm::application::get()->get_telemetry()->get_smooth_frame_time_s() * 1000.0f);
 	ImGui::Text("FPS: %.2f", elm::application::get()->get_telemetry()->get_fps());
 
 	ImGui::End();
