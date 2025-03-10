@@ -42,7 +42,5 @@ namespace elm {
 
 		std::unordered_map<uint32_t /*GLenum*/, std::vector<uint32_t>> m_vulkan_spirv;
 		std::unordered_map<uint32_t /*GLenum*/, std::vector<uint32_t>> m_opengl_spirv;
-
-		std::unordered_map<uint32_t /*GLenum*/, std::string> m_opengl_source_code;
 	};
 }

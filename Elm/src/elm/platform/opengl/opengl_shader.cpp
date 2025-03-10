@@ -16,22 +16,9 @@ namespace elm {
 
 	static void ensure_cache_directory_exists(void)
 	{
-#define STUPIDE_DIR_CREATION 1
-#if STUPIDE_DIR_CREATION
-		if (!std::filesystem::exists("content")) {
-			std::filesystem::create_directory("content");
-		}
-		if (!std::filesystem::exists("content/_shadercache")) {
-			std::filesystem::create_directory("content/_shadercache");
-		}
 		if (!std::filesystem::exists(s_cache_directory)) {
-			std::filesystem::create_directory(s_cache_directory);
+			std::filesystem::create_directories(s_cache_directory);
 		}
-#else
-		if (!std::filesystem::exists(s_cache_directory)) {
-			std::filesystem::create_directory(s_cache_directory); // Why does this not just create all of them?
-		}
-#endif
 	}
 
 	static GLenum shader_kind_from_string(const std::string &kind_str)
@@ -114,25 +101,25 @@ namespace elm {
 		return result;
 	}
 
-	static const char *glshader_kind_cached_vulkan_file_extension(uint32_t stage)
+	static const char *glshader_kind_cached_vulkan_file_extension(uint32_t kind)
 	{
-		switch (stage) {
+		switch (kind) {
 		case GL_VERTEX_SHADER: return ".cached_vulkan.vert";
 		case GL_FRAGMENT_SHADER: return ".cached_vulkan.pixel";
 		}
 
-		ELM_CORE_ASSERT(false, "Unknown shader stage!");
+		ELM_CORE_ASSERT(false, "Unknown shader kind!");
 		return "";
 	}
 
-	static const char *glshader_kind_cached_opengl_file_extension(uint32_t stage)
+	static const char *glshader_kind_cached_opengl_file_extension(uint32_t kind)
 	{
-		switch (stage) {
+		switch (kind) {
 		case GL_VERTEX_SHADER: return ".cached_opengl.vert";
 		case GL_FRAGMENT_SHADER: return ".cached_opengl.pixel";
 		}
 
-		ELM_CORE_ASSERT(false, "Unknown shader stage!");
+		ELM_CORE_ASSERT(false, "Unknown shader kind!");
 		return "";
 	}
 
@@ -227,8 +214,7 @@ namespace elm {
 			options.SetOptimizationLevel(shaderc_optimization_level_performance);
 		}
 
-		auto &shader_data = m_vulkan_spirv;
-		shader_data.clear();
+		m_vulkan_spirv.clear();
 
 		for (auto &&[kind, source] : shader_sources) {
 			bool has_valid_cache = false;
@@ -250,7 +236,7 @@ namespace elm {
 
 				if (has_valid_cache) {
 					size -= sizeof(checksum_from_file);
-					auto &data = shader_data[kind];
+					auto &data = m_vulkan_spirv[kind];
 					data.resize(size / sizeof(uint32_t));
 					in.read((char *)data.data(), size);
 				}
@@ -263,11 +249,11 @@ namespace elm {
 					ELM_CORE_ASSERT(false, "Shader Compilation Failed!");
 				}
 
-				shader_data[kind] = std::vector<uint32_t>(res.cbegin(), res.cend());
+				m_vulkan_spirv[kind] = std::vector<uint32_t>(res.cbegin(), res.cend());
 
 				std::ofstream out(cache_path, std::ios::out | std::ios::binary);
 				if (out.is_open()) {
-					auto &data = shader_data[kind];
+					auto &data = m_vulkan_spirv[kind];
 					out.write((const char *)&checksum_from_source, sizeof(checksum_from_source));
 					out.write((char *)data.data(), data.size() * sizeof(uint32_t));
 					out.flush();
@@ -276,7 +262,7 @@ namespace elm {
 			}
 		}
 
-		for (auto &&[kind, data] : shader_data) {
+		for (auto &&[kind, data] : m_vulkan_spirv) {
 			reflect(kind, data);
 		}
 	}
@@ -284,8 +270,6 @@ namespace elm {
 	void opengl_shader::compile_or_get_opengl_binaries(void)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
-
-		auto &shader_data = m_opengl_spirv;
 
 		shaderc::Compiler compiler;
 		shaderc::CompileOptions options;
@@ -296,8 +280,7 @@ namespace elm {
 			options.SetOptimizationLevel(shaderc_optimization_level_performance);
 		}
 
-		shader_data.clear();
-		m_opengl_source_code.clear();
+		m_opengl_spirv.clear();
 
 		for (auto &&[kind, spirv] : m_vulkan_spirv) {
 			bool has_valid_cache = false;
@@ -319,7 +302,7 @@ namespace elm {
 
 				if (has_valid_cache) {
 					size -= sizeof(checksum_from_file);
-					auto &data = shader_data[kind];
+					auto &data = m_opengl_spirv[kind];
 					data.resize(size / sizeof(uint32_t));
 					in.read((char *)data.data(), size);
 				}
@@ -327,8 +310,7 @@ namespace elm {
 
 			if (!has_valid_cache) {
 				spirv_cross::CompilerGLSL glsl_compiler(spirv);
-				m_opengl_source_code[kind] = glsl_compiler.compile();
-				auto &source = m_opengl_source_code[kind];
+				auto source = glsl_compiler.compile(); // OpenGL source code
 
 				shaderc::SpvCompilationResult res = compiler.CompileGlslToSpv(source, glshader_kind_to_shaderc(kind), (const char *)m_fpath.c_str(), options);
 				if (res.GetCompilationStatus() != shaderc_compilation_status_success) {
@@ -336,11 +318,11 @@ namespace elm {
 					ELM_CORE_ASSERT(false, "Shader Compilation Failed!");
 				}
 
-				shader_data[kind] = std::vector<uint32_t>(res.cbegin(), res.cend());
+				m_opengl_spirv[kind] = std::vector<uint32_t>(res.cbegin(), res.cend());
 
 				std::ofstream out(cache_path, std::ios::out | std::ios::binary);
 				if (out.is_open()) {
-					auto &data = shader_data[kind];
+					auto &data = m_opengl_spirv[kind];
 					out.write((char *)data.data(), data.size() * sizeof(uint32_t));
 					out.flush();
 					out.close();
