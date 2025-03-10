@@ -9,7 +9,10 @@ namespace elm {
 	class uniform_buffer
 	{
 	public:
-		~uniform_buffer(void) = default;
+		virtual ~uniform_buffer(void) = default;
+
+		virtual void bind(void) = 0;
+		virtual void unbind(void) = 0;
 
 		virtual void set_data(const void *data, uint32_t size, uint32_t offset = 0) = 0;
 

@@ -60,6 +60,7 @@ namespace elm::renderer {
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		s_data.model_buffer.transform = transform;
+		s_data.model_uniform_buffer->bind();
 		s_data.model_uniform_buffer->set_data((const void *)&s_data.model_buffer, sizeof s_data.model_buffer);
 
 		shader->bind();

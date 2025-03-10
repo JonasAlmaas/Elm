@@ -92,6 +92,10 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	auto ib = elm::index_buffer::create(indices, sizeof indices / sizeof(uint32_t));
 	m_vertex_array->set_index_buffer(ib);
 
+	// World grid
+	m_world_grid_shader = elm::shader::create("content/shaders/world_grid.glsl");
+	m_world_grid_ub = elm::uniform_buffer::create(sizeof m_world_grid_data, 1);
+
 	// Setup scene
 	/*m_scene = elm::scene::create();
 	elm::entity entity = m_scene->create_entity();
@@ -108,6 +112,10 @@ void sandbox_3d_layer::on_detach(void)
 
 void sandbox_3d_layer::on_update(elm::timestep ts)
 {
+	if (elm::input::is_key_pressed(elm::key::F5)) {
+		m_world_grid_shader->reload();
+	}
+
 	m_camera_controller.on_update(ts);
 
 	elm::render_command::set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
@@ -117,6 +125,12 @@ void sandbox_3d_layer::on_update(elm::timestep ts)
 
 	m_texture_checkerboard->bind();
 	elm::renderer::submit(m_shader, m_vertex_array);
+
+	m_world_grid_shader->bind();
+	m_world_grid_data.camera_position = m_camera_controller.get_position();
+	m_world_grid_ub->bind();
+	m_world_grid_ub->set_data((const void *)&m_world_grid_data, sizeof m_world_grid_data);
+	elm::render_command::draw_arrays(6);
 
 	elm::renderer::end_scene();
 

@@ -36,6 +36,11 @@ namespace elm {
 			s_renderer_api->draw_indexed(vertex_array, count);
 		}
 
+		inline static void draw_arrays(uint32_t count, uint32_t offset = 0)
+		{
+			s_renderer_api->draw_arrays(count, offset);
+		}
+
 	public:
 		inline static std::string get_vendor(void)
 		{

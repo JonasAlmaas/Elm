@@ -27,6 +27,7 @@ namespace elm {
 		virtual void clear(void) = 0;
 
 		virtual void draw_indexed(const std::shared_ptr<vertex_array> &vertex_array, uint32_t count = 0) = 0;
+		virtual void draw_arrays(uint32_t count, uint32_t offset = 0) = 0;
 
 	public:
 		virtual std::string get_vendor(void) = 0;

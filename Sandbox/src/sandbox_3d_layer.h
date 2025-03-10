@@ -25,4 +25,11 @@ private:
 	std::shared_ptr<elm::shader> m_shader;
 	std::shared_ptr<elm::vertex_array> m_vertex_array;
 	std::shared_ptr<elm::texture_2d> m_texture_checkerboard;
+
+	std::shared_ptr<elm::shader> m_world_grid_shader;
+	std::shared_ptr<elm::uniform_buffer> m_world_grid_ub;
+	struct world_grid_data {
+		glm::vec3 camera_position;
+	};
+	world_grid_data m_world_grid_data;
 };

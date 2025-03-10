@@ -48,6 +48,13 @@ namespace elm {
 		glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, nullptr);
 	}
 
+	void opengl_renderer_api::draw_arrays(uint32_t count, uint32_t offset)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		glDrawArrays(GL_TRIANGLES, offset, count);
+	}
+
 	std::string opengl_renderer_api::get_vendor(void)
 	{
 		return std::string((const char *)glGetString(GL_VENDOR));
