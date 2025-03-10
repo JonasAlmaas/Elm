@@ -1,5 +1,6 @@
 #include "opengl_shader.h"
 #include "elm/core/timer.h"
+#include "elm/utils/crc32.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glad/glad.h>
 #include <shaderc/shaderc.hpp>
@@ -230,19 +231,32 @@ namespace elm {
 		shader_data.clear();
 
 		for (auto &&[kind, source] : shader_sources) {
+			bool has_valid_cache = false;
+			uint32_t checksum_from_source = crc32((uint8_t *)source.data(), (uint32_t)source.size());
+
 			std::filesystem::path shader_fpath = m_fpath;
 			std::filesystem::path cache_path = s_cache_directory / (shader_fpath.filename().string() + glshader_kind_cached_vulkan_file_extension(kind));
 
 			std::ifstream in(cache_path, std::ios::in | std::ios::binary);
-			if (in.is_open()) { // Has cachsed shader
+			if (in.is_open()) { // Has cachced shader
 				in.seekg(0, std::ios::end);
 				auto size = in.tellg();
 				in.seekg(0, std::ios::beg);
 
-				auto &data = shader_data[kind];
-				data.resize(size / sizeof(uint32_t));
-				in.read((char *)data.data(), size);
-			} else {
+				uint32_t checksum_from_file;
+				in.read((char *)&checksum_from_file, sizeof(checksum_from_file));
+
+				has_valid_cache = checksum_from_file == checksum_from_source;
+
+				if (has_valid_cache) {
+					size -= sizeof(checksum_from_file);
+					auto &data = shader_data[kind];
+					data.resize(size / sizeof(uint32_t));
+					in.read((char *)data.data(), size);
+				}
+			}
+
+			if (!has_valid_cache) {
 				shaderc::SpvCompilationResult res = compiler.CompileGlslToSpv(source, glshader_kind_to_shaderc(kind), (const char *)m_fpath.c_str(), options);
 				if (res.GetCompilationStatus() != shaderc_compilation_status_success) {
 					ELM_CORE_ERROR(res.GetErrorMessage());
@@ -254,6 +268,7 @@ namespace elm {
 				std::ofstream out(cache_path, std::ios::out | std::ios::binary);
 				if (out.is_open()) {
 					auto &data = shader_data[kind];
+					out.write((const char *)&checksum_from_source, sizeof(checksum_from_source));
 					out.write((char *)data.data(), data.size() * sizeof(uint32_t));
 					out.flush();
 					out.close();
@@ -285,19 +300,32 @@ namespace elm {
 		m_opengl_source_code.clear();
 
 		for (auto &&[kind, spirv] : m_vulkan_spirv) {
+			bool has_valid_cache = false;
+			uint32_t checksum_from_spirv = crc32((uint8_t *)spirv.data(), (uint32_t)(spirv.size() * sizeof(uint32_t)));
+
 			std::filesystem::path shader_fpath = m_fpath;
 			std::filesystem::path cache_path = s_cache_directory / (shader_fpath.filename().string() + glshader_kind_cached_opengl_file_extension(kind));
 
 			std::ifstream in(cache_path, std::ios::in | std::ios::binary);
-			if (in.is_open()) { // Has cachsed shader
+			if (in.is_open()) { // Has cachced shader
 				in.seekg(0, std::ios::end);
 				auto size = in.tellg();
 				in.seekg(0, std::ios::beg);
 
-				auto &data = shader_data[kind];
-				data.resize(size / sizeof(uint32_t));
-				in.read((char *)data.data(), size);
-			} else {
+				uint32_t checksum_from_file;
+				in.read((char *)&checksum_from_file, sizeof(checksum_from_file));
+
+				has_valid_cache = checksum_from_file == checksum_from_spirv;
+
+				if (has_valid_cache) {
+					size -= sizeof(checksum_from_file);
+					auto &data = shader_data[kind];
+					data.resize(size / sizeof(uint32_t));
+					in.read((char *)data.data(), size);
+				}
+			}
+
+			if (!has_valid_cache) {
 				spirv_cross::CompilerGLSL glsl_compiler(spirv);
 				m_opengl_source_code[kind] = glsl_compiler.compile();
 				auto &source = m_opengl_source_code[kind];
