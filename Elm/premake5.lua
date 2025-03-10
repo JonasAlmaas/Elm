@@ -33,7 +33,6 @@ project "Elm"
 		"glad",
 		"GLFW",
 		"imgui",
-		"opengl32.lib"
 	}
 
 	filter "system:windows"
