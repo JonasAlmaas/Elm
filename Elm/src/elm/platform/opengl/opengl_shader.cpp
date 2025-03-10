@@ -136,19 +136,9 @@ namespace elm {
 	}
 
 	opengl_shader::opengl_shader(const std::filesystem::path &fpath)
-		: m_renderer_id(UINT32_MAX), m_fpath(fpath)
+		: m_renderer_id(UINT32_MAX), m_fpath(fpath), m_name(fpath.stem().string())
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
-
-		// Extract name from fpath
-		// "content/shaders/flat_color.glsl" = "flat_color"
-		size_t last_slash = fpath.string().find_last_of("/\\");
-		last_slash = last_slash == std::string::npos ? 0 : last_slash + 1;
-		size_t last_dot = fpath.string().rfind('.');
-		size_t count = last_dot == std::string::npos
-			? fpath.string().size() - last_slash
-			: last_dot - last_slash;
-		m_name = fpath.string().substr(last_slash, count);
 
 		ensure_cache_directory_exists();
 		load_from_file();
