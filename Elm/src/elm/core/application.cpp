@@ -62,6 +62,8 @@ namespace elm {
 
 			m_window->on_update(m_minimized);
 		}
+
+		renderer::shutdown();
 	}
 
 	void application::push_layer(layer* layer)

@@ -1,5 +1,6 @@
 #include "renderer.h"
 #include "renderer_2d.h"
+#include "scene_renderer.h"
 #include "elm/core/renderer/uniform_buffer.h"
 #include "elm/core/renderer/render_command.h"
 
@@ -27,9 +28,18 @@ namespace elm::renderer {
 
 		render_command::init();
 		renderer_2d::init();
+		scene_renderer::init();
 
 		s_data.camera_uniform_buffer = uniform_buffer::create(sizeof(struct renderer_data::camera_data), 0);
 		s_data.model_uniform_buffer = uniform_buffer::create(sizeof(struct renderer_data::model_data), 1);
+	}
+
+	extern void shutdown(void)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		renderer_2d::shutdown();
+		scene_renderer::shutdown();
 	}
 
 	extern void on_viewport_resize(uint32_t width, uint32_t height)
@@ -43,7 +53,7 @@ namespace elm::renderer {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		s_data.camera_buffer.view_projection = camera->get_view_projection_matrix();
+		s_data.camera_buffer.view_projection = camera->get_view_projection();
 		s_data.camera_uniform_buffer->set_data((const void *)&s_data.camera_buffer, sizeof s_data.camera_buffer);
 	}
 

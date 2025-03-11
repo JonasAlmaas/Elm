@@ -9,6 +9,8 @@ namespace elm::math {
 	{
 		// Form glm::decompose in matrix_decompose.inl
 
+		ELM_CORE_ASSERT(scale || !rotation, "Can not decompose scale without rotation");
+
 		using namespace glm;
 
 		mat4 LocalMatrix(transform);
@@ -39,20 +41,24 @@ namespace elm::math {
 			}
 		}
 
-		(*scale).x = length(Row[0]);
-		Row[0] = detail::scale(Row[0], 1.0f);
-		(*scale).y = length(Row[1]);
-		Row[1] = detail::scale(Row[1], 1.0f);
-		(*scale).z = length(Row[2]);
-		Row[2] = detail::scale(Row[2], 1.0f);
+		if (scale) {
+			(*scale).x = length(Row[0]);
+			Row[0] = detail::scale(Row[0], 1.0f);
+			(*scale).y = length(Row[1]);
+			Row[1] = detail::scale(Row[1], 1.0f);
+			(*scale).z = length(Row[2]);
+			Row[2] = detail::scale(Row[2], 1.0f);
+		}
 
-		(*rotation).y = asin(-Row[0][2]);
-		if (cos((*rotation).y) != 0.0f) {
-			(*rotation).x = atan2(Row[1][2], Row[2][2]);
-			(*rotation).z = atan2(Row[0][1], Row[0][0]);
-		} else {
-			(*rotation).x = atan2(-Row[2][0], Row[1][1]);
-			(*rotation).z = 0.0f;
+		if (rotation) {
+			(*rotation).y = asin(-Row[0][2]);
+			if (cos((*rotation).y) != 0.0f) {
+				(*rotation).x = atan2(Row[1][2], Row[2][2]);
+				(*rotation).z = atan2(Row[0][1], Row[0][0]);
+			} else {
+				(*rotation).x = atan2(-Row[2][0], Row[1][1]);
+				(*rotation).z = 0.0f;
+			}
 		}
 
 		return true;

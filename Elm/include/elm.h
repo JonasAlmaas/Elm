@@ -32,6 +32,10 @@
 #include <elm/core/renderer/vertex_buffer_layout.h>
 // --------------------------
 
+// --- Math -----------------
+#include <elm/math/math.h>
+// --------------------------
+
 // --- Renderer -------------
 #include <elm/renderer/renderer.h>
 #include <elm/renderer/renderer_2d.h>

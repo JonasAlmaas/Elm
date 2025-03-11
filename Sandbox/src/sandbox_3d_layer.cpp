@@ -101,13 +101,15 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	// Setup scene
 	m_scene = elm::scene::create();
 	m_scene->set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
+	m_scene->set_show_world_grid(true);
 
 	{
 		elm::entity entity = m_scene->create_entity();
 		auto &circle_renderer = entity.add_component<elm::circle_renderer_component>();
 		circle_renderer.color = { 0.2f, 0.3f, 0.8f, 1.0f };
 		auto &transform = entity.add_component<elm::transform_component>();
-		transform.transform = glm::translate(glm::mat4(1.0f), { 1.0f, 1.0f, 0.0f });
+		transform.transform = glm::translate(glm::mat4(1.0f), { 1.0f, 1.0f, 0.0f })
+			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f});
 	}
 
 	{
@@ -115,7 +117,8 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		auto &circle_renderer = entity.add_component<elm::circle_renderer_component>();
 		circle_renderer.color = { 0.2f, 0.8f, 0.3f, 1.0f };
 		auto &transform = entity.add_component<elm::transform_component>();
-		transform.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f });
+		transform.transform = glm::translate(glm::mat4(1.0f), { -1.0f, 1.0f, 0.0f })
+			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
 	}
 }
 

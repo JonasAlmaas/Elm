@@ -10,6 +10,7 @@
 namespace elm::renderer {
 
 	extern void init(void);
+	extern void shutdown(void);
 
 	extern void on_viewport_resize(uint32_t width, uint32_t height);
 
