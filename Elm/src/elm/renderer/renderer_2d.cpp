@@ -65,7 +65,7 @@ namespace elm::renderer_2d {
 
 		// Load shader
 		s_data.generic_2d_shader = elm::shader::create("content/shaders/generic_2d.glsl");
-		s_data.circle_shader = elm::shader::create("content/shaders/circle.glsl");
+		s_data.circle_shader = elm::shader::create("content/shaders/circle_unlit.glsl");
 
 		// Create blank white texture
 		s_data.texture_blank = texture_2d::create(1, 1);

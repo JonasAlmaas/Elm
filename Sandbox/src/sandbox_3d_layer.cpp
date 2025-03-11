@@ -11,7 +11,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	m_camera_controller.set_pitch_deg(-55.0f);
 	m_camera_controller.set_yaw_deg(45.0f);
 
-	auto shader = elm::shader::create("content/shaders/texture.glsl");
+	auto shader = elm::shader::create("content/shaders/texture_unit.glsl");
 
 	uint32_t checkerboard_data[8 * 8];
 	for (int y = 0; y < 8; ++y) {
@@ -115,6 +115,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 		auto &circle_renderer = entity.add_component<elm::circle_renderer_component>();
 		circle_renderer.color = { 0.2f, 0.8f, 0.3f, 1.0f };
+		circle_renderer.thickness = 0.2f;
 
 		auto &transform = entity.add_component<elm::transform_component>();
 		transform.transform = glm::translate(glm::mat4(1.0f), { -1.0f, 1.0f, 0.0f })

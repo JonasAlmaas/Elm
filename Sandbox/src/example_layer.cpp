@@ -49,7 +49,7 @@ example_layer::example_layer(void)
 	}
 
 	m_flat_color_shader = m_shader_library.load("content/shaders/flat_color.glsl");
-	m_texture_shader = m_shader_library.load("content/shaders/texture.glsl");
+	m_texture_shader = m_shader_library.load("content/shaders/texture_unit.glsl");
 
 	m_texture = elm::texture_2d::create("content/textures/dev/checkerboard.png", {
 		.mag_filter = elm::texture_2d_filter::NEAREST
