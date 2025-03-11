@@ -41,7 +41,7 @@ namespace elm {
 		texture_2d_wrap wrap_s = texture_2d_wrap::REPEAT;
 		texture_2d_wrap wrap_t = texture_2d_wrap::REPEAT;
 		texture_2d_filter min_filter = texture_2d_filter::LINEAR;
-		texture_2d_filter mag_filter = texture_2d_filter::NEAREST;
+		texture_2d_filter mag_filter = texture_2d_filter::LINEAR;
 	};
 
 	class texture_2d : public texture

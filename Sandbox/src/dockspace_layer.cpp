@@ -16,7 +16,9 @@ void dockspace_layer::on_attach(void)
 			checkerboard_data[y * 8 + x] = (x + y) % 2 == 0 ? 0xFFFFFFFF : 0xFFCCCCCC;
 		}
 	}
-	m_texture_checkerboard = elm::texture_2d::create(8, 8);
+	m_texture_checkerboard = elm::texture_2d::create(8, 8, {
+		.mag_filter = elm::texture_2d_filter::NEAREST
+	});
 	m_texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
 
 	m_frame_buffer = elm::frame_buffer::create({

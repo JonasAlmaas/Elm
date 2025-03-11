@@ -51,8 +51,12 @@ example_layer::example_layer(void)
 	m_flat_color_shader = m_shader_library.load("content/shaders/flat_color.glsl");
 	m_texture_shader = m_shader_library.load("content/shaders/texture.glsl");
 
-	m_texture = elm::texture_2d::create("content/textures/dev/checkerboard.png");
-	m_texture2 = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png");
+	m_texture = elm::texture_2d::create("content/textures/dev/checkerboard.png", {
+		.mag_filter = elm::texture_2d_filter::NEAREST
+	});
+	m_texture2 = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png", {
+		.mag_filter = elm::texture_2d_filter::NEAREST
+	});
 
 	m_color_uniform_buffer = elm::uniform_buffer::create(sizeof(glm::vec4), 2);
 }
