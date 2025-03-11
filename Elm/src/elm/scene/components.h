@@ -1,6 +1,13 @@
 #pragma once
 
+#include "elm/core/base.h"
 #include <glm/glm.hpp>
+
+// quick_and_dirty_mesh_renderer
+#include "elm/core/renderer/shader.h"
+#include "elm/core/renderer/vertex_array.h"
+#include "elm/core/renderer/texture.h"
+#include <memory>
 
 namespace elm {
 
@@ -22,5 +29,11 @@ namespace elm {
 
 		circle_renderer_component(void) = default;
 		circle_renderer_component(const circle_renderer_component &) = default;
+	};
+
+	struct quick_and_dirty_mesh_renderer {
+		std::shared_ptr<shader> shader;
+		std::shared_ptr<vertex_array> vertex_array;
+		std::shared_ptr<texture_2d> texture;
 	};
 }

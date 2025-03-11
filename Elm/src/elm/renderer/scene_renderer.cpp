@@ -45,7 +45,12 @@ namespace elm::scene_renderer {
 
 		renderer::begin_scene(camera);
 
-		// TODO: Submit stuff here
+		auto view = reg.view<transform_component, quick_and_dirty_mesh_renderer>();
+		for (auto entity : view) {
+			auto [tc, rc] = view.get<transform_component, quick_and_dirty_mesh_renderer>(entity);
+			rc.texture->bind();
+			renderer::submit(rc.shader, rc.vertex_array, tc.transform);
+		}
 
 		renderer_2d::begin_scene(camera, false);
 		{
@@ -53,13 +58,8 @@ namespace elm::scene_renderer {
 
 			auto view = reg.view<transform_component, circle_renderer_component>();
 			for (auto entity : view) {
-				auto [transform_comp, circle_renderer_comp] = view.get<transform_component, circle_renderer_component>(entity);
-				renderer_2d::draw_circle(
-					transform_comp.transform,
-					circle_renderer_comp.color,
-					circle_renderer_comp.radius,
-					circle_renderer_comp.thickness,
-					circle_renderer_comp.fade);
+				auto [tc, rc] = view.get<transform_component, circle_renderer_component>(entity);
+				renderer_2d::draw_circle(tc.transform, rc.color, rc.radius, rc.thickness, rc.fade);
 			}
 
 			renderer_2d::end_scene();

@@ -11,7 +11,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	m_camera_controller.set_pitch_deg(-55.0f);
 	m_camera_controller.set_yaw_deg(45.0f);
 
-	m_shader = elm::shader::create("content/shaders/texture.glsl");
+	auto shader = elm::shader::create("content/shaders/texture.glsl");
 
 	uint32_t checkerboard_data[8 * 8];
 	for (int y = 0; y < 8; ++y) {
@@ -19,13 +19,13 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 			checkerboard_data[y * 8 + x] = (x + y) % 2 == 0 ? 0xFFFFFFFF : 0xFFCCCCCC;
 		}
 	}
-	m_texture_checkerboard = elm::texture_2d::create(8, 8, {
+	auto texture_checkerboard = elm::texture_2d::create(8, 8, {
 		.mag_filter = elm::texture_2d_filter::NEAREST
 	});
-	m_texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
+	texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
 
 	// Setup vertex array to render
-	m_vertex_array = elm::vertex_array::create();
+	auto vertex_array = elm::vertex_array::create();
 	float vertices[5 * 4 * 6] = {
 		// Front face
 		-0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
@@ -69,7 +69,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		{ elm::shader_data_type::Float3, "a_position" },
 		{ elm::shader_data_type::Float2, "a_uv" } };
 	vb->set_layout(&layout);
-	m_vertex_array->add_vertex_buffer(vb);
+	vertex_array->add_vertex_buffer(vb);
 
 	uint32_t indices[6 * 6] = {
 		// Front face
@@ -92,11 +92,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		22, 23, 20
 	};
 	auto ib = elm::index_buffer::create(indices, sizeof indices / sizeof(uint32_t));
-	m_vertex_array->set_index_buffer(ib);
-
-	// World grid
-	m_world_grid_shader = elm::shader::create("content/shaders/world_grid.glsl");
-	m_world_grid_ub = elm::uniform_buffer::create(sizeof m_world_grid_data, 1);
+	vertex_array->set_index_buffer(ib);
 
 	// Setup scene
 	m_scene = elm::scene::create();
@@ -105,8 +101,10 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 	{
 		elm::entity entity = m_scene->create_entity();
+
 		auto &circle_renderer = entity.add_component<elm::circle_renderer_component>();
 		circle_renderer.color = { 0.2f, 0.3f, 0.8f, 1.0f };
+
 		auto &transform = entity.add_component<elm::transform_component>();
 		transform.transform = glm::translate(glm::mat4(1.0f), { 1.0f, 1.0f, 0.0f })
 			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f});
@@ -114,10 +112,25 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 	{
 		elm::entity entity = m_scene->create_entity();
+
 		auto &circle_renderer = entity.add_component<elm::circle_renderer_component>();
 		circle_renderer.color = { 0.2f, 0.8f, 0.3f, 1.0f };
+
 		auto &transform = entity.add_component<elm::transform_component>();
 		transform.transform = glm::translate(glm::mat4(1.0f), { -1.0f, 1.0f, 0.0f })
+			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
+	}
+
+	{
+		elm::entity entity = m_scene->create_entity();
+
+		auto &renderer = entity.add_component<elm::quick_and_dirty_mesh_renderer>();
+		renderer.shader = shader;
+		renderer.vertex_array = vertex_array;
+		renderer.texture = texture_checkerboard;
+
+		auto &transform = entity.add_component<elm::transform_component>();
+		transform.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f })
 			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
 	}
 }
@@ -134,26 +147,7 @@ void sandbox_3d_layer::on_update(elm::timestep ts)
 {
 	m_camera_controller.on_update(ts);
 
-#define USE_SCENE_RENDERER 1
-#if USE_SCENE_RENDERER
 	elm::scene_renderer::render(m_scene, m_camera_controller.get_camera());
-#else
-	elm::render_command::set_clear_color({0.1f, 0.1f, 0.1f, 1.0f});
-	elm::render_command::clear();
-
-	elm::renderer::begin_scene(m_camera_controller.get_camera());
-
-	m_texture_checkerboard->bind();
-	elm::renderer::submit(m_shader, m_vertex_array);
-
-	m_world_grid_shader->bind();
-	m_world_grid_data.camera_position = m_camera_controller.get_position();
-	m_world_grid_ub->bind();
-	m_world_grid_ub->set_data((const void *)&m_world_grid_data, sizeof m_world_grid_data);
-	elm::render_command::draw_arrays(6);
-
-	elm::renderer::end_scene();
-#endif
 }
 
 void sandbox_3d_layer::on_event(elm::event &e)
