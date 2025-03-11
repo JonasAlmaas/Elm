@@ -17,6 +17,9 @@ namespace elm {
 		inline void set_clear_color(const glm::vec4 &clear_color) { m_clear_color = clear_color; }
 		inline const glm::vec4 &get_clear_color(void) const { return m_clear_color; }
 
+		// Should find a better solution than this
+		const entt::registry &get_reg(void) const { return m_registry; }
+
 	public:
 		static std::shared_ptr<scene> create(void);
 

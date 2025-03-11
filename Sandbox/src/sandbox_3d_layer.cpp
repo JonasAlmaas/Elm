@@ -100,9 +100,23 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 	// Setup scene
 	m_scene = elm::scene::create();
-	elm::entity entity = m_scene->create_entity();
-	auto &circle_renderer = entity.add_component<elm::circle_renderer_component>();
-	circle_renderer.thickness = 0.0f;
+	m_scene->set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
+
+	{
+		elm::entity entity = m_scene->create_entity();
+		auto &circle_renderer = entity.add_component<elm::circle_renderer_component>();
+		circle_renderer.color = { 0.2f, 0.3f, 0.8f, 1.0f };
+		auto &transform = entity.add_component<elm::transform_component>();
+		transform.transform = glm::translate(glm::mat4(1.0f), { 1.0f, 1.0f, 0.0f });
+	}
+
+	{
+		elm::entity entity = m_scene->create_entity();
+		auto &circle_renderer = entity.add_component<elm::circle_renderer_component>();
+		circle_renderer.color = { 0.2f, 0.8f, 0.3f, 1.0f };
+		auto &transform = entity.add_component<elm::transform_component>();
+		transform.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f });
+	}
 }
 
 void sandbox_3d_layer::on_attach(void)
@@ -117,7 +131,11 @@ void sandbox_3d_layer::on_update(elm::timestep ts)
 {
 	m_camera_controller.on_update(ts);
 
-	/*elm::render_command::set_clear_color({0.1f, 0.1f, 0.1f, 1.0f});
+#define USE_SCENE_RENDERER 1
+#if USE_SCENE_RENDERER
+	elm::scene_renderer::render(m_scene, m_camera_controller.get_camera());
+#else
+	elm::render_command::set_clear_color({0.1f, 0.1f, 0.1f, 1.0f});
 	elm::render_command::clear();
 
 	elm::renderer::begin_scene(m_camera_controller.get_camera());
@@ -131,9 +149,8 @@ void sandbox_3d_layer::on_update(elm::timestep ts)
 	m_world_grid_ub->set_data((const void *)&m_world_grid_data, sizeof m_world_grid_data);
 	elm::render_command::draw_arrays(6);
 
-	elm::renderer::end_scene();*/
-
-	elm::scene_renderer::render(m_scene, m_camera_controller.get_camera());
+	elm::renderer::end_scene();
+#endif
 }
 
 void sandbox_3d_layer::on_event(elm::event &e)

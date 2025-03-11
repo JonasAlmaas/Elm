@@ -34,6 +34,8 @@ namespace elm::renderer_2d {
 		static const uint32_t max_quad_verticies = max_quads * 4;
 		static const uint32_t max_quad_indices = max_quads * 6;
 
+		bool standalone = false; // If not called from within the scope of the 3D renderer
+
 		std::shared_ptr<shader> generic_2d_shader;
 		std::shared_ptr<shader> circle_shader;
 		std::shared_ptr<texture_2d> texture_blank; // Texture slot 0
@@ -131,11 +133,14 @@ namespace elm::renderer_2d {
 		s_data.batch_circle_vertex_buf_ptr = nullptr;
 	}
 
-	extern void begin_scene(const camera *camera)
+	extern void begin_scene(const camera *camera, bool standalone)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		renderer::begin_scene(camera);
+		s_data.standalone = standalone;
+		if (s_data.standalone) {
+			renderer::begin_scene(camera);
+		}
 
 		s_data.batch_quad_count = 0u;
 		s_data.batch_quad_vertex_buf_ptr = s_data.batch_quad_vertex_buf_base;
@@ -151,7 +156,9 @@ namespace elm::renderer_2d {
 
 		flush();
 
-		renderer::end_scene();
+		if (s_data.standalone) {
+			renderer::end_scene();
+		}
 	}
 
 	static void flush_quads(void)
