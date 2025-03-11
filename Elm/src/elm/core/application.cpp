@@ -14,6 +14,10 @@ namespace elm {
 		ELM_CORE_ASSERT(!s_instance, "Application already exists");
 		s_instance = this;
 
+		if (!m_spec.cwd.empty()) {
+			std::filesystem::current_path(m_spec.cwd);
+		}
+
 		m_window = window::create({
 			.title = m_spec.name,
 			.width = m_spec.window_width,

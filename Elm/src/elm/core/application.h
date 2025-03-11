@@ -7,6 +7,7 @@
 #include "elm/core/application_telemetry.h"
 #include "elm/core/window.h"
 #include "elm/imgui/imgui_layer.h"
+#include <filesystem>
 #include <memory>
 #include <string>
 
@@ -25,6 +26,7 @@ namespace elm {
 
 	struct application_specification {
 		std::string name = "Elm";
+		std::filesystem::path cwd = "";
 		uint32_t window_width = 1280u;
 		uint32_t window_height = 720u;
 		bool vsync = true;
