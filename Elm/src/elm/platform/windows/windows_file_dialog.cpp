@@ -1,4 +1,4 @@
-#include "elm/platform_utils/file_dialog.h"
+#include "elm/core/file_dialog.h"
 
 #ifdef ELM_PLATFORM_WINDOWS
 
