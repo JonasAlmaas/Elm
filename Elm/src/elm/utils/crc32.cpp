@@ -12,14 +12,14 @@ namespace elm {
 	}
 
 	extern uint32_t crc32(uint8_t *buf, uint32_t size) {
-		int i, j;
+		uint32_t i, j;
 		uint32_t byte, crc;
 
 		crc = 0xFFFFFFFFu;
-		for (i = 0; i < size; ++i) {
+		for (i = 0u; i < size; ++i) {
 			byte = buf[i];
 			byte = reverse(byte);
-			for (j = 0; j <= 7; j++) {
+			for (j = 0u; j <= 7u; j++) {
 				if ((int)(crc ^ byte) < 0) {
 					crc = (crc << 1) ^ 0x04C11DB7;
 				} else {
