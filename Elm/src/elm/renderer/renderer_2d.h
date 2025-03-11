@@ -10,8 +10,9 @@ namespace elm::renderer_2d {
 		uint32_t draw_calls = 0u;
 		uint32_t quad_count = 0u;
 		uint32_t circle_count = 0u;
+		uint32_t line_count = 0u;
 
-		inline uint32_t get_vertex_count(void) const { return quad_count * 4u + circle_count * 4u; }
+		inline uint32_t get_vertex_count(void) const { return quad_count * 4u + circle_count * 4u + line_count * 2u; }
 		inline uint32_t get_index_count(void) const { return quad_count * 6u + circle_count * 6u; }
 	};
 
@@ -50,6 +51,13 @@ namespace elm::renderer_2d {
 
 	// -- Draw circle --
 	extern void draw_circle(const glm::mat4 &transform, const glm::vec4 &color, float radius = 0.5f, float thickness = 1.0f, float fade = 0.005f);
+
+	// -- Draw line --
+	extern float get_line_thickness(void);
+	extern void set_line_thickness(float thickness);
+
+	extern void draw_line(const glm::vec3 &p0, const glm::vec3 &p1, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_line(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec4 &color = glm::vec4(1.0f));
 
 	// -- Statistics --
 	extern struct statistics get_stats(void);

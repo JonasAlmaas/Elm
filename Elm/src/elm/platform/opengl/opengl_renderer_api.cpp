@@ -39,13 +39,13 @@ namespace elm {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void opengl_renderer_api::draw_indexed(const std::shared_ptr<vertex_array> &vertex_array, uint32_t count)
+	void opengl_renderer_api::draw_indexed(const std::shared_ptr<vertex_array> &vertex_array, uint32_t index_count)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		uint32_t index_count = count ? count : vertex_array->get_index_buffer()->get_count();
-		ELM_CORE_ASSERT(index_count <= vertex_array->get_index_buffer()->get_count(), "Trying to draw more indicies than index buffer contains");
-		glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, nullptr);
+		uint32_t count = index_count ? index_count : vertex_array->get_index_buffer()->get_count();
+		ELM_CORE_ASSERT(count <= vertex_array->get_index_buffer()->get_count(), "Trying to draw more indicies than index buffer contains");
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 
 	void opengl_renderer_api::draw_arrays(uint32_t count, uint32_t offset)
@@ -53,6 +53,20 @@ namespace elm {
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		glDrawArrays(GL_TRIANGLES, offset, count);
+	}
+
+	void opengl_renderer_api::draw_line(const std::shared_ptr<vertex_array> &vertex_array, uint32_t vertex_count)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		glDrawArrays(GL_LINES, 0, vertex_count);
+	}
+
+	void opengl_renderer_api::set_line_thickness(float thickness)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		glLineWidth(thickness);
 	}
 
 	std::string opengl_renderer_api::get_vendor(void)

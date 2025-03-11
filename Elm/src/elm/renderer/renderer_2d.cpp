@@ -26,10 +26,15 @@ namespace elm::renderer_2d {
 		float fade;
 	};
 
+	struct line_vertex {
+		glm::vec3 position;
+		glm::vec4 color;
+	};
+
 	struct renderer_2d_data {
 		static const uint32_t max_texture_slots = 32; // TODO: Render Capabilities
 
-		// Used for circles too
+		// Used for circles and lines too
 		static const uint32_t max_quads = 20000u;
 		static const uint32_t max_quad_verticies = max_quads * 4;
 		static const uint32_t max_quad_indices = max_quads * 6;
@@ -38,6 +43,8 @@ namespace elm::renderer_2d {
 
 		std::shared_ptr<shader> generic_2d_shader;
 		std::shared_ptr<shader> circle_shader;
+		std::shared_ptr<shader> line_shader;
+
 		std::shared_ptr<texture_2d> texture_blank; // Texture slot 0
 
 		std::shared_ptr<vertex_array> batch_quad_vertex_array;
@@ -54,6 +61,13 @@ namespace elm::renderer_2d {
 		circle_vertex *batch_circle_vertex_buf_base = nullptr;
 		circle_vertex *batch_circle_vertex_buf_ptr = nullptr;
 
+		float line_thickness = 2.0f;
+		std::shared_ptr<vertex_array> batch_line_vertex_array;
+		std::shared_ptr<vertex_buffer> batch_line_vertex_buffer;
+		uint32_t batch_line_count = 0;
+		line_vertex *batch_line_vertex_buf_base = nullptr;
+		line_vertex *batch_line_vertex_buf_ptr = nullptr;
+
 		struct statistics stats;
 	};
 
@@ -63,9 +77,10 @@ namespace elm::renderer_2d {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		// Load shader
+		// Load shaders
 		s_data.generic_2d_shader = elm::shader::create("content/shaders/generic_2d.glsl");
 		s_data.circle_shader = elm::shader::create("content/shaders/circle_unlit.glsl");
+		s_data.line_shader = elm::shader::create("content/shaders/line.glsl");
 
 		// Create blank white texture
 		s_data.texture_blank = texture_2d::create(1, 1);
@@ -98,7 +113,7 @@ namespace elm::renderer_2d {
 		}
 		auto quad_ib = elm::index_buffer::create(quad_indices, renderer_2d_data::max_quad_indices);
 		s_data.batch_quad_vertex_array->set_index_buffer(quad_ib);
-		
+
 		// -- Circle vertex array --
 		s_data.batch_circle_vertex_array = elm::vertex_array::create();
 
@@ -117,6 +132,18 @@ namespace elm::renderer_2d {
 		auto circle_ib = elm::index_buffer::create(quad_indices, renderer_2d_data::max_quad_indices);
 		s_data.batch_circle_vertex_array->set_index_buffer(circle_ib);
 
+		// -- Line vertex array --
+		s_data.batch_line_vertex_array = elm::vertex_array::create();
+
+		s_data.batch_line_vertex_buffer = elm::vertex_buffer::create(renderer_2d_data::max_quad_verticies * sizeof(line_vertex));
+		elm::vertex_buffer_layout line_vb_layout = {
+			{ elm::shader_data_type::Float3, "a_position" },
+			{ elm::shader_data_type::Float4, "a_color" } };
+		s_data.batch_line_vertex_buffer->set_layout(&line_vb_layout);
+		s_data.batch_line_vertex_array->add_vertex_buffer(s_data.batch_line_vertex_buffer);
+
+		s_data.batch_line_vertex_buf_base = new line_vertex[renderer_2d_data::max_quad_verticies];
+
 		delete[] quad_indices;
 	}
 
@@ -131,6 +158,10 @@ namespace elm::renderer_2d {
 		delete[] s_data.batch_circle_vertex_buf_base;
 		s_data.batch_circle_vertex_buf_base = nullptr;
 		s_data.batch_circle_vertex_buf_ptr = nullptr;
+
+		delete[] s_data.batch_line_vertex_buf_base;
+		s_data.batch_line_vertex_buf_base = nullptr;
+		s_data.batch_line_vertex_buf_ptr = nullptr;
 	}
 
 	extern void begin_scene(const camera *camera, bool standalone)
@@ -148,6 +179,9 @@ namespace elm::renderer_2d {
 
 		s_data.batch_circle_count = 0u;
 		s_data.batch_circle_vertex_buf_ptr = s_data.batch_circle_vertex_buf_base;
+
+		s_data.batch_line_count = 0u;
+		s_data.batch_line_vertex_buf_ptr = s_data.batch_line_vertex_buf_base;
 	}
 
 	extern void end_scene(void)
@@ -208,10 +242,33 @@ namespace elm::renderer_2d {
 		++s_data.stats.draw_calls;
 	}
 
+	static void flush_lines(void)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		if (s_data.batch_line_count == 0) {
+			return;
+		}
+
+		uint32_t data_size = (uint32_t)((uint8_t *)s_data.batch_line_vertex_buf_ptr - (uint8_t *)s_data.batch_line_vertex_buf_base);
+		s_data.batch_line_vertex_buffer->set_data(s_data.batch_line_vertex_buf_base, data_size);
+
+		s_data.line_shader->bind();
+		s_data.batch_line_vertex_array->bind();
+		elm::render_command::set_line_thickness(s_data.line_thickness);
+		render_command::draw_line(s_data.batch_line_vertex_array, s_data.batch_line_count * 2);
+
+		s_data.batch_line_count = 0;
+		s_data.batch_line_vertex_buf_ptr = s_data.batch_line_vertex_buf_base;
+
+		++s_data.stats.draw_calls;
+	}
+
 	extern void flush(void)
 	{
 		flush_quads();
 		flush_circles();
+		flush_lines();
 	}
 
 	static void draw_quad_transform(
@@ -501,7 +558,42 @@ namespace elm::renderer_2d {
 			flush_circles();
 		}
 
-		++s_data.stats.quad_count;
+		++s_data.stats.circle_count;
+	}
+
+	float get_line_thickness(void)
+	{
+		return s_data.line_thickness;
+	}
+
+	void set_line_thickness(float thickness)
+	{
+		s_data.line_thickness = thickness;
+	}
+
+	void draw_line(const glm::vec3 &p0, const glm::vec3 &p1, const glm::vec4 &color)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		s_data.batch_line_vertex_buf_ptr->position = p0;
+		s_data.batch_line_vertex_buf_ptr->color = color;
+		++s_data.batch_line_vertex_buf_ptr;
+
+		s_data.batch_line_vertex_buf_ptr->position = p1;
+		s_data.batch_line_vertex_buf_ptr->color = color;
+		++s_data.batch_line_vertex_buf_ptr;
+
+		++s_data.batch_line_count;
+		if (s_data.batch_line_count >= renderer_2d_data::max_quads) {
+			flush_lines();
+		}
+
+		++s_data.stats.line_count;
+	}
+
+	void draw_line(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec4 &color)
+	{
+		draw_line(glm::vec3(p0, 0.0f), glm::vec3(p1, 0.0f), color);
 	}
 
 	extern struct statistics get_stats(void)
