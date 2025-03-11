@@ -11,7 +11,7 @@ namespace elm::input {
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(application::get()->get_window()->get_native_window());
 		int state = glfwGetKey(window, key_code);
-		return state == GLFW_PRESS || state == GLFW_REPEAT;
+		return state == GLFW_PRESS;
 	}
 
 	extern bool is_mouse_button_pressed(mouse_code button)
