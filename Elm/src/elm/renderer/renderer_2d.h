@@ -1,6 +1,6 @@
 #pragma once
 
-#include "elm/camera/orthographic_camera.h"
+#include "elm/core/renderer/camera.h"
 #include "elm/core/renderer/texture.h"
 #include <memory>
 
@@ -9,16 +9,16 @@ namespace elm::renderer_2d {
 	struct statistics {
 		uint32_t draw_calls = 0u;
 		uint32_t quad_count = 0u;
+		uint32_t circle_count = 0u;
 
-		inline uint32_t get_vertex_count(void) const { return quad_count * 4u; }
-		inline uint32_t get_index_count(void) const { return quad_count * 6u; }
-		uint32_t get_memory_usage(void) const;
+		inline uint32_t get_vertex_count(void) const { return quad_count * 4u + circle_count * 4u; }
+		inline uint32_t get_index_count(void) const { return quad_count * 6u + circle_count * 6u; }
 	};
 
 	extern void init(void);
 	extern void shutdown(void);
 
-	extern void begin_scene(const orthographic_camera *camera);
+	extern void begin_scene(const camera *camera);
 	extern void end_scene(void);
 
 	extern void flush(void);
@@ -47,6 +47,9 @@ namespace elm::renderer_2d {
 
 	extern void draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<sub_texture_2d> &sub_texture, const glm::vec4 &color = glm::vec4(1.0f));
 	extern void draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<sub_texture_2d> &sub_texture, const glm::vec4 &color = glm::vec4(1.0f));
+
+	// -- Draw circle --
+	extern void draw_circle(const glm::mat4 &transform, const glm::vec4 &color, float radius = 0.5f, float thickness = 1.0f, float fade = 0.005f);
 
 	// -- Statistics --
 	extern struct statistics get_stats(void);

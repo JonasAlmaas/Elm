@@ -18,14 +18,24 @@ namespace elm::renderer_2d {
 		int texture_slot;
 	};
 
+	struct circle_vertex {
+		glm::vec3 world_position;
+		glm::vec3 local_position;
+		glm::vec4 color;
+		float thickness;
+		float fade;
+	};
+
 	struct renderer_2d_data {
+		static const uint32_t max_texture_slots = 32; // TODO: Render Capabilities
+
+		// Used for circles too
 		static const uint32_t max_quads = 20000u;
 		static const uint32_t max_quad_verticies = max_quads * 4;
 		static const uint32_t max_quad_indices = max_quads * 6;
 
-		static const uint32_t max_texture_slots = 32; // TODO: Render Capabilities
-
-		std::shared_ptr<shader> shader;
+		std::shared_ptr<shader> generic_2d_shader;
+		std::shared_ptr<shader> circle_shader;
 		std::shared_ptr<texture_2d> texture_blank; // Texture slot 0
 
 		std::shared_ptr<vertex_array> batch_quad_vertex_array;
@@ -33,9 +43,14 @@ namespace elm::renderer_2d {
 		uint32_t batch_quad_count = 0;
 		quad_vertex *batch_quad_vertex_buf_base = nullptr;
 		quad_vertex *batch_quad_vertex_buf_ptr = nullptr;
+		std::array<std::shared_ptr<texture_2d>, max_texture_slots> batch_quad_texture_slots;
+		uint32_t batch_quad_texture_slot_ix = 1u; // 0 = blank texture
 
-		std::array<std::shared_ptr<texture_2d>, max_texture_slots> texture_slots;
-		uint32_t texture_slot_ix = 1u; // 0 = blank texture
+		std::shared_ptr<vertex_array> batch_circle_vertex_array;
+		std::shared_ptr<vertex_buffer> batch_circle_vertex_buffer;
+		uint32_t batch_circle_count = 0;
+		circle_vertex *batch_circle_vertex_buf_base = nullptr;
+		circle_vertex *batch_circle_vertex_buf_ptr = nullptr;
 
 		struct statistics stats;
 	};
@@ -47,24 +62,25 @@ namespace elm::renderer_2d {
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		// Load shader
-		s_data.shader = elm::shader::create("content/shaders/generic_2d.glsl");
+		s_data.generic_2d_shader = elm::shader::create("content/shaders/generic_2d.glsl");
+		s_data.circle_shader = elm::shader::create("content/shaders/circle.glsl");
 
 		// Create blank white texture
 		s_data.texture_blank = texture_2d::create(1, 1);
 		uint8_t t[4] = { 0xFFu, 0xFFu, 0xFFu, 0xFFu };
 		s_data.texture_blank->set_data(t, sizeof t);
-		s_data.texture_slots[0] = s_data.texture_blank;
+		s_data.batch_quad_texture_slots[0] = s_data.texture_blank;
 
 		// -- Quad vertex array --
 		s_data.batch_quad_vertex_array = elm::vertex_array::create();
 
 		s_data.batch_quad_vertex_buffer = elm::vertex_buffer::create(renderer_2d_data::max_quad_verticies * sizeof(quad_vertex));
-		elm::vertex_buffer_layout layout = {
+		elm::vertex_buffer_layout quad_vb_layout = {
 			{ elm::shader_data_type::Float3, "a_position" },
 			{ elm::shader_data_type::Float2, "a_uv" },
 			{ elm::shader_data_type::Float4, "a_color" },
 			{ elm::shader_data_type::Int, "a_texture_slot" } };
-		s_data.batch_quad_vertex_buffer->set_layout(&layout);
+		s_data.batch_quad_vertex_buffer->set_layout(&quad_vb_layout);
 		s_data.batch_quad_vertex_array->add_vertex_buffer(s_data.batch_quad_vertex_buffer);
 
 		s_data.batch_quad_vertex_buf_base = new quad_vertex[renderer_2d_data::max_quad_verticies];
@@ -80,6 +96,25 @@ namespace elm::renderer_2d {
 		}
 		auto quad_ib = elm::index_buffer::create(quad_indices, renderer_2d_data::max_quad_indices);
 		s_data.batch_quad_vertex_array->set_index_buffer(quad_ib);
+		
+		// -- Circle vertex array --
+		s_data.batch_circle_vertex_array = elm::vertex_array::create();
+
+		s_data.batch_circle_vertex_buffer = elm::vertex_buffer::create(renderer_2d_data::max_quad_verticies * sizeof(circle_vertex));
+		elm::vertex_buffer_layout circle_vb_layout = {
+			{ elm::shader_data_type::Float3, "a_world_position" },
+			{ elm::shader_data_type::Float3, "a_local_position" },
+			{ elm::shader_data_type::Float4, "a_color" },
+			{ elm::shader_data_type::Float, "a_thickness" },
+			{ elm::shader_data_type::Float, "a_fade" } };
+		s_data.batch_circle_vertex_buffer->set_layout(&circle_vb_layout);
+		s_data.batch_circle_vertex_array->add_vertex_buffer(s_data.batch_circle_vertex_buffer);
+
+		s_data.batch_circle_vertex_buf_base = new circle_vertex[renderer_2d_data::max_quad_verticies];
+
+		auto circle_ib = elm::index_buffer::create(quad_indices, renderer_2d_data::max_quad_indices);
+		s_data.batch_circle_vertex_array->set_index_buffer(circle_ib);
+
 		delete[] quad_indices;
 	}
 
@@ -90,19 +125,24 @@ namespace elm::renderer_2d {
 		delete[] s_data.batch_quad_vertex_buf_base;
 		s_data.batch_quad_vertex_buf_base = nullptr;
 		s_data.batch_quad_vertex_buf_ptr = nullptr;
+
+		delete[] s_data.batch_circle_vertex_buf_base;
+		s_data.batch_circle_vertex_buf_base = nullptr;
+		s_data.batch_circle_vertex_buf_ptr = nullptr;
 	}
 
-	extern void begin_scene(const orthographic_camera *camera)
+	extern void begin_scene(const camera *camera)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		renderer::begin_scene(camera);
 
-		s_data.texture_slots[0]->bind(0); // Blank texture
-
 		s_data.batch_quad_count = 0u;
 		s_data.batch_quad_vertex_buf_ptr = s_data.batch_quad_vertex_buf_base;
-		s_data.texture_slot_ix = 1u;
+		s_data.batch_quad_texture_slot_ix = 1u;
+
+		s_data.batch_circle_count = 0u;
+		s_data.batch_circle_vertex_buf_ptr = s_data.batch_circle_vertex_buf_base;
 	}
 
 	extern void end_scene(void)
@@ -114,7 +154,7 @@ namespace elm::renderer_2d {
 		renderer::end_scene();
 	}
 
-	extern void flush(void)
+	static void flush_quads(void)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -125,20 +165,46 @@ namespace elm::renderer_2d {
 		uint32_t data_size = (uint32_t)((uint8_t *)s_data.batch_quad_vertex_buf_ptr - (uint8_t *)s_data.batch_quad_vertex_buf_base);
 		s_data.batch_quad_vertex_buffer->set_data(s_data.batch_quad_vertex_buf_base, data_size);
 
-		// First slot is the blank texture, bound in begin_scene()
-		for (uint32_t i = 1u; i < s_data.texture_slot_ix; ++i) {
-			s_data.texture_slots[i]->bind(i);
+		for (uint32_t i = 0; i < s_data.batch_quad_texture_slot_ix; ++i) {
+			s_data.batch_quad_texture_slots[i]->bind(i);
 		}
 
-		s_data.shader->bind();
+		s_data.generic_2d_shader->bind();
 		s_data.batch_quad_vertex_array->bind();
 		render_command::draw_indexed(s_data.batch_quad_vertex_array, s_data.batch_quad_count * 6);
 
 		s_data.batch_quad_count = 0;
 		s_data.batch_quad_vertex_buf_ptr = s_data.batch_quad_vertex_buf_base;
-		s_data.texture_slot_ix = 1;
+		s_data.batch_quad_texture_slot_ix = 1;
 
 		++s_data.stats.draw_calls;
+	}
+
+	static void flush_circles(void)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		if (s_data.batch_circle_count == 0) {
+			return;
+		}
+
+		uint32_t data_size = (uint32_t)((uint8_t *)s_data.batch_circle_vertex_buf_ptr - (uint8_t *)s_data.batch_circle_vertex_buf_base);
+		s_data.batch_circle_vertex_buffer->set_data(s_data.batch_circle_vertex_buf_base, data_size);
+
+		s_data.circle_shader->bind();
+		s_data.batch_circle_vertex_array->bind();
+		render_command::draw_indexed(s_data.batch_circle_vertex_array, s_data.batch_circle_count * 6);
+
+		s_data.batch_circle_count = 0;
+		s_data.batch_circle_vertex_buf_ptr = s_data.batch_circle_vertex_buf_base;
+
+		++s_data.stats.draw_calls;
+	}
+
+	extern void flush(void)
+	{
+		flush_quads();
+		flush_circles();
 	}
 
 	static void draw_quad_transform(
@@ -152,20 +218,20 @@ namespace elm::renderer_2d {
 
 		int texture_slot = -1;
 
-		for (uint32_t i = 0; i < s_data.texture_slot_ix; ++i) {
-			if (s_data.texture_slots[i]->equal(&*texture)) {
+		for (uint32_t i = 0; i < s_data.batch_quad_texture_slot_ix; ++i) {
+			if (s_data.batch_quad_texture_slots[i]->equal(&*texture)) {
 				texture_slot = (int)i;
 				break;
 			}
 		}
 
 		if (texture_slot == -1) {
-			if (s_data.texture_slot_ix >= renderer_2d_data::max_texture_slots) {
-				flush();
+			if (s_data.batch_quad_texture_slot_ix >= renderer_2d_data::max_texture_slots) {
+				flush_quads();
 			}
 
-			s_data.texture_slots[s_data.texture_slot_ix] = texture;
-			texture_slot = s_data.texture_slot_ix++;
+			s_data.batch_quad_texture_slots[s_data.batch_quad_texture_slot_ix] = texture;
+			texture_slot = s_data.batch_quad_texture_slot_ix++;
 		}
 
 
@@ -195,7 +261,7 @@ namespace elm::renderer_2d {
 
 		++s_data.batch_quad_count;
 		if (s_data.batch_quad_count >= renderer_2d_data::max_quads) {
-			flush();
+			flush_quads();
 		}
 
 		++s_data.stats.quad_count;
@@ -391,6 +457,46 @@ namespace elm::renderer_2d {
 		draw_quad_super_rotated(glm::vec3(position, 0.0f), size, rotation_rad, sub_texture->texture, &sub_texture->uvs, glm::vec2(1.0f), color);
 	}
 
+	void draw_circle(const glm::mat4 &transform, const glm::vec4 &color, float radius, float thickness, float fade)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		s_data.batch_circle_vertex_buf_ptr->local_position = { -1.0f, -1.0f, 0.0f };
+		s_data.batch_circle_vertex_buf_ptr->world_position = transform * glm::vec4(-radius, -radius, 0.0f, 1.0f);
+		s_data.batch_circle_vertex_buf_ptr->color = color;
+		s_data.batch_circle_vertex_buf_ptr->thickness = thickness;
+		s_data.batch_circle_vertex_buf_ptr->fade = fade;
+		++s_data.batch_circle_vertex_buf_ptr;
+
+		s_data.batch_circle_vertex_buf_ptr->local_position = { 1.0f, -1.0f, 0.0f };
+		s_data.batch_circle_vertex_buf_ptr->world_position = transform * glm::vec4(radius, -radius, 0.0f, 1.0f);
+		s_data.batch_circle_vertex_buf_ptr->color = color;
+		s_data.batch_circle_vertex_buf_ptr->thickness = thickness;
+		s_data.batch_circle_vertex_buf_ptr->fade = fade;
+		++s_data.batch_circle_vertex_buf_ptr;
+
+		s_data.batch_circle_vertex_buf_ptr->local_position = { 1.0f, 1.0f, 0.0f };
+		s_data.batch_circle_vertex_buf_ptr->world_position = transform * glm::vec4(radius, radius, 0.0f, 1.0f);
+		s_data.batch_circle_vertex_buf_ptr->color = color;
+		s_data.batch_circle_vertex_buf_ptr->thickness = thickness;
+		s_data.batch_circle_vertex_buf_ptr->fade = fade;
+		++s_data.batch_circle_vertex_buf_ptr;
+
+		s_data.batch_circle_vertex_buf_ptr->local_position = { -1.0f, 1.0f, 0.0f };
+		s_data.batch_circle_vertex_buf_ptr->world_position = transform * glm::vec4(-radius, radius, 0.0f, 1.0f);
+		s_data.batch_circle_vertex_buf_ptr->color = color;
+		s_data.batch_circle_vertex_buf_ptr->thickness = thickness;
+		s_data.batch_circle_vertex_buf_ptr->fade = fade;
+		++s_data.batch_circle_vertex_buf_ptr;
+
+		++s_data.batch_circle_count;
+		if (s_data.batch_circle_count >= renderer_2d_data::max_quads) {
+			flush_circles();
+		}
+
+		++s_data.stats.quad_count;
+	}
+
 	extern struct statistics get_stats(void)
 	{
 		return s_data.stats;
@@ -399,11 +505,5 @@ namespace elm::renderer_2d {
 	extern void reset_stats(void)
 	{
 		memset(&s_data.stats, 0, sizeof s_data.stats);
-	}
-
-	uint32_t statistics::get_memory_usage(void) const
-	{
-		return sizeof(quad_vertex) * get_vertex_count()
-			+ sizeof(uint32_t) * get_index_count();
 	}
 }

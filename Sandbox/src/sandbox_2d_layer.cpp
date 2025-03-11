@@ -64,6 +64,10 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 
 	elm::renderer_2d::draw_quad({ 0.0f, 0.0f }, { 1.5f, 1.0f }, m_texture_grass_tileset);
 
+	elm::renderer_2d::draw_circle(
+		glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, -1.0f, 0.0f)),
+		glm::vec4(0.2f, 0.3f, 0.8f, 1.0f));
+
 	static float s_rotation = 0.0f;
 	s_rotation += 50.0f * ts.get_seconds();
 	elm::renderer_2d::draw_rotated_quad({ 2.0f, 0.0f }, { 1.0f, 1.0f }, glm::radians(s_rotation), m_texture_checkerboard, 5.0f);
@@ -89,7 +93,7 @@ void sandbox_2d_layer::on_imgui_render(void)
 	ImGui::Text("Quad count: %d", stats.quad_count);
 	ImGui::Text("Draw calls: %d", stats.draw_calls);
 
-	uint32_t mem_usage = stats.get_memory_usage();
+	/*uint32_t mem_usage = stats.get_memory_usage();
 	if (mem_usage < 1000) {
 		ImGui::Text("Memory usage: %d B", mem_usage);
 	} else if (mem_usage < 1'000'000) {
@@ -98,7 +102,7 @@ void sandbox_2d_layer::on_imgui_render(void)
 		ImGui::Text("Memory usage: %.2f MB", (float)mem_usage / 1'000'000.0f);
 	} else {
 		ImGui::Text("Memory usage: %.2f GB", (float)mem_usage / 1'000'000'000.0f);
-	}
+	}*/
 
 	ImGui::End();
 }

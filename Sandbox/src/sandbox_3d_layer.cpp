@@ -99,9 +99,10 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	m_world_grid_ub = elm::uniform_buffer::create(sizeof m_world_grid_data, 1);
 
 	// Setup scene
-	/*m_scene = elm::scene::create();
+	m_scene = elm::scene::create();
 	elm::entity entity = m_scene->create_entity();
-	auto &transform = entity.add_component<elm::transform_component>(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f)));*/
+	auto &circle_renderer = entity.add_component<elm::circle_renderer_component>();
+	circle_renderer.thickness = 0.0f;
 }
 
 void sandbox_3d_layer::on_attach(void)
@@ -114,13 +115,9 @@ void sandbox_3d_layer::on_detach(void)
 
 void sandbox_3d_layer::on_update(elm::timestep ts)
 {
-	if (elm::input::is_key_pressed(elm::key::F5)) {
-		m_world_grid_shader->reload();
-	}
-
 	m_camera_controller.on_update(ts);
 
-	elm::render_command::set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
+	/*elm::render_command::set_clear_color({0.1f, 0.1f, 0.1f, 1.0f});
 	elm::render_command::clear();
 
 	elm::renderer::begin_scene(m_camera_controller.get_camera());
@@ -134,10 +131,9 @@ void sandbox_3d_layer::on_update(elm::timestep ts)
 	m_world_grid_ub->set_data((const void *)&m_world_grid_data, sizeof m_world_grid_data);
 	elm::render_command::draw_arrays(6);
 
-	elm::renderer::end_scene();
+	elm::renderer::end_scene();*/
 
-	// TODO: Use the scene renderer
-	//elm::scene_renderer::render(m_scene, &m_camera);
+	elm::scene_renderer::render(m_scene, m_camera_controller.get_camera());
 }
 
 void sandbox_3d_layer::on_event(elm::event &e)

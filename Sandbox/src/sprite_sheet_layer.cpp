@@ -130,7 +130,7 @@ void sprite_sheet_layer::on_imgui_render(void)
 	ImGui::Text("Quad count: %d", stats.quad_count);
 	ImGui::Text("Draw calls: %d", stats.draw_calls);
 
-	uint32_t mem_usage = stats.get_memory_usage();
+	/*uint32_t mem_usage = stats.get_memory_usage();
 	if (mem_usage < 1000) {
 		ImGui::Text("Memory usage: %d B", mem_usage);
 	} else if (mem_usage < 1'000'000) {
@@ -139,7 +139,7 @@ void sprite_sheet_layer::on_imgui_render(void)
 		ImGui::Text("Memory usage: %.2f MB", (float)mem_usage / 1'000'000.0f);
 	} else {
 		ImGui::Text("Memory usage: %.2f GB", (float)mem_usage / 1'000'000'000.0f);
-	}
+	}*/
 
 	ImGui::End();
 }
