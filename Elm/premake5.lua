@@ -13,6 +13,7 @@ project "Elm"
 		"include/**.h",
 
 		"%{IncludeDir.stb}/stb_image.cpp",
+		"%{IncludeDir.tinyobjloader}/tiny_obj_loader.cpp",
 	}
 
 	includedirs {
@@ -26,6 +27,7 @@ project "Elm"
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.stb}",
+		"%{IncludeDir.tinyobjloader}",
 		"%{IncludeDir.VulkanSDK}",
 	}
 

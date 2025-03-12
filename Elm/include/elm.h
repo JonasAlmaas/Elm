@@ -43,6 +43,8 @@
 #include <elm/renderer/renderer_2d.h>
 #include <elm/renderer/scene_renderer.h>
 
+#include <elm/renderer/mesh.h>
+
 #include <elm/camera/orthographic_camera.h>
 #include <elm/camera/orthographic_camera_controller.h>
 #include <elm/camera/perspective_camera.h>

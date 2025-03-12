@@ -8,6 +8,9 @@
 #include "elm/scene/components.h"
 #include <glm/glm.hpp>
 
+// Temp
+#include <entt/entt.hpp>
+
 namespace elm::scene_renderer {
 
 	struct scene_renderer_data {
@@ -34,6 +37,47 @@ namespace elm::scene_renderer {
 		ELM_PROFILE_RENDERER_FUNCTION();
 	}
 
+	inline static void render_mesh_render_components(const entt::registry &reg)
+	{
+		ELM_PROFILE_RENDERER_SCOPE("render_mesh_render_components()");
+
+		auto view = reg.view<transform_component, mesh_renderer_component>();
+		for (auto entity : view) {
+			auto [tc, rc] = view.get<transform_component, mesh_renderer_component>(entity);
+			for (uint32_t i = 0; i < rc.textures.size(); ++i) {
+				rc.textures[i]->bind(i);
+			}
+			renderer::submit(rc.shader, rc.mesh->vertex_array, tc.transform);
+		}
+	}
+
+	inline static void render_circle_renderer_components(const entt::registry &reg)
+	{
+		ELM_PROFILE_RENDERER_SCOPE("render_circle_renderer_components()");
+
+		auto view = reg.view<transform_component, circle_renderer_component>();
+		for (auto entity : view) {
+			auto [tc, rc] = view.get<transform_component, circle_renderer_component>(entity);
+			renderer_2d::draw_circle(tc.transform, rc.color, rc.radius, rc.thickness, rc.fade);
+		}
+	}
+
+	inline static void render_world_grid(const camera *camera)
+	{
+		ELM_PROFILE_RENDERER_SCOPE("render_world_grid()");
+		// TODO: Configure world grid data
+
+		math::decompose_transform(
+			glm::inverse(camera->get_view()),
+			&s_data.world_grid_data.camera_position,
+			nullptr,
+			nullptr);
+		s_data.world_grid_shader->bind();
+		s_data.world_grid_ub->bind();
+		s_data.world_grid_ub->set_data((const void *)&s_data.world_grid_data, sizeof s_data.world_grid_data);
+		elm::render_command::draw_arrays(6);
+	}
+
 	extern void render(std::shared_ptr<scene> scene, const camera *camera)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
@@ -45,6 +89,8 @@ namespace elm::scene_renderer {
 
 		renderer::begin_scene(camera);
 
+		render_mesh_render_components(reg);
+
 		auto view = reg.view<transform_component, quick_and_dirty_mesh_renderer>();
 		for (auto entity : view) {
 			auto [tc, rc] = view.get<transform_component, quick_and_dirty_mesh_renderer>(entity);
@@ -53,32 +99,12 @@ namespace elm::scene_renderer {
 		}
 
 		renderer_2d::begin_scene(camera, false);
-		{
-			ELM_PROFILE_RENDERER_SCOPE("scene_renderer::render() - 2D");
-
-			auto view = reg.view<transform_component, circle_renderer_component>();
-			for (auto entity : view) {
-				auto [tc, rc] = view.get<transform_component, circle_renderer_component>(entity);
-				renderer_2d::draw_circle(tc.transform, rc.color, rc.radius, rc.thickness, rc.fade);
-			}
-
-			renderer_2d::end_scene();
-		}
+		render_circle_renderer_components(reg);
+		renderer_2d::end_scene();
 
 		// Render world grid if enabled
 		if (scene->get_show_world_grid()) {
-			ELM_PROFILE_RENDERER_SCOPE("scene_renderer::render() - World grid");
-			// TODO: Configure world grid data
-
-			math::decompose_transform(
-				glm::inverse(camera->get_view()),
-				&s_data.world_grid_data.camera_position,
-				nullptr,
-				nullptr);
-			s_data.world_grid_shader->bind();
-			s_data.world_grid_ub->bind();
-			s_data.world_grid_ub->set_data((const void *)&s_data.world_grid_data, sizeof s_data.world_grid_data);
-			elm::render_command::draw_arrays(6);
+			render_world_grid(camera);
 		}
 
 		renderer::end_scene();
