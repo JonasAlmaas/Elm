@@ -14,7 +14,8 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	auto shader = elm::shader::create("content/shaders/texture_unit.glsl");
 	auto unlit_generic_shader = elm::shader::create("content/shaders/unlit_generic.glsl");
 
-	auto mesh = elm::mesh::create("content/meshes/cube.obj");
+	auto cube_mesh = elm::mesh::create("content/meshes/cube.obj");
+	auto suzanne_mesh = elm::mesh::create("content/meshes/suzanne.obj");
 
 	uint32_t checkerboard_data[8 * 8];
 	for (int y = 0; y < 8; ++y) {
@@ -26,76 +27,6 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		.mag_filter = elm::texture_2d_filter::NEAREST
 	});
 	texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
-
-	// Setup vertex array to render
-	auto vertex_array = elm::vertex_array::create();
-	float vertices[5 * 4 * 6] = {
-		// Front face
-		-0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f, 0.0f, 1.0f,
-
-		// Back face
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-
-		// Left face
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
-
-		// Right face
-		0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-		0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
-		0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
-		0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
-
-		// Top face
-		-0.5f,  0.5f, -0.5f, 0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f, 0.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f, 1.0f, 0.0f,
-
-		// Bottom face
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f, 1.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f, 0.0f, 1.0f
-	};
-
-	auto vb = elm::vertex_buffer::create((void *)vertices, sizeof vertices);
-	elm::vertex_buffer_layout layout = {
-		{ elm::shader_data_type::Float3, "a_position" },
-		{ elm::shader_data_type::Float2, "a_uv" } };
-	vb->set_layout(&layout);
-	vertex_array->add_vertex_buffer(vb);
-
-	uint32_t indices[6 * 6] = {
-		// Front face
-		0, 1, 2,
-		2, 3, 0,
-		// Back face
-		4, 5, 6,
-		6, 7, 4,
-		// Left face
-		8, 9, 10,
-		10, 11, 8,
-		// Right face
-		12, 13, 14,
-		14, 15, 12,
-		// Top face
-		16, 17, 18,
-		18, 19, 16,
-		// Bottom face
-		20, 21, 22,
-		22, 23, 20
-	};
-	auto ib = elm::index_buffer::create(indices, sizeof indices / sizeof(uint32_t));
-	vertex_array->set_index_buffer(ib);
 
 	// Setup scene
 	m_scene = elm::scene::create();
@@ -125,30 +56,28 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
 	}
 
-	/* {
+	{
 		elm::entity entity = m_scene->create_entity();
 
-		auto &renderer = entity.add_component<elm::quick_and_dirty_mesh_renderer>();
-		renderer.shader = shader;
-		renderer.vertex_array = vertex_array;
-		renderer.texture = texture_checkerboard;
+		auto &renderer = entity.add_component<elm::mesh_renderer_component>();
+		renderer.mesh = cube_mesh;
+		renderer.shader = unlit_generic_shader;
+		renderer.textures.push_back(texture_checkerboard);
 
 		auto &transform = entity.add_component<elm::transform_component>();
-		transform.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f })
-			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
-	}*/
+		transform.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f });
+	}
 
 	{
 		elm::entity entity = m_scene->create_entity();
 
 		auto &renderer = entity.add_component<elm::mesh_renderer_component>();
-		renderer.mesh = mesh;
+		renderer.mesh = suzanne_mesh;
 		renderer.shader = unlit_generic_shader;
 		renderer.textures.push_back(texture_checkerboard);
 
 		auto &transform = entity.add_component<elm::transform_component>();
-		transform.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f })
-			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
+		transform.transform = glm::translate(glm::mat4(1.0f), { 2.0f, 0.0f, 0.0f });
 	}
 }
 
