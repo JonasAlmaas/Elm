@@ -21,4 +21,7 @@ private:
 	elm::perspective_camera_controller m_camera_controller;
 
 	std::shared_ptr<elm::scene> m_scene;
+	std::shared_ptr<elm::shader> m_specular_generic_shader;
+
+	elm::entity m_dir_light;
 };

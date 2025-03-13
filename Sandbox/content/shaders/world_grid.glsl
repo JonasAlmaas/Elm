@@ -4,12 +4,8 @@
 layout (std140, binding = 0) uniform camera
 {
 	mat4 view_projection;
+	vec3 position;
 } u_camera;
-
-layout (std140, binding = 1) uniform data
-{
-	vec3 camera_pos;
-} u_data;
 
 struct vertex_output
 {
@@ -35,10 +31,10 @@ void main()
 
 	vec3 pos = vertices[indices[gl_VertexIndex]];
 	pos *= grid_size;
-	pos.xy += u_data.camera_pos.xy;
+	pos.xy += u_camera.position.xy;
 
 	v_output.world_pos = pos.xy;
-	v_output.camera_pos = u_data.camera_pos.xy;
+	v_output.camera_pos = u_camera.position.xy;
 	v_output.grid_size = grid_size;
 
 	gl_Position = u_camera.view_projection * vec4(pos, 1.0);

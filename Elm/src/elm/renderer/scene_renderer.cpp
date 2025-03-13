@@ -14,12 +14,20 @@
 namespace elm::scene_renderer {
 
 	struct scene_renderer_data {
+		std::shared_ptr<elm::uniform_buffer> lights_ub;
 		std::shared_ptr<elm::shader> world_grid_shader;
-		std::shared_ptr<elm::uniform_buffer> world_grid_ub;
-		struct world_grid_data {
-			glm::vec3 camera_position;
-		};
-		struct world_grid_data world_grid_data;
+	};
+
+	struct directional_light { // Strange order so it aligns in gpu memory. vec3 has an alignment of 16 byts
+		glm::vec3 direction;
+		float intensity;
+		glm::vec3 color;
+		float ambient_intensity;
+		glm::vec3 ambient_color;
+	};
+
+	struct lights_data {
+		struct directional_light dir_light;
 	};
 
 	static struct scene_renderer_data s_data;
@@ -28,8 +36,9 @@ namespace elm::scene_renderer {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
+		s_data.lights_ub = elm::uniform_buffer::create(sizeof(struct lights_data), 2);
+
 		s_data.world_grid_shader = elm::shader::create("content/shaders/world_grid.glsl");
-		s_data.world_grid_ub = elm::uniform_buffer::create(sizeof s_data.world_grid_data, 1);
 	}
 
 	void shutdown(void)
@@ -62,19 +71,35 @@ namespace elm::scene_renderer {
 		}
 	}
 
+	inline static void prepare_lights(const entt::registry &reg)
+	{
+		ELM_PROFILE_RENDERER_SCOPE("prepare_lights()");
+
+		static struct lights_data s_lights_data;
+
+		auto view = reg.view<directional_light_component>();
+		ELM_CORE_ASSERT(view.size(), "Scene must have one directional light");
+		for (auto entity : view) {
+			auto &dlc = view.get<directional_light_component>(entity);
+
+			s_lights_data.dir_light.direction = dlc.direction;
+			s_lights_data.dir_light.color = dlc.color;
+			s_lights_data.dir_light.intensity = dlc.intensity;
+			s_lights_data.dir_light.ambient_color = dlc.ambient_color;
+			s_lights_data.dir_light.ambient_intensity = dlc.ambient_intensity;
+		}
+
+		s_data.lights_ub->bind();
+		s_data.lights_ub->set_data((const void *)&s_lights_data, sizeof s_lights_data);
+	}
+
 	inline static void render_world_grid(const camera *camera)
 	{
 		ELM_PROFILE_RENDERER_SCOPE("render_world_grid()");
+
 		// TODO: Configure world grid data
 
-		math::decompose_transform(
-			glm::inverse(camera->get_view()),
-			&s_data.world_grid_data.camera_position,
-			nullptr,
-			nullptr);
 		s_data.world_grid_shader->bind();
-		s_data.world_grid_ub->bind();
-		s_data.world_grid_ub->set_data((const void *)&s_data.world_grid_data, sizeof s_data.world_grid_data);
 		elm::render_command::draw_arrays(6);
 	}
 
@@ -92,6 +117,8 @@ namespace elm::scene_renderer {
 		renderer_2d::end_scene();
 
 		renderer::begin_scene(camera);
+
+		prepare_lights(reg);
 
 		render_mesh_render_components(reg);
 

@@ -3,12 +3,14 @@
 #include "scene_renderer.h"
 #include "elm/core/renderer/uniform_buffer.h"
 #include "elm/core/renderer/render_command.h"
+#include "elm/math/math.h"
 
 namespace elm::renderer {
 
 	struct renderer_data {
 		struct camera_data {
 			glm::mat4 view_projection;
+			glm::vec3 position;
 		};
 		camera_data camera_buffer;
 		std::shared_ptr<uniform_buffer> camera_uniform_buffer;
@@ -54,6 +56,12 @@ namespace elm::renderer {
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		s_data.camera_buffer.view_projection = camera->get_view_projection();
+		math::decompose_transform(
+			glm::inverse(camera->get_view()),
+			&s_data.camera_buffer.position,
+			nullptr,
+			nullptr);
+
 		s_data.camera_uniform_buffer->bind();
 		s_data.camera_uniform_buffer->set_data((const void *)&s_data.camera_buffer, sizeof s_data.camera_buffer);
 	}

@@ -12,7 +12,8 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	m_camera_controller.set_yaw_deg(45.0f);
 
 	auto shader = elm::shader::create("content/shaders/texture_unit.glsl");
-	auto unlit_generic_shader = elm::shader::create("content/shaders/unlit_generic.glsl");
+	m_specular_generic_shader = elm::shader::create("content/shaders/specular_generic.glsl");
+	//auto unlit_generic_shader = elm::shader::create("content/shaders/unlit_generic.glsl");
 
 	auto cube_mesh = elm::mesh::create("content/meshes/cube.obj");
 	auto suzanne_mesh = elm::mesh::create("content/meshes/suzanne.obj");
@@ -32,6 +33,17 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	m_scene = elm::scene::create();
 	m_scene->set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
 	m_scene->set_show_world_grid(true);
+
+	{
+		m_dir_light = m_scene->create_entity();
+
+		auto &circle_renderer = m_dir_light.add_component<elm::directional_light_component>();
+		circle_renderer.direction = glm::normalize(glm::vec3(1, -1, -1));
+		circle_renderer.color = { 1.0f, 0.79f, 0.56f };
+		circle_renderer.intensity = 1.0f;
+		circle_renderer.ambient_color = { 0.54f, 0.78f, 1.0f };
+		circle_renderer.ambient_intensity = 0.4f;
+	}
 
 	{
 		elm::entity entity = m_scene->create_entity();
@@ -61,7 +73,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 		auto &renderer = entity.add_component<elm::mesh_renderer_component>();
 		renderer.mesh = cube_mesh;
-		renderer.shader = unlit_generic_shader;
+		renderer.shader = m_specular_generic_shader;
 		renderer.textures.push_back(texture_checkerboard);
 
 		auto &transform = entity.add_component<elm::transform_component>();
@@ -73,7 +85,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 		auto &renderer = entity.add_component<elm::mesh_renderer_component>();
 		renderer.mesh = suzanne_mesh;
-		renderer.shader = unlit_generic_shader;
+		renderer.shader = m_specular_generic_shader;
 		renderer.textures.push_back(texture_checkerboard);
 
 		auto &transform = entity.add_component<elm::transform_component>();
@@ -91,6 +103,10 @@ void sandbox_3d_layer::on_detach(void)
 
 void sandbox_3d_layer::on_update(elm::timestep ts)
 {
+	if (elm::input::is_key_pressed(elm::key::F5)) {
+		m_specular_generic_shader->reload();
+	}
+
 	m_camera_controller.on_update(ts);
 
 	elm::scene_renderer::render(m_scene, m_camera_controller.get_camera());
@@ -107,6 +123,17 @@ void sandbox_3d_layer::on_event(elm::event &e)
 
 void sandbox_3d_layer::on_imgui_render(void)
 {
+	// -- Lighting --
+	ImGui::Begin("Lighting");
+
+	auto &dlc = m_dir_light.get_component<elm::directional_light_component>();
+	ImGui::ColorEdit3("Color", glm::value_ptr(dlc.color));
+	ImGui::DragFloat("Intensity", &dlc.intensity, 0.01f);
+	ImGui::ColorEdit3("Ambient color", glm::value_ptr(dlc.ambient_color));
+	ImGui::DragFloat("Ambient intensity", &dlc.ambient_intensity, 0.01f);
+
+	ImGui::End();
+
 	// -- Renderer --
 	ImGui::Begin("Renderer");
 
@@ -119,28 +146,6 @@ void sandbox_3d_layer::on_imgui_render(void)
 	ImGui::Text("Version: %s", renderer_version.c_str());
 	ImGui::Text("Frame time: %.3fms", elm::application::get()->get_telemetry()->get_smooth_frame_time_s() * 1000.0f);
 	ImGui::Text("FPS: %.2f", elm::application::get()->get_telemetry()->get_fps());
-
-	ImGui::End();
-
-	// -- Misc --
-	ImGui::Begin("Misc");
-
-	auto camera_pos = m_camera_controller.get_position();
-	if (ImGui::DragFloat3("Camera position", glm::value_ptr(camera_pos), 0.1f)) {
-		m_camera_controller.set_position(camera_pos);
-	}
-	float pitch = m_camera_controller.get_pitch_deg();
-	if (ImGui::DragFloat("Camera pitch", &pitch, 0.01f)) {
-		m_camera_controller.set_pitch_deg(pitch);
-	}
-	float yaw = m_camera_controller.get_yaw_deg();
-	if (ImGui::DragFloat("Camera yaw", &yaw, 0.01f)) {
-		m_camera_controller.set_yaw_deg(yaw);
-	}
-	float roll = m_camera_controller.get_roll_deg();
-	if (ImGui::DragFloat("Camera roll", &roll, 0.01f)) {
-		m_camera_controller.set_roll_deg(roll);
-	}
 
 	ImGui::End();
 }

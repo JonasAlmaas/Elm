@@ -36,5 +36,11 @@ namespace elm {
 		std::vector<std::shared_ptr<texture_2d>> textures;
 	};
 
+	struct directional_light_component {
+		glm::vec3 direction;
+		glm::vec3 color;
+		glm::vec3 ambient_color;
+		float intensity;
+		float ambient_intensity;
 	};
 }
