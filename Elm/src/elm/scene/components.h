@@ -34,13 +34,31 @@ namespace elm {
 		std::shared_ptr<mesh> mesh;
 		std::shared_ptr<shader> shader;
 		std::vector<std::shared_ptr<texture_2d>> textures;
+
+		mesh_renderer_component(void) = default;
+		mesh_renderer_component(const mesh_renderer_component &) = default;
 	};
 
 	struct directional_light_component {
 		glm::vec3 direction;
 		glm::vec3 color;
-		glm::vec3 ambient_color;
 		float intensity;
+		glm::vec3 ambient_color;
 		float ambient_intensity;
+
+		directional_light_component(void) = default;
+		directional_light_component(const directional_light_component &) = default;
+	};
+
+	struct point_light_component {
+		glm::vec3 color;
+		float intensity;
+		// Attenuation;
+		float constant;
+		float linear;
+		float quadratic;
+
+		point_light_component(void) = default;
+		point_light_component(const point_light_component &) = default;
 	};
 }

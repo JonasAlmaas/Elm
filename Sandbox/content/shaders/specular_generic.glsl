@@ -37,6 +37,8 @@ void main()
 #type fragment
 #version 450 core
 
+const int MAX_POINT_LIGHTS = 4;
+
 layout (location = 0) out vec4 o_color;
 
 struct vertex_output
@@ -55,6 +57,17 @@ struct directional_light
 	vec3 ambient_color;
 };
 
+struct point_light
+{
+	vec3 position;
+	float intensity;
+	vec3 color;
+	// Attenuation
+	float constant;
+	float linear;
+	float quadratic;
+};
+
 layout (location = 0) in vertex_output v_input;
 
 layout (std140, binding = 0) uniform camera
@@ -66,30 +79,77 @@ layout (std140, binding = 0) uniform camera
 layout (std140, binding = 2) uniform lights
 {
 	directional_light dir_light;
+	int point_light_count;
+	point_light point_lights[MAX_POINT_LIGHTS];
 } u_lights;
 
 layout (binding = 0) uniform sampler2D u_textures[32];
 
-void main()
+vec3 calc_light(
+	vec3 normal,
+	vec3 light_dir,
+	vec3 light_color,
+	float light_intensity,
+	vec3 ambient_color,
+	float ambient_intensity)
 {
-	// Ambient lighting
-	vec3 ambient = u_lights.dir_light.ambient_intensity * u_lights.dir_light.ambient_color;
+	vec3 color = light_color * light_intensity;
+
+	vec3 ambient = ambient_color * ambient_intensity;
 
 	// Diffuse lighting
-	float diff = max(dot(v_input.normal, -u_lights.dir_light.direction), 0.0);
-	vec3 diffuse = diff * u_lights.dir_light.color * u_lights.dir_light.intensity;
+	float diff = max(dot(normal, light_dir), 0.0);
+	vec3 diffuse = diff * color;
 
 	// Specular lighting
 	float specular_strength = 0.5;
 	vec3 view_dir = normalize(u_camera.position - v_input.frag_pos);
-	vec3 reflect_dir = reflect(u_lights.dir_light.direction, v_input.normal);
+	vec3 reflect_dir = reflect(-light_dir, normal);
 	float spec = pow(max(dot(view_dir, reflect_dir), 0.0), 32);
-	vec3 specular = specular_strength * spec * u_lights.dir_light.color;
+	vec3 specular = specular_strength * spec * color;
 
-	// Combine results
+	return ambient + diffuse + specular;
+}
+
+vec3 calc_dir_light(vec3 normal)
+{
+	return calc_light(
+		normal,
+		-u_lights.dir_light.direction,
+		u_lights.dir_light.color,
+		u_lights.dir_light.intensity,
+		u_lights.dir_light.ambient_color,
+		u_lights.dir_light.ambient_intensity);
+}
+
+vec3 calc_point_light(vec3 normal, point_light light)
+{
+	vec3 light_dir = normalize(light.position - v_input.frag_pos);
+
+	vec3 res = calc_light(
+		normal,
+		light_dir,
+		light.color,
+		light.intensity,
+		light.color,
+		0.1);
+
+	float distance = length(light.position - v_input.frag_pos);
+	float attenuation = light.constant + light.linear * distance + light.quadratic * (distance * distance);
+
+	return res / attenuation;
+}
+
+void main()
+{
+	vec3 normal = normalize(v_input.normal);
+
+	vec3 light = calc_dir_light(normal);
+
+	for (int i = 0; i < u_lights.point_light_count; ++i) {
+		light += calc_point_light(normal, u_lights.point_lights[i]);
+	}
+
 	vec4 color = texture(u_textures[0], v_input.uv);
-	vec3 light = ambient + diffuse + specular;
-	color = vec4(color.xyz * light, color.a);
-
-	o_color = color;
+	o_color = vec4(color.rgb * light, color.a);
 }

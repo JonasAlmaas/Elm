@@ -26,8 +26,26 @@ namespace elm::scene_renderer {
 		glm::vec3 ambient_color;
 	};
 
+	struct point_light
+	{
+		glm::vec3 position;
+		float intensity;
+		glm::vec3 color;
+		// Attenuation;
+		float constant;
+		float linear;
+		float quadratic;
+		uint32_t padding[2];
+	};
+
+	enum {MAX_POINT_LIGHTS=4};
+
 	struct lights_data {
 		struct directional_light dir_light;
+		uint32_t padding;
+		int point_light_count;
+		uint32_t padding2[3];
+		struct point_light point_lights[MAX_POINT_LIGHTS];
 	};
 
 	static struct scene_renderer_data s_data;
@@ -77,16 +95,42 @@ namespace elm::scene_renderer {
 
 		static struct lights_data s_lights_data;
 
-		auto view = reg.view<directional_light_component>();
-		ELM_CORE_ASSERT(view.size(), "Scene must have one directional light");
-		for (auto entity : view) {
-			auto &dlc = view.get<directional_light_component>(entity);
+		{ // Directional light
+			auto view = reg.view<directional_light_component>();
+			ELM_CORE_ASSERT(view.size(), "Scene must have one directional light");
+			for (auto entity : view) {
+				auto &dlc = view.get<directional_light_component>(entity);
 
-			s_lights_data.dir_light.direction = dlc.direction;
-			s_lights_data.dir_light.color = dlc.color;
-			s_lights_data.dir_light.intensity = dlc.intensity;
-			s_lights_data.dir_light.ambient_color = dlc.ambient_color;
-			s_lights_data.dir_light.ambient_intensity = dlc.ambient_intensity;
+				s_lights_data.dir_light.direction = dlc.direction;
+				s_lights_data.dir_light.color = dlc.color;
+				s_lights_data.dir_light.intensity = dlc.intensity;
+				s_lights_data.dir_light.ambient_color = dlc.ambient_color;
+				s_lights_data.dir_light.ambient_intensity = dlc.ambient_intensity;
+			}
+		}
+
+		{ // Point lights
+			s_lights_data.point_light_count = 0;
+
+			auto view = reg.view<transform_component, point_light_component>();
+			for (auto entity : view) {
+				auto [tc, plc] = view.get<transform_component, point_light_component>(entity);
+
+				if (s_lights_data.point_light_count < MAX_POINT_LIGHTS) {
+					auto &pl = s_lights_data.point_lights[s_lights_data.point_light_count];
+
+					elm::math::decompose_transform(tc.transform, &pl.position, nullptr, nullptr);
+					pl.color = plc.color;
+					pl.intensity = plc.intensity;
+					pl.linear = plc.linear;
+					pl.constant = plc.constant;
+					pl.quadratic = plc.quadratic;
+					
+					++s_lights_data.point_light_count;
+				} else {
+					ELM_CORE_WARN("Only {0} point lights are currently supported", (int)MAX_POINT_LIGHTS);
+				}
+			}
 		}
 
 		s_data.lights_ub->bind();

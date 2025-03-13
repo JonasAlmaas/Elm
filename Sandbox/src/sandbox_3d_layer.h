@@ -23,5 +23,8 @@ private:
 	std::shared_ptr<elm::shader> m_specular_generic_shader;
 
 	elm::entity m_dir_light;
+	elm::entity m_point_light;
 	elm::entity m_suzanne;
+
+	float m_point_light_speed = 2.0f;
 };

@@ -37,12 +37,40 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	{
 		m_dir_light = m_scene->create_entity();
 
-		auto &circle_renderer = m_dir_light.add_component<elm::directional_light_component>();
-		circle_renderer.direction = glm::normalize(glm::vec3(1, -1, -1));
-		circle_renderer.color = { 1.0f, 0.79f, 0.56f };
-		circle_renderer.intensity = 1.0f;
-		circle_renderer.ambient_color = { 0.54f, 0.78f, 1.0f };
-		circle_renderer.ambient_intensity = 0.4f;
+		auto &light = m_dir_light.add_component<elm::directional_light_component>();
+		light.direction = glm::normalize(glm::vec3(1, -1, -1));
+		light.color = { 1.0f, 0.79f, 0.56f };
+		light.intensity = 1.0f;
+		light.ambient_color = { 0.54f, 0.78f, 1.0f };
+		light.ambient_intensity = 0.4f;
+	}
+
+	{
+		m_point_light = m_scene->create_entity();
+		
+		auto &light = m_point_light.add_component<elm::point_light_component>();
+		light.color = { 1.0f, 0.0f, 1.0f };
+		light.intensity = 1.0f;
+		light.constant = 1.0f;
+		light.linear = 0.09f;
+		light.quadratic = 0.032f;
+
+		auto &tc = m_point_light.add_component<elm::transform_component>();
+		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 2.0f });
+	}
+
+	{
+		elm::entity entity = m_scene->create_entity();
+
+		auto &light = entity.add_component<elm::point_light_component>();
+		light.color = { 0.0f, 1.0f, 0.0f };
+		light.intensity = 1.0f;
+		light.constant = 1.0f;
+		light.linear = 0.09f;
+		light.quadratic = 0.032f;
+
+		auto &tc = entity.add_component<elm::transform_component>();
+		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 2.0f });
 	}
 
 	{
@@ -51,8 +79,8 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		auto &circle_renderer = entity.add_component<elm::circle_renderer_component>();
 		circle_renderer.color = { 0.2f, 0.3f, 0.8f, 1.0f };
 
-		auto &transform = entity.add_component<elm::transform_component>();
-		transform.transform = glm::translate(glm::mat4(1.0f), { 1.0f, 1.0f, 0.0f })
+		auto &tc = entity.add_component<elm::transform_component>();
+		tc.transform = glm::translate(glm::mat4(1.0f), { 1.0f, 1.0f, 0.0f })
 			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f});
 	}
 
@@ -63,8 +91,8 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		circle_renderer.color = { 0.2f, 0.8f, 0.3f, 1.0f };
 		circle_renderer.thickness = 0.2f;
 
-		auto &transform = entity.add_component<elm::transform_component>();
-		transform.transform = glm::translate(glm::mat4(1.0f), { -1.0f, 1.0f, 0.0f })
+		auto &tc = entity.add_component<elm::transform_component>();
+		tc.transform = glm::translate(glm::mat4(1.0f), { -1.0f, 1.0f, 0.0f })
 			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
 	}
 
@@ -76,8 +104,8 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		renderer.shader = m_specular_generic_shader;
 		renderer.textures.push_back(texture_checkerboard);
 
-		auto &transform = entity.add_component<elm::transform_component>();
-		transform.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f });
+		auto &tc = entity.add_component<elm::transform_component>();
+		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f });
 	}
 
 	{
@@ -88,8 +116,8 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		renderer.shader = m_specular_generic_shader;
 		renderer.textures.push_back(texture_checkerboard);
 
-		auto &transform = m_suzanne.add_component<elm::transform_component>();
-		transform.transform = glm::translate(glm::mat4(1.0f), { 2.0f, 0.0f, 0.0f });
+		auto &tc = m_suzanne.add_component<elm::transform_component>();
+		tc.transform = glm::translate(glm::mat4(1.0f), { 2.0f, 0.0f, 0.0f });
 	}
 }
 
@@ -109,14 +137,24 @@ void sandbox_3d_layer::on_update(elm::timestep ts)
 
 	m_camera_controller.on_update(ts);
 
-	auto &tc = m_suzanne.get_component<elm::transform_component>();
-	glm::vec3 pos, rot, scale;
-	elm::math::decompose_transform(tc.transform, &pos, &rot, &scale);
-	pos.z = glm::sin(elm::time::get_seconds()) * 0.5f;
-	rot.z = glm::cos(elm::time::get_seconds());
+	{
+		auto &tc = m_suzanne.get_component<elm::transform_component>();
+		glm::vec3 pos, rot, scale;
+		elm::math::decompose_transform(tc.transform, &pos, &rot, &scale);
+		pos.z = glm::sin(elm::time::get_seconds()) * 0.5f;
+		rot.z = glm::cos(elm::time::get_seconds());
+		tc.transform = glm::translate(glm::mat4(1.0f), pos)
+			* glm::rotate(glm::mat4(1.0f), rot.z, { 0.0f, 0.0f, 1.0f });
+	}
 
-	tc.transform = glm::translate(glm::mat4(1.0f), pos)
-		* glm::rotate(glm::mat4(1.0f), rot.z, { 0.0f, 0.0f, 1.0f });
+	{
+		auto &tc = m_point_light.get_component<elm::transform_component>();
+		glm::vec3 pos;
+		elm::math::decompose_transform(tc.transform, &pos, nullptr, nullptr);
+		pos.x = glm::cos(elm::time::get_seconds() * m_point_light_speed) * 5.0f;
+		pos.y = glm::sin(elm::time::get_seconds() * m_point_light_speed) * 5.0f;
+		tc.transform = glm::translate(glm::mat4(1.0f), pos);
+	}
 
 	elm::scene_renderer::render(m_scene, m_camera_controller.get_camera());
 }
@@ -132,14 +170,29 @@ void sandbox_3d_layer::on_event(elm::event &e)
 
 void sandbox_3d_layer::on_imgui_render(void)
 {
-	// -- Lighting --
-	ImGui::Begin("Lighting");
+	// -- Scene --
+	ImGui::Begin("Scene");
 
+	static bool show_world_grid = true;
+	if (ImGui::Checkbox("Show world grid", &show_world_grid)) {
+		m_scene->set_show_world_grid(show_world_grid);
+	}
+
+	ImGui::Text("Directional light");
 	auto &dlc = m_dir_light.get_component<elm::directional_light_component>();
-	ImGui::ColorEdit3("Color", glm::value_ptr(dlc.color));
-	ImGui::DragFloat("Intensity", &dlc.intensity, 0.01f);
-	ImGui::ColorEdit3("Ambient color", glm::value_ptr(dlc.ambient_color));
-	ImGui::DragFloat("Ambient intensity", &dlc.ambient_intensity, 0.01f);
+	ImGui::ColorEdit3("Color##DirectionalLight", glm::value_ptr(dlc.color));
+	ImGui::DragFloat("Intensity##DirectionalLight", &dlc.intensity, 0.01f);
+	ImGui::ColorEdit3("Ambient color##DirectionalLight", glm::value_ptr(dlc.ambient_color));
+	ImGui::DragFloat("Ambient intensity##DirectionalLight", &dlc.ambient_intensity, 0.01f);
+
+	ImGui::Text("Point light");
+	auto &plc = m_point_light.get_component<elm::point_light_component>();
+	ImGui::DragFloat("Speed##PointLight", &m_point_light_speed, 0.01f);
+	ImGui::ColorEdit3("Color##PointLight", glm::value_ptr(plc.color));
+	ImGui::DragFloat("Intensity##PointLight", &plc.intensity, 0.01f);
+	ImGui::DragFloat("Constant##PointLight", &plc.constant, 0.01f);
+	ImGui::DragFloat("Linear##PointLight", &plc.linear, 0.01f);
+	ImGui::DragFloat("Quadratic##PointLight", &plc.quadratic, 0.001f);
 
 	ImGui::End();
 
