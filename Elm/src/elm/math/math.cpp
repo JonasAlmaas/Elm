@@ -9,7 +9,7 @@ namespace elm::math {
 	{
 		// Form glm::decompose in matrix_decompose.inl
 
-		ELM_CORE_ASSERT(scale || !rotation, "Can not decompose scale without rotation");
+		ELM_CORE_ASSERT(scale || !rotation, "Can not decompose rotation without scale");
 
 		using namespace glm;
 

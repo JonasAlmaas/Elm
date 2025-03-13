@@ -110,8 +110,8 @@ void sandbox_3d_layer::on_update(elm::timestep ts)
 	m_camera_controller.on_update(ts);
 
 	auto &tc = m_suzanne.get_component<elm::transform_component>();
-	glm::vec3 pos, rot;
-	elm::math::decompose_transform(tc.transform, &pos, &rot, nullptr);
+	glm::vec3 pos, rot, scale;
+	elm::math::decompose_transform(tc.transform, &pos, &rot, &scale);
 	pos.z = glm::sin(elm::time::get_seconds()) * 0.5f;
 	rot.z = glm::cos(elm::time::get_seconds());
 
