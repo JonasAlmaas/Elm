@@ -8,9 +8,6 @@
 #include <memory>
 #include <vector>
 
-// quick_and_dirty_mesh_renderer
-#include "elm/core/renderer/vertex_array.h"
-
 namespace elm {
 
 	struct transform_component {
@@ -39,9 +36,5 @@ namespace elm {
 		std::vector<std::shared_ptr<texture_2d>> textures;
 	};
 
-	struct quick_and_dirty_mesh_renderer {
-		std::shared_ptr<shader> shader;
-		std::shared_ptr<vertex_array> vertex_array;
-		std::shared_ptr<texture_2d> texture;
 	};
 }

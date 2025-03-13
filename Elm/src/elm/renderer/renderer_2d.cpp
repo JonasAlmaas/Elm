@@ -5,7 +5,6 @@
 #include "elm/core/renderer/texture.h"
 #include "elm/core/renderer/uniform_buffer.h"
 #include "elm/core/renderer/vertex_array.h"
-#include "elm/renderer/renderer.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <array>
 
@@ -39,7 +38,11 @@ namespace elm::renderer_2d {
 		static const uint32_t max_quad_verticies = max_quads * 4;
 		static const uint32_t max_quad_indices = max_quads * 6;
 
-		bool standalone = false; // If not called from within the scope of the 3D renderer
+		struct camera_data {
+			glm::mat4 view_projection;
+		};
+		camera_data camera_buffer;
+		std::shared_ptr<uniform_buffer> camera_uniform_buffer;
 
 		std::shared_ptr<shader> generic_2d_shader;
 		std::shared_ptr<shader> circle_shader;
@@ -164,14 +167,12 @@ namespace elm::renderer_2d {
 		s_data.batch_line_vertex_buf_ptr = nullptr;
 	}
 
-	extern void begin_scene(const camera *camera, bool standalone)
+	extern void begin_scene(const camera *camera)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		s_data.standalone = standalone;
-		if (s_data.standalone) {
-			renderer::begin_scene(camera);
-		}
+		s_data.camera_buffer.view_projection = camera->get_view_projection();
+		s_data.camera_uniform_buffer->set_data((const void *)&s_data.camera_buffer, sizeof s_data.camera_buffer);
 
 		s_data.batch_quad_count = 0u;
 		s_data.batch_quad_vertex_buf_ptr = s_data.batch_quad_vertex_buf_base;
@@ -189,10 +190,6 @@ namespace elm::renderer_2d {
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		flush();
-
-		if (s_data.standalone) {
-			renderer::end_scene();
-		}
 	}
 
 	static void flush_quads(void)

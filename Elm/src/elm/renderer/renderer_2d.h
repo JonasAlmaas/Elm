@@ -19,7 +19,7 @@ namespace elm::renderer_2d {
 	extern void init(void);
 	extern void shutdown(void);
 
-	extern void begin_scene(const camera *camera, bool standalone = true);
+	extern void begin_scene(const camera *camera);
 	extern void end_scene(void);
 
 	extern void flush(void);

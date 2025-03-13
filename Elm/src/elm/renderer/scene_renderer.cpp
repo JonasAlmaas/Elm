@@ -87,20 +87,13 @@ namespace elm::scene_renderer {
 		render_command::set_clear_color(scene->get_clear_color());
 		render_command::clear();
 
+		renderer_2d::begin_scene(camera);
+		render_circle_renderer_components(reg);
+		renderer_2d::end_scene();
+
 		renderer::begin_scene(camera);
 
 		render_mesh_render_components(reg);
-
-		auto view = reg.view<transform_component, quick_and_dirty_mesh_renderer>();
-		for (auto entity : view) {
-			auto [tc, rc] = view.get<transform_component, quick_and_dirty_mesh_renderer>(entity);
-			rc.texture->bind();
-			renderer::submit(rc.shader, rc.vertex_array, tc.transform);
-		}
-
-		renderer_2d::begin_scene(camera, false);
-		render_circle_renderer_components(reg);
-		renderer_2d::end_scene();
 
 		// Render world grid if enabled
 		if (scene->get_show_world_grid()) {
