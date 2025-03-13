@@ -6,9 +6,8 @@ struct GLFWwindow;
 
 namespace elm {
 
-	class opengl_context : public graphics_context
+	struct opengl_context : graphics_context
 	{
-	public:
 		opengl_context(GLFWwindow *window);
 
 		virtual void init(void) override;

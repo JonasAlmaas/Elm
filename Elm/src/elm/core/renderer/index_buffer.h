@@ -6,9 +6,8 @@
 
 namespace elm {
 
-	class index_buffer
+	struct index_buffer
 	{
-	public:
 		virtual ~index_buffer(void) {}
 
 		virtual void bind(void) const = 0;

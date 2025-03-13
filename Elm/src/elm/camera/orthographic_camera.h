@@ -6,9 +6,8 @@
 
 namespace elm {
 
-	class orthographic_camera : public camera
+	struct orthographic_camera : camera
 	{
-	public:
 		orthographic_camera(float left, float right, float bottom, float top);
 
 		void set_projection(float left, float right, float bottom, float top);

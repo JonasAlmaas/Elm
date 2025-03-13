@@ -6,9 +6,8 @@
 
 namespace elm {
 
-	class mouse_button_event : public event
+	struct mouse_button_event : event
 	{
-	public:
 		inline mouse_code get_mouse_button(void) const { return m_button; }
 
 		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_INPUT | EVENT_CATEGORY_MOUSE | EVENT_CATEGORY_MOUSE_BUTTON)
@@ -22,9 +21,8 @@ namespace elm {
 		mouse_code m_button;
 	};
 
-	class mouse_button_pressed_event : public mouse_button_event
+	struct mouse_button_pressed_event : mouse_button_event
 	{
-	public:
 		mouse_button_pressed_event(mouse_code button)
 			: mouse_button_event(button)
 		{
@@ -40,9 +38,8 @@ namespace elm {
 		EVENT_CLASS_TYPE(EVENT_TYPE_MOUSE_BUTTON_PRESSED)
 	};
 
-	class mouse_button_released_event : public mouse_button_event
+	struct mouse_button_released_event : mouse_button_event
 	{
-	public:
 		mouse_button_released_event(mouse_code button)
 			: mouse_button_event(button)
 		{
@@ -58,9 +55,8 @@ namespace elm {
 		EVENT_CLASS_TYPE(EVENT_TYPE_MOUSE_BUTTON_RELEASED)
 	};
 
-	class mouse_moved_event : public event
+	struct mouse_moved_event : event
 	{
-	public:
 		mouse_moved_event(float x, float y)
 			: m_mouse_x(x), m_mouse_y(y)
 		{
@@ -83,9 +79,8 @@ namespace elm {
 		float m_mouse_x, m_mouse_y;
 	};
 
-	class mouse_scrolled_event : public event
+	struct mouse_scrolled_event : event
 	{
-	public:
 		mouse_scrolled_event(float offset_x, float offset_y)
 			: m_offset_x(offset_x), m_offset_y(offset_y)
 		{

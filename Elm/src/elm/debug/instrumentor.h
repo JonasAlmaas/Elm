@@ -21,9 +21,8 @@ namespace elm {
 		std::string name;
 	};
 
-	class instrumentor
+	struct instrumentor
 	{
-	public:
 		instrumentor(const instrumentor &) = delete;
 		instrumentor(instrumentor &&) = delete;
 
@@ -53,9 +52,8 @@ namespace elm {
 		std::ofstream m_output_stream;
 	};
 
-	class instrumentation_timer
+	struct instrumentation_timer
 	{
-	public:
 		instrumentation_timer(const char *name);
 		~instrumentation_timer();
 

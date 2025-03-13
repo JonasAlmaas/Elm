@@ -13,9 +13,8 @@ struct GLFWwindow;
 
 namespace elm {
 
-	class windows_window : public window
+	struct windows_window : window
 	{
-	public:
 		windows_window(const window_specification& spec);
 		virtual ~windows_window();
 

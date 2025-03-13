@@ -5,9 +5,8 @@
 
 namespace elm {
 
-	class camera
+	struct camera
 	{
-	public:
 		virtual ~camera(void) = default;
 
 		virtual const glm::mat4 &get_view(void) const = 0;

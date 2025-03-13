@@ -4,9 +4,8 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-class sandbox_2d_layer : public elm::layer
+struct sandbox_2d_layer : elm::layer
 {
-public:
 	sandbox_2d_layer(void);
 	virtual ~sandbox_2d_layer(void) = default;
 

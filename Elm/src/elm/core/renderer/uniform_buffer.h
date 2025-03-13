@@ -6,9 +6,8 @@
 
 namespace elm {
 
-	class uniform_buffer
+	struct uniform_buffer
 	{
-	public:
 		virtual ~uniform_buffer(void) = default;
 
 		virtual void bind(void) = 0;

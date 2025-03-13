@@ -8,9 +8,8 @@
 
 namespace elm {
 
-	class vertex_buffer_layout
+	struct vertex_buffer_layout
 	{
-	public:
 		vertex_buffer_layout(void) = default;
 
 		vertex_buffer_layout(const std::initializer_list<vertex_buffer_element> &elements)

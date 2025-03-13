@@ -7,9 +7,8 @@
 
 namespace elm {
 
-	class vertex_buffer
+	struct vertex_buffer
 	{
-	public:
 		virtual ~vertex_buffer(void) {}
 
 		virtual void bind(void) const = 0;

@@ -49,9 +49,8 @@ namespace elm {
 		/*bool is_swap_chain_target = false;*/
 	};
 
-	class frame_buffer
+	struct frame_buffer
 	{
-	public:
 		virtual ~frame_buffer(void) = default;
 
 		virtual void bind(void) = 0;

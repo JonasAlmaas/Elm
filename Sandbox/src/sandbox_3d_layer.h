@@ -2,9 +2,8 @@
 
 #include <elm.h>
 
-class sandbox_3d_layer : public elm::layer
+struct sandbox_3d_layer : elm::layer
 {
-public:
 	sandbox_3d_layer(void);
 	virtual ~sandbox_3d_layer(void) = default;
 

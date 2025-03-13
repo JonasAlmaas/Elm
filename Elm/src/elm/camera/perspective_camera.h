@@ -6,9 +6,8 @@
 
 namespace elm {
 
-	class perspective_camera : public camera
+	struct perspective_camera : camera
 	{
-	public:
 		perspective_camera(void) = delete;
 		perspective_camera(float fov, float aspect_ratio, float near_clip = 0.01f, float far_clip = 10'000.0f);
 

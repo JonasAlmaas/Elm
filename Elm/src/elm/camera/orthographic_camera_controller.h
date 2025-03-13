@@ -7,9 +7,8 @@
 
 namespace elm {
 
-	class orthographic_camera_controller
+	struct orthographic_camera_controller
 	{
-	public:
 		orthographic_camera_controller(float aspect_ratio, bool enable_rotation = false);
 
 		void on_update(timestep ts);

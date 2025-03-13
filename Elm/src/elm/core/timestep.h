@@ -2,9 +2,8 @@
 
 namespace elm {
 
-	class timestep
+	struct timestep
 	{
-	public:
 		timestep(float time = 0.0f)
 			: m_time_sec(time)
 		{

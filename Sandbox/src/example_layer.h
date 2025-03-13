@@ -4,9 +4,8 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-class example_layer : public elm::layer
+struct example_layer : elm::layer
 {
-public:
 	example_layer(void);
 	virtual ~example_layer(void) = default;
 

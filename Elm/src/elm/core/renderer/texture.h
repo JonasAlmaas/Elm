@@ -9,9 +9,8 @@
 
 namespace elm {
 
-	class texture
+	struct texture
 	{
-	public:
 		virtual ~texture(void) = default;
 
 		virtual void bind(uint32_t slot = 0) = 0;
@@ -44,9 +43,8 @@ namespace elm {
 		texture_2d_filter mag_filter = texture_2d_filter::LINEAR;
 	};
 
-	class texture_2d : public texture
+	struct texture_2d : texture
 	{
-	public:
 		virtual ~texture_2d(void) = default;
 
 	public:

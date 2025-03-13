@@ -29,10 +29,10 @@ namespace elm {
 
 	#define EVENT_CLASS_CATEGORY(category) virtual int get_category_flags(void) const override { return category; }
 
-	class event
+	struct event
 	{
-		friend class event_dispatcher;
-	public:
+		friend struct event_dispatcher;
+
 		virtual ~event(void) = default;
 
 		virtual event_type get_event_type(void) const = 0;
@@ -47,12 +47,10 @@ namespace elm {
 
 	public:
 		bool handled = false;
-
 	};
 
-	class event_dispatcher
+	struct event_dispatcher
 	{
-	public:
 		event_dispatcher(event& e)
 			: m_event(e)
 		{

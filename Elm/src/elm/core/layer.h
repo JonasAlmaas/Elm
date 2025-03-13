@@ -6,9 +6,8 @@
 
 namespace elm {
 
-	class layer
+	struct layer
 	{
-	public:
 		layer(const std::string& name = "Layer")
 			: m_debug_name(name)
 		{

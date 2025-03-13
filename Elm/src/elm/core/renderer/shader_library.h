@@ -8,9 +8,8 @@
 
 namespace elm {
 
-	class shader_library
+	struct shader_library
 	{
-	public:
 		void add(const std::string &name, const std::shared_ptr<shader> &shader);
 		void add(const std::shared_ptr<shader> &shader);
 		std::shared_ptr<shader> load(const std::string &fpath);

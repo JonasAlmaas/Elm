@@ -8,15 +8,13 @@
 
 namespace elm {
 
-	class renderer_api
+	struct renderer_api
 	{
-	public:
 		enum class api {
 			none = 0,
 			opengl
 		};
 
-	public:
 		virtual ~renderer_api(void) = default;
 
 		virtual void init(void) = 0;

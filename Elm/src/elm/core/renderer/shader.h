@@ -8,9 +8,8 @@
 
 namespace elm {
 
-	class shader
+	struct shader
 	{
-	public:
 		virtual ~shader(void) = default;
 
 		virtual void bind(void) = 0;

@@ -5,9 +5,8 @@
 
 namespace elm {
 
-	class layer_stack
+	struct layer_stack
 	{
-	public:
 		layer_stack(void);
 		~layer_stack(void);
 
@@ -22,6 +21,5 @@ namespace elm {
 	private:
 		std::vector<layer*> m_layers;
 		uint32_t m_layer_insert_ix = 0;
-
 	};
 }

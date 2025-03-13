@@ -5,9 +5,8 @@
 
 namespace elm {
 
-	class entity
+	struct entity
 	{
-	public:
 		entity(void) = default;
 		entity(entt::registry *registry);
 		entity(entt::registry *registry, entt::entity entity_handle);
@@ -39,7 +38,6 @@ namespace elm {
 			return m_registry->all_of<T>(m_entity_handle);
 		}
 
-	public:
 		operator bool() const { return m_entity_handle != entt::null; }
 		operator entt::entity() const { return m_entity_handle; }
 

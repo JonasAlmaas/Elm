@@ -5,9 +5,8 @@
 
 namespace elm {
 
-	class graphics_context
+	struct graphics_context
 	{
-	public:
 		virtual ~graphics_context(void) = default;
 
 		virtual void init(void) = 0;

@@ -32,9 +32,8 @@ namespace elm {
 		bool vsync = true;
 	};
 
-	class application
+	struct application
 	{
-	public:
 		application(
 			const struct application_specification &spec,
 			struct application_command_line_args args = struct application_command_line_args());

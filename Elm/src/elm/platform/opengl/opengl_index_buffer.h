@@ -5,9 +5,8 @@
 
 namespace elm {
 
-	class opengl_index_buffer : public index_buffer
+	struct opengl_index_buffer : index_buffer
 	{
-	public:
 		opengl_index_buffer(const uint32_t *indices, uint32_t count);
 		virtual ~opengl_index_buffer();
 

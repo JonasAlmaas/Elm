@@ -4,9 +4,8 @@
 
 namespace elm {
 
-	class opengl_uniform_buffer : public uniform_buffer
+	struct opengl_uniform_buffer : uniform_buffer
 	{
-	public:
 		opengl_uniform_buffer(uint32_t size, uint32_t binding);
 		virtual ~opengl_uniform_buffer(void);
 

@@ -4,9 +4,8 @@
 
 namespace elm {
 
-	class opengl_texture_2d : public texture_2d
+	struct opengl_texture_2d : texture_2d
 	{
-	public:
 		opengl_texture_2d(uint32_t width, uint32_t height, texture_2d_specification spec);
 		opengl_texture_2d(const std::string &fpath, texture_2d_specification spec);
 		virtual ~opengl_texture_2d(void);

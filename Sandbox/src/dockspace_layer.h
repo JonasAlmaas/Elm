@@ -4,9 +4,8 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-class dockspace_layer : public elm::layer
+struct dockspace_layer : elm::layer
 {
-public:
 	dockspace_layer(void);
 	virtual ~dockspace_layer(void) = default;
 

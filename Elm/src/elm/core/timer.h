@@ -5,9 +5,8 @@
 
 namespace elm {
 
-	class timer
+	struct timer
 	{
-	public:
 		timer()
 		{
 			reset();

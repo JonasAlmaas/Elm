@@ -8,9 +8,8 @@
 
 namespace elm {
 
-	class vertex_array
+	struct vertex_array
 	{
-	public:
 		virtual ~vertex_array(void) = default;
 
 		virtual void bind(void) const = 0;

@@ -8,9 +8,8 @@
 
 namespace elm {
 
-	class scene
+	struct scene
 	{
-	public:
 		entity create_entity(void);
 		void destroy_entity(entity entity);
 

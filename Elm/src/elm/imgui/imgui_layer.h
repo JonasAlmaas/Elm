@@ -4,9 +4,8 @@
 
 namespace elm {
 
-	class imgui_layer : public layer
+	struct imgui_layer : layer
 	{
-	public:
 		imgui_layer(void);
 		~imgui_layer(void);
 

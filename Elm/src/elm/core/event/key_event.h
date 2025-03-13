@@ -6,9 +6,8 @@
 
 namespace elm {
 
-	class key_event : public event
+	struct key_event : event
 	{
-	public:
 		inline key_code get_key_code() const { return m_key_code; }
 
 		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_KEYBOARD | EVENT_CATEGORY_INPUT)
@@ -22,9 +21,8 @@ namespace elm {
 		key_code m_key_code;
 	};
 
-	class key_pressed_event : public key_event
+	struct key_pressed_event : key_event
 	{
-	public:
 		key_pressed_event(key_code keycode, bool is_repeat = false)
 			: key_event(keycode), m_is_repeat(is_repeat)
 		{
@@ -45,9 +43,8 @@ namespace elm {
 		bool m_is_repeat;
 	};
 
-	class key_released_event : public key_event
+	struct key_released_event : key_event
 	{
-	public:
 		key_released_event(key_code keycode)
 			: key_event(keycode)
 		{
@@ -63,9 +60,8 @@ namespace elm {
 		EVENT_CLASS_TYPE(EVENT_TYPE_KEY_RELEASED)
 	};
 
-	class key_typed_event : public key_event
+	struct key_typed_event : key_event
 	{
-	public:
 		key_typed_event(key_code keycode)
 			: key_event(keycode)
 		{

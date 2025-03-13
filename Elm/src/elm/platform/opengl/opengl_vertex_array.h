@@ -6,9 +6,8 @@
 
 namespace elm {
 
-	class opengl_vertex_array : public vertex_array
+	struct opengl_vertex_array : vertex_array
 	{
-	public:
 		opengl_vertex_array();
 		virtual ~opengl_vertex_array();
 

@@ -8,9 +8,8 @@
 
 namespace elm {
 
-	class render_command
+	struct render_command
 	{
-	public:
 		inline static void init(void) { s_api->init(); }
 
 		inline static void set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) { s_api->set_viewport(x, y, width, height); }

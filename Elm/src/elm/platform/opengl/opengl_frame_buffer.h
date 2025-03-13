@@ -4,9 +4,8 @@
 
 namespace elm {
 
-	class opengl_frame_buffer : public frame_buffer
+	struct opengl_frame_buffer : frame_buffer
 	{
-	public:
 		opengl_frame_buffer(const struct frame_buffer_specification &spec);
 		virtual ~opengl_frame_buffer(void);
 

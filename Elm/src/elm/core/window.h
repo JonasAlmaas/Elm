@@ -14,9 +14,8 @@ namespace elm {
 		bool vsync = true;
 	};
 
-	class window
+	struct window
 	{
-	public:
 		virtual ~window(void) = default;
 
 		virtual void on_update(bool minimized) = 0;

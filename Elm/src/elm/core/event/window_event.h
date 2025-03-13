@@ -6,18 +6,16 @@
 
 namespace elm {
 
-	class window_close_event : public event
+	struct window_close_event : event
 	{
-	public:
 		window_close_event(void) = default;
 
 		EVENT_CLASS_TYPE(EVENT_TYPE_WINDOW_CLOSE)
 		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_APPLICATION)
 	};
 
-	class window_minimize_event : public event
+	struct window_minimize_event : event
 	{
-	public:
 		window_minimize_event(bool minimized)
 			: m_minimized(minimized) {}
 
@@ -30,9 +28,8 @@ namespace elm {
 		bool m_minimized;
 	};
 
-	class window_resize_event : public event
+	struct window_resize_event : event
 	{
-	public:
 		window_resize_event(uint32_t width, uint32_t height)
 			: m_width(width), m_height(height) {}
 

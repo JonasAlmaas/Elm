@@ -4,9 +4,8 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-class sprite_sheet_layer : public elm::layer
+struct sprite_sheet_layer : elm::layer
 {
-public:
 	sprite_sheet_layer(void);
 	virtual ~sprite_sheet_layer(void) = default;
 
