@@ -81,14 +81,14 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	}
 
 	{
-		elm::entity entity = m_scene->create_entity();
+		m_suzanne = m_scene->create_entity();
 
-		auto &renderer = entity.add_component<elm::mesh_renderer_component>();
+		auto &renderer = m_suzanne.add_component<elm::mesh_renderer_component>();
 		renderer.mesh = suzanne_mesh;
 		renderer.shader = m_specular_generic_shader;
 		renderer.textures.push_back(texture_checkerboard);
 
-		auto &transform = entity.add_component<elm::transform_component>();
+		auto &transform = m_suzanne.add_component<elm::transform_component>();
 		transform.transform = glm::translate(glm::mat4(1.0f), { 2.0f, 0.0f, 0.0f });
 	}
 }
@@ -108,6 +108,15 @@ void sandbox_3d_layer::on_update(elm::timestep ts)
 	}
 
 	m_camera_controller.on_update(ts);
+
+	auto &tc = m_suzanne.get_component<elm::transform_component>();
+	glm::vec3 pos, rot;
+	elm::math::decompose_transform(tc.transform, &pos, &rot, nullptr);
+	pos.z = glm::sin(elm::time::get_seconds()) * 0.5f;
+	rot.z = glm::cos(elm::time::get_seconds());
+
+	tc.transform = glm::translate(glm::mat4(1.0f), pos)
+		* glm::rotate(glm::mat4(1.0f), rot.z, { 0.0f, 0.0f, 1.0f });
 
 	elm::scene_renderer::render(m_scene, m_camera_controller.get_camera());
 }

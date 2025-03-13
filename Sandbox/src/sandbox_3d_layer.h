@@ -23,4 +23,5 @@ private:
 	std::shared_ptr<elm::shader> m_specular_generic_shader;
 
 	elm::entity m_dir_light;
+	elm::entity m_suzanne;
 };
