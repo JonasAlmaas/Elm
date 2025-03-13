@@ -80,6 +80,8 @@ namespace elm::renderer_2d {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
+		s_data.camera_uniform_buffer = uniform_buffer::create(sizeof(struct renderer_2d_data::camera_data), 0);
+
 		// Load shaders
 		s_data.generic_2d_shader = elm::shader::create("content/shaders/generic_2d.glsl");
 		s_data.circle_shader = elm::shader::create("content/shaders/circle_unlit.glsl");
@@ -172,6 +174,7 @@ namespace elm::renderer_2d {
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		s_data.camera_buffer.view_projection = camera->get_view_projection();
+		s_data.camera_uniform_buffer->bind();
 		s_data.camera_uniform_buffer->set_data((const void *)&s_data.camera_buffer, sizeof s_data.camera_buffer);
 
 		s_data.batch_quad_count = 0u;

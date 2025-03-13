@@ -54,6 +54,7 @@ namespace elm::renderer {
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		s_data.camera_buffer.view_projection = camera->get_view_projection();
+		s_data.camera_uniform_buffer->bind();
 		s_data.camera_uniform_buffer->set_data((const void *)&s_data.camera_buffer, sizeof s_data.camera_buffer);
 	}
 
