@@ -48,7 +48,7 @@ namespace elm {
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 
-	void opengl_renderer_api::draw_arrays(uint32_t count, uint32_t offset)
+	void opengl_renderer_api::draw_triangles(uint32_t count, uint32_t offset)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
