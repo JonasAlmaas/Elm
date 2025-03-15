@@ -347,6 +347,11 @@ namespace elm::renderer_2d {
 		draw_sprite(transform, texture, uvs, color);
 	}
 
+	void draw_sprite(const glm::mat4 &transform, const glm::vec4 &color)
+	{
+		draw_sprite(transform, s_data.texture_blank, s_quad_uvs, color);
+	}
+
 	extern void draw_sprite(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color)
 	{
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)

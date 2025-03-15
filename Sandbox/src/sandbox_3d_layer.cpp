@@ -76,6 +76,42 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	{
 		elm::entity entity = m_scene->create_entity();
 
+		auto &circle_renderer = entity.add_component<elm::sprite_renderer_component>();
+		circle_renderer.color = { 0.8f, 0.2f, 0.3f, 1.0f };
+
+		auto &tc = entity.add_component<elm::transform_component>();
+		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 1.0f, -1.0f })
+			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
+	}
+
+	{
+		elm::entity entity = m_scene->create_entity();
+
+		auto &circle_renderer = entity.add_component<elm::sprite_renderer_component>();
+		circle_renderer.color = { 0.8f, 0.2f, 0.3f, 1.0f };
+		circle_renderer.texture = texture_checkerboard;
+
+		auto &tc = entity.add_component<elm::transform_component>();
+		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 1.0f, 0.0f })
+			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
+	}
+
+	{
+		elm::entity entity = m_scene->create_entity();
+
+		auto &circle_renderer = entity.add_component<elm::sprite_renderer_component>();
+		circle_renderer.color = { 0.8f, 0.2f, 0.3f, 1.0f };
+		circle_renderer.texture = texture_checkerboard;
+		circle_renderer.tiling_factor = { 1.0f, 2.0f };
+
+		auto &tc = entity.add_component<elm::transform_component>();
+		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 1.0f, 1.0f })
+			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
+	}
+
+	{
+		elm::entity entity = m_scene->create_entity();
+
 		auto &circle_renderer = entity.add_component<elm::circle_renderer_component>();
 		circle_renderer.color = { 0.2f, 0.3f, 0.8f, 1.0f };
 

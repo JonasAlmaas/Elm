@@ -66,7 +66,7 @@ namespace elm::scene_renderer {
 
 	inline static void render_mesh_render_components(const entt::registry &reg)
 	{
-		ELM_PROFILE_RENDERER_SCOPE("render_mesh_render_components()");
+		ELM_PROFILE_RENDERER_FUNCTION();
 
 		auto view = reg.view<transform_component, mesh_renderer_component>();
 		for (auto entity : view) {
@@ -78,9 +78,24 @@ namespace elm::scene_renderer {
 		}
 	}
 
+	inline static void render_sprite_renderer_components(const entt::registry &reg)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		auto view = reg.view<transform_component, sprite_renderer_component>();
+		for (auto entity : view) {
+			auto [tc, rc] = view.get<transform_component, sprite_renderer_component>(entity);
+			if (rc.texture) {
+				renderer_2d::draw_sprite(tc.transform, rc.texture, rc.tiling_factor, rc.color);
+			} else {
+				renderer_2d::draw_sprite(tc.transform, rc.color);
+			}
+		}
+	}
+
 	inline static void render_circle_renderer_components(const entt::registry &reg)
 	{
-		ELM_PROFILE_RENDERER_SCOPE("render_circle_renderer_components()");
+		ELM_PROFILE_RENDERER_FUNCTION();
 
 		auto view = reg.view<transform_component, circle_renderer_component>();
 		for (auto entity : view) {
@@ -91,7 +106,7 @@ namespace elm::scene_renderer {
 
 	inline static void prepare_lights(const entt::registry &reg)
 	{
-		ELM_PROFILE_RENDERER_SCOPE("prepare_lights()");
+		ELM_PROFILE_RENDERER_FUNCTION();
 
 		static struct lights_data s_lights_data;
 
@@ -139,7 +154,7 @@ namespace elm::scene_renderer {
 
 	inline static void render_world_grid(const camera *camera)
 	{
-		ELM_PROFILE_RENDERER_SCOPE("render_world_grid()");
+		ELM_PROFILE_RENDERER_FUNCTION();
 
 		// TODO: Configure world grid data
 
@@ -157,6 +172,7 @@ namespace elm::scene_renderer {
 		render_command::clear();
 
 		renderer_2d::begin_scene(camera);
+		render_sprite_renderer_components(reg);
 		render_circle_renderer_components(reg);
 		renderer_2d::end_scene();
 

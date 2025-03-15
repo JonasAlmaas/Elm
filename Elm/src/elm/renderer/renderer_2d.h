@@ -27,6 +27,7 @@ namespace elm::renderer_2d {
 	// -- Draw sprite --
 	extern void draw_sprite(const glm::mat4 &transform, const std::shared_ptr<texture_2d> &texture, const std::array<glm::vec2, 4> &uvs, const glm::vec4 &color = glm::vec4(1.0f));
 	extern void draw_sprite(const glm::mat4 &transform, const std::shared_ptr<texture_2d> &texture, const glm::vec2 &texture_tiling_factor = glm::vec2(1.0f), const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_sprite(const glm::mat4 &transform, const glm::vec4 &color = glm::vec4(1.0f));
 
 	extern void draw_sprite(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color = glm::vec4(1.0f));
 	extern void draw_sprite(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color = glm::vec4(1.0f));

@@ -20,6 +20,15 @@ namespace elm {
 		}
 	};
 
+	struct sprite_renderer_component {
+		glm::vec4 color = glm::vec4(1.0f);
+		std::shared_ptr<texture_2d> texture = nullptr;
+		glm::vec2 tiling_factor = glm::vec2(1.0f);
+
+		sprite_renderer_component(void) = default;
+		sprite_renderer_component(const sprite_renderer_component &) = default;
+	};
+
 	struct circle_renderer_component {
 		glm::vec4 color = glm::vec4(1.0f);
 		float radius = 0.5f;
