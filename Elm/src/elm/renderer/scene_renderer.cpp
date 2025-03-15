@@ -174,11 +174,15 @@ namespace elm::scene_renderer {
 		render_command::set_depth_test(true);
 		render_command::set_depth_fn(depth_function::Less);
 
+		// -- Renderer 2d --
 		renderer_2d::begin_scene(camera);
+
 		render_sprite_renderer_components(reg);
 		render_circle_renderer_components(reg);
+
 		renderer_2d::end_scene();
 
+		// -- Renderer 3d --
 		renderer::begin_scene(camera);
 
 		prepare_lights(reg);
