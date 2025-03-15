@@ -29,11 +29,12 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	});
 	texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
 
-	// Setup scene
+	// -- Setup scene --
 	m_scene = elm::scene::create();
 	m_scene->set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
 	m_scene->set_show_world_grid(true);
 
+	// Lights
 	{
 		m_dir_light = m_scene->create_entity();
 
@@ -73,6 +74,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 2.0f });
 	}
 
+	// 2D sprites
 	{
 		elm::entity entity = m_scene->create_entity();
 
@@ -109,6 +111,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
 	}
 
+	// 2D circles
 	{
 		elm::entity entity = m_scene->create_entity();
 
@@ -132,6 +135,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
 	}
 
+	// 3D meshes
 	{
 		elm::entity entity = m_scene->create_entity();
 
