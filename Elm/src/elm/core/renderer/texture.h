@@ -9,6 +9,14 @@
 
 namespace elm {
 
+	enum class image_format {
+		None = 0,
+		R8,
+		RGB8,
+		RGBA8,
+		RGBA32F,
+	};
+
 	struct texture
 	{
 		virtual ~texture(void) = default;
@@ -37,6 +45,7 @@ namespace elm {
 	};
 
 	struct texture_2d_specification {
+		image_format format = image_format::RGBA8;
 		texture_2d_wrap wrap_s = texture_2d_wrap::REPEAT;
 		texture_2d_wrap wrap_t = texture_2d_wrap::REPEAT;
 		texture_2d_filter min_filter = texture_2d_filter::LINEAR;
