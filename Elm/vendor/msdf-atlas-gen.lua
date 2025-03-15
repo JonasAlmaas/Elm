@@ -1,48 +1,46 @@
-project "Sandbox"
-	kind "ConsoleApp"
+project "msdf-atlas-gen"
+	kind "StaticLib"
 	language "C++"
 	cppdialect "C++23"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
-	files {
-		"src/**.h",
-		"src/**.cpp",
+	files
+	{
+		"msdf-atlas-gen/msdf-atlas-gen/**.h",
+		"msdf-atlas-gen/msdf-atlas-gen/**.hpp",
+		"msdf-atlas-gen/msdf-atlas-gen/**.cpp"
 	}
 
 	includedirs {
-		"src",
+		"_config",
+		"msdf-atlas-gen/artery-font-format",
+		"msdf-atlas-gen/msdf-atlas-gen",
+		"msdf-atlas-gen/msdfgen",
+		"msdf-atlas-gen/msdfgen/include"
+	}
 
-		"../Elm/include",
-		"../Elm/src",
-
-		"%{IncludeDir.entt}",
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.imgui}",
+	defines {
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	links {
-		"Elm"
+		"msdfgen"
 	}
 
 	filter "system:windows"
 		systemversion "latest"
-		buildoptions { "/utf-8" }
-		defines "ELM_PLATFORM_WINDOWS"
 
 	filter "configurations:Debug"
-		defines "ELM_DEBUG"
 		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "ELM_RELEASE"
 		runtime "Release"
 		optimize "on"
 
 	filter "configurations:Dist"
-		defines "ELM_DIST"
 		runtime "Release"
 		optimize "on"
+		symbols "off"

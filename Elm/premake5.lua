@@ -25,6 +25,8 @@ project "Elm"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.imgui}",
+		"%{IncludeDir.msdf_atlas_gen}",
+		"%{IncludeDir.msdfgen}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.stb}",
 		"%{IncludeDir.tinyobjloader}",
@@ -35,6 +37,7 @@ project "Elm"
 		"glad",
 		"GLFW",
 		"imgui",
+		"msdf-atlas-gen",
 	}
 
 	filter "system:windows"
