@@ -13,6 +13,9 @@ namespace elm {
 		virtual void set_clear_color(const glm::vec4 &color) override;
 		virtual void clear(void) override;
 
+		virtual void set_depth_test(bool enabled) override;
+		virtual void set_depth_fn(depth_function fn) override;
+
 		virtual void draw_indexed(const std::shared_ptr<vertex_array> &vertex_array, uint32_t index_count = 0) override;
 		virtual void draw_triangles(uint32_t count, uint32_t offset = 0) override;
 		virtual void draw_line(const std::shared_ptr<vertex_array> &vertex_array, uint32_t vertex_count) override;

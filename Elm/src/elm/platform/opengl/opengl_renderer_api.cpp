@@ -39,6 +39,41 @@ namespace elm {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
+	void opengl_renderer_api::set_depth_test(bool enabled)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		if (enabled) {
+			glEnable(GL_DEPTH_TEST);
+		} else {
+			glDisable(GL_DEPTH_TEST);
+		}
+	}
+
+	void opengl_renderer_api::set_depth_fn(depth_function fn)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		GLenum gl_func;
+
+		switch (fn) {
+		case depth_function::Never: gl_func = GL_NEVER; break;
+		case depth_function::Always: gl_func = GL_ALWAYS; break;
+		case depth_function::Equal: gl_func = GL_EQUAL; break;
+		case depth_function::NotEqual: gl_func = GL_NOTEQUAL; break;
+		case depth_function::Less: gl_func = GL_LESS; break;
+		case depth_function::Greater: gl_func = GL_GREATER; break;
+		case depth_function::LessEqual: gl_func = GL_LEQUAL; break;
+		case depth_function::GreaterEqual: gl_func = GL_GEQUAL; break;
+		default:
+			ELM_CORE_ASSERT(false, "Unknwon depth function");
+			gl_func = GL_LESS;
+			break;
+		}
+
+		glDepthFunc(gl_func);
+	}
+
 	void opengl_renderer_api::draw_indexed(const std::shared_ptr<vertex_array> &vertex_array, uint32_t index_count)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();

@@ -171,6 +171,9 @@ namespace elm::scene_renderer {
 		render_command::set_clear_color(scene->get_clear_color());
 		render_command::clear();
 
+		render_command::set_depth_test(true);
+		render_command::set_depth_fn(depth_function::Less);
+
 		renderer_2d::begin_scene(camera);
 		render_sprite_renderer_components(reg);
 		render_circle_renderer_components(reg);
