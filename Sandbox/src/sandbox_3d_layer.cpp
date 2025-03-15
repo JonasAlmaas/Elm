@@ -11,6 +11,8 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	m_camera_controller.set_pitch_deg(-55.0f);
 	m_camera_controller.set_yaw_deg(45.0f);
 
+	elm::font font("C:\\Windows\\Fonts\\arialbd.ttf");
+
 	auto shader = elm::shader::create("content/shaders/texture_unit.glsl");
 	m_specular_generic_shader = elm::shader::create("content/shaders/specular_generic.glsl");
 	//auto unlit_generic_shader = elm::shader::create("content/shaders/unlit_generic.glsl");

@@ -2,6 +2,8 @@ VULKAN_SDK = os.getenv("VULKAN_SDK")
 
 IncludeDir = {}
 
+IncludeDir["vendor_config"] = "%{wks.location}/Elm/vendor/_config"
+
 IncludeDir["entt"] = "%{wks.location}/Elm/vendor/entt/include"
 IncludeDir["glad"] = "%{wks.location}/Elm/vendor/glad/include"
 IncludeDir["glm"] = "%{wks.location}/Elm/vendor/glm"

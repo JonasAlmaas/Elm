@@ -20,6 +20,8 @@ project "Elm"
 		"src",
 		"resources",
 
+		"%{IncludeDir.vendor_config}",
+
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.glad}",
 		"%{IncludeDir.glm}",
