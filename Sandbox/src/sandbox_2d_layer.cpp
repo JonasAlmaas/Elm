@@ -50,7 +50,7 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 
 	for (int y = 0; y < 200; ++y) {
 		for (int x = 0; x < 200; ++x) {
-			elm::renderer_2d::draw_quad(
+			elm::renderer_2d::draw_sprite(
 				{ 2.0f + x, 2.0f + y },
 				{ 1.0f, 1.0f },
 				(x + y) % 2 == 0
@@ -59,14 +59,14 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 		}
 	}
 
-	elm::renderer_2d::draw_quad({ 1.0f, 1.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-	elm::renderer_2d::draw_quad({ 0.0f, 1.0f }, { 1.0f, 1.0f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+	elm::renderer_2d::draw_sprite({ 1.0f, 1.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+	elm::renderer_2d::draw_sprite({ 0.0f, 1.0f }, { 1.0f, 1.0f }, { 0.2f, 0.3f, 0.8f, 1.0f });
 
-	elm::renderer_2d::draw_quad({ 0.0f, 0.0f }, { 1.5f, 1.0f }, m_texture_grass_tileset);
+	elm::renderer_2d::draw_sprite({ 0.0f, 0.0f }, { 1.5f, 1.0f }, m_texture_grass_tileset);
 
 	static float s_rotation = 0.0f;
 	s_rotation += 50.0f * ts.get_seconds();
-	elm::renderer_2d::draw_rotated_quad({ 2.0f, 0.0f }, { 1.0f, 1.0f }, glm::radians(s_rotation), m_texture_checkerboard, 5.0f);
+	elm::renderer_2d::draw_rotated_sprite({ 2.0f, 0.0f }, { 1.0f, 1.0f }, glm::radians(s_rotation), m_texture_checkerboard, 5.0f);
 
 	elm::renderer_2d::draw_circle(
 		glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, -1.0f, 0.0f)),

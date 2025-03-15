@@ -24,30 +24,33 @@ namespace elm::renderer_2d {
 
 	extern void flush(void);
 
-	// -- Draw quad --
-	extern void draw_quad(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color);
-	extern void draw_quad(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color);
+	// -- Draw sprite --
+	extern void draw_sprite(const glm::mat4 &transform, const std::shared_ptr<texture_2d> &texture, const std::array<glm::vec2, 4> &uvs, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_sprite(const glm::mat4 &transform, const std::shared_ptr<texture_2d> &texture, const glm::vec2 &texture_tiling_factor = glm::vec2(1.0f), const glm::vec4 &color = glm::vec4(1.0f));
 
-	extern void draw_quad(const glm::vec3 &position, const glm::vec2 &size, const std::shared_ptr<texture_2d> &texture, const glm::vec4 &color);
-	extern void draw_quad(const glm::vec2 &position, const glm::vec2 &size, const std::shared_ptr<texture_2d> &texture, const glm::vec4 &color);
+	extern void draw_sprite(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_sprite(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color = glm::vec4(1.0f));
 
-	extern void draw_quad(const glm::vec3 &position, const glm::vec2 &size, const std::shared_ptr<texture_2d> &texture, float texture_tiling_factor = 1.0f, const glm::vec4 &color = glm::vec4(1.0f));
-	extern void draw_quad(const glm::vec2 &position, const glm::vec2 &size, const std::shared_ptr<texture_2d> &texture, float texture_tiling_factor = 1.0f, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_sprite(const glm::vec3 &position, const glm::vec2 &size, const std::shared_ptr<texture_2d> &texture, const glm::vec4 &color);
+	extern void draw_sprite(const glm::vec2 &position, const glm::vec2 &size, const std::shared_ptr<texture_2d> &texture, const glm::vec4 &color);
 
-	extern void draw_quad(const glm::vec3 &position, const glm::vec2 &size, const std::shared_ptr<sub_texture_2d> &sub_texture, const glm::vec4 &color = glm::vec4(1.0f));
-	extern void draw_quad(const glm::vec2 &position, const glm::vec2 &size, const std::shared_ptr<sub_texture_2d> &sub_texture, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_sprite(const glm::vec3 &position, const glm::vec2 &size, const std::shared_ptr<texture_2d> &texture, float texture_tiling_factor = 1.0f, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_sprite(const glm::vec2 &position, const glm::vec2 &size, const std::shared_ptr<texture_2d> &texture, float texture_tiling_factor = 1.0f, const glm::vec4 &color = glm::vec4(1.0f));
 
-	extern void draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation_rad, const glm::vec4 &color);
-	extern void draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation_rad, const glm::vec4 &color);
+	extern void draw_sprite(const glm::vec3 &position, const glm::vec2 &size, const std::shared_ptr<sub_texture_2d> &sub_texture, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_sprite(const glm::vec2 &position, const glm::vec2 &size, const std::shared_ptr<sub_texture_2d> &sub_texture, const glm::vec4 &color = glm::vec4(1.0f));
 
-	extern void draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<texture_2d> &texture, const glm::vec4 &color);
-	extern void draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<texture_2d> &texture, const glm::vec4 &color);
+	extern void draw_rotated_sprite(const glm::vec3 &position, const glm::vec2 &size, float rotation_rad = 0.0f, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_rotated_sprite(const glm::vec2 &position, const glm::vec2 &size, float rotation_rad = 0.0f, const glm::vec4 &color = glm::vec4(1.0f));
 
-	extern void draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<texture_2d> &texture, float texture_tiling_factor = 1.0f, const glm::vec4 &color = glm::vec4(1.0f));
-	extern void draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<texture_2d> &texture, float texture_tiling_factor = 1.0f, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_rotated_sprite(const glm::vec3 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<texture_2d> &texture, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_rotated_sprite(const glm::vec2 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<texture_2d> &texture, const glm::vec4 &color = glm::vec4(1.0f));
 
-	extern void draw_rotated_quad(const glm::vec3 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<sub_texture_2d> &sub_texture, const glm::vec4 &color = glm::vec4(1.0f));
-	extern void draw_rotated_quad(const glm::vec2 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<sub_texture_2d> &sub_texture, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_rotated_sprite(const glm::vec3 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<texture_2d> &texture, float texture_tiling_factor = 1.0f, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_rotated_sprite(const glm::vec2 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<texture_2d> &texture, float texture_tiling_factor = 1.0f, const glm::vec4 &color = glm::vec4(1.0f));
+
+	extern void draw_rotated_sprite(const glm::vec3 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<sub_texture_2d> &sub_texture, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_rotated_sprite(const glm::vec2 &position, const glm::vec2 &size, float rotation_rad, const std::shared_ptr<sub_texture_2d> &sub_texture, const glm::vec4 &color = glm::vec4(1.0f));
 
 	// -- Draw circle --
 	extern void draw_circle(const glm::mat4 &transform, const glm::vec4 &color, float radius = 0.5f, float thickness = 1.0f, float fade = 0.005f);

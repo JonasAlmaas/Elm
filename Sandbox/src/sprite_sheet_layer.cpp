@@ -94,18 +94,18 @@ void sprite_sheet_layer::on_update(elm::timestep ts)
 			glm::vec2 size = { 0.25f, 0.25f };
 
 			if (tile != 13) {
-				elm::renderer_2d::draw_quad(glm::vec3(pos, -0.1f), size, m_texture_sprite_water[m_water_ix]);
+				elm::renderer_2d::draw_sprite(glm::vec3(pos, -0.1f), size, m_texture_sprite_water[m_water_ix]);
 			}
 
 			if (tile) {
-				elm::renderer_2d::draw_quad(pos, size, m_texture_atlas_grass_tileset[tile - 1]);
+				elm::renderer_2d::draw_sprite(pos, size, m_texture_atlas_grass_tileset[tile - 1]);
 			}
 		}
 	}
 
 	/*for (int y = 0; y < 5; ++y) {
 		for (int x = 0; x < 11; ++x) {
-			elm::renderer_2d::draw_quad({ x, 5 - y }, { 1.0f, 1.0f }, m_texture_atlas_grass_tileset[y * 11 + x]);
+			elm::renderer_2d::draw_sprite({ x, 5 - y }, { 1.0f, 1.0f }, m_texture_atlas_grass_tileset[y * 11 + x]);
 		}
 	}*/
 

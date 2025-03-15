@@ -55,12 +55,12 @@ void dockspace_layer::on_update(elm::timestep ts)
 
 	elm::renderer_2d::begin_scene(m_camera_controller.get_camera());
 
-	elm::renderer_2d::draw_quad({ -0.5f, -0.5f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-	elm::renderer_2d::draw_quad({ 0.5f, 0.5f }, { 1.0f, 1.0f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+	elm::renderer_2d::draw_sprite({ -0.5f, -0.5f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+	elm::renderer_2d::draw_sprite({ 0.5f, 0.5f }, { 1.0f, 1.0f }, { 0.2f, 0.3f, 0.8f, 1.0f });
 
 	static float s_rotation = 0.0f;
 	s_rotation += 50.0f * ts.get_seconds();
-	elm::renderer_2d::draw_rotated_quad({ 0.0f, 0.0f, 0.1f }, { 1.0f, 1.0f }, glm::radians(s_rotation), m_texture_checkerboard, 5.0f);
+	elm::renderer_2d::draw_rotated_sprite({ 0.0f, 0.0f, 0.1f }, { 1.0f, 1.0f }, glm::radians(s_rotation), m_texture_checkerboard, 5.0f);
 
 	elm::renderer_2d::end_scene();
 
