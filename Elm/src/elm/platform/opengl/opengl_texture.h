@@ -19,6 +19,8 @@ namespace elm {
 
 		virtual void set_data(void *data, uint32_t size) override;
 
+		inline virtual const texture_2d_specification &get_spec(void) override { return m_spec; }
+
 		inline virtual bool equal(const texture *other) const override {
 			return m_renderer_id == ((opengl_texture_2d *)other)->m_renderer_id;
 		}

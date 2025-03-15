@@ -56,6 +56,8 @@ namespace elm {
 	{
 		virtual ~texture_2d(void) = default;
 
+		virtual const texture_2d_specification &get_spec(void) = 0;
+
 	public:
 		static std::shared_ptr<texture_2d> create(uint32_t width, uint32_t height, texture_2d_specification spec = texture_2d_specification());
 		static std::shared_ptr<texture_2d> create(const std::string &fpath, texture_2d_specification spec = texture_2d_specification());
