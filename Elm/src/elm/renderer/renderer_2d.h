@@ -2,6 +2,7 @@
 
 #include "elm/core/renderer/camera.h"
 #include "elm/core/renderer/texture.h"
+#include "elm/renderer/font.h"
 #include <memory>
 
 namespace elm::renderer_2d {
@@ -62,6 +63,9 @@ namespace elm::renderer_2d {
 
 	extern void draw_line(const glm::vec3 &p0, const glm::vec3 &p1, const glm::vec4 &color = glm::vec4(1.0f));
 	extern void draw_line(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec4 &color = glm::vec4(1.0f));
+
+	// -- Draw text --
+	extern void draw_text(const std::string &text, const std::shared_ptr<font> &font, const glm::mat4 &transform, const glm::vec4 &color = glm::vec4(1.0f));
 
 	// -- Statistics --
 	extern struct statistics get_stats(void);

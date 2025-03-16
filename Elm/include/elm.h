@@ -45,7 +45,7 @@
 
 #include <elm/renderer/mesh.h>
 
-#include <elm/renderer/ui/font.h>
+#include <elm/renderer/font.h>
 
 #include <elm/camera/orthographic_camera.h>
 #include <elm/camera/orthographic_camera_controller.h>
