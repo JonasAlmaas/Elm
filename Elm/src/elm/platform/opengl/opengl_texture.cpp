@@ -149,7 +149,6 @@ namespace elm {
 		auto type = image_format_to_gl_type(spec.format);
 
 		glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &m_renderer_id);
-		//glTextureStorage2D(m_renderer_id, 1, m_internal_format, m_width, m_height);
 
 		for (int i = 0; i < 6; ++i) {
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, m_internal_format, m_width, m_height, 0, m_data_format, type, nullptr);
@@ -177,6 +176,7 @@ namespace elm {
 
 	void opengl_texture_cube::set_data(void *data, uint32_t size)
 	{
+		// TODO: Implement
 		ELM_CORE_ASSERT(false, "Not implemented");
 	}
 }
