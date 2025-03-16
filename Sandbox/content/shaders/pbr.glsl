@@ -82,6 +82,7 @@ layout (std140, binding = 2) uniform lights
 } u_lights;
 
 layout (binding = 0) uniform sampler2D u_textures[32];
+layout (binding = 1) uniform samplerCube u_irradiance_map;
 
 const float PI = 3.14159265359;
 
@@ -158,7 +159,7 @@ void main()
 	float alpha = 1.0;
 	float metallic = 0.0;
 	float roughness = 0.3;
-	// float ao = 0.0; // TODO: implement
+	float ao = 0.0;
 
 	// TODO: I don't know if this is the 'PBR' way
 	roughness = max(roughness, 0.04); // Make sure we don't loose the specular reflections
@@ -203,8 +204,14 @@ void main()
 			radiance);
 	}
 
-	// TODO: Use IBL
-	vec3 ambient = vec3(0.03) * albedo;
+	float n_dot_v = max(dot(n, v), 0.0000001); // Prevent divide by zero
+
+	// Get ambient term from IBL
+	vec3 f = fresnel_schlick(n_dot_v, base_reflectivity);
+	vec3 kd = (1.0 - f) * (1.0 * metallic);
+	vec3 diffuse = texture(u_irradiance_map, n).rgb * albedo * kd;
+
+	vec3 ambient = diffuse * ao;
 
 	vec3 color = ambient + lo;
 

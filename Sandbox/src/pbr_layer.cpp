@@ -29,6 +29,9 @@ pbr_layer::pbr_layer(void)
 	});
 	texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
 
+	// Create cubemap
+	auto cubemap = elm::cubemap::create("content/textures/skybox/minedump_flats.hdr");
+
 	// -- Setup scene --
 	m_scene = elm::scene::create();
 	m_scene->set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
