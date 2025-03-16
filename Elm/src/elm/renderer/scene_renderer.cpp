@@ -111,7 +111,11 @@ namespace elm::scene_renderer {
 		auto view = reg.view<transform_component, text_renderer_component>();
 		for (auto entity : view) {
 			auto [tc, rc] = view.get<transform_component, text_renderer_component>(entity);
-			renderer_2d::draw_text(rc.text, rc.font, tc.transform, rc.color);
+			renderer_2d::text_render_params params = {
+				.color = rc.color,
+				.kerning = rc.kerning,
+				.line_spacing = rc.line_spacing};
+			renderer_2d::draw_text(rc.text, rc.font, tc.transform, params);
 		}
 	}
 

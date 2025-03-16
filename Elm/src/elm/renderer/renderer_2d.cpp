@@ -694,7 +694,7 @@ namespace elm::renderer_2d {
 		const std::string &text,
 		const std::shared_ptr<font> &font,
 		const glm::mat4 &transform,
-		const glm::vec4 &color)
+		const struct text_render_params &params)
 	{
 		const auto &font_geometry = font->get_msdf_data()->font_geometry;
 		const auto &metrics = font_geometry.getMetrics();
@@ -720,7 +720,8 @@ namespace elm::renderer_2d {
 
 		double x = 0.0, y = 0.0;
 		double fs_scale = 1.0 / (metrics.ascenderY - metrics.descenderY);
-		float line_height_offset = 0.0f;
+
+		const float space_glyph_advance = (float)font_geometry.getGlyph(' ')->getAdvance();
 
 		for (size_t i = 0; i < text.size(); ++i) {
 			char character = text[i];
@@ -730,8 +731,25 @@ namespace elm::renderer_2d {
 
 			if (character == '\n') {
 				x = 0.0;
-				y -= fs_scale * metrics.lineHeight + line_height_offset;
+				y -= fs_scale * metrics.lineHeight + params.line_spacing;
 				continue;
+			}
+
+			if (character == ' ') {
+				float advance = space_glyph_advance;
+				if (i < text.size() - 1) {
+					double d_advance;
+					char next_character = text[i + 1];
+					font_geometry.getAdvance(d_advance, character, next_character);
+					advance = (float)d_advance;
+				}
+				x += fs_scale * advance + params.kerning;
+				continue;
+			}
+
+			if (character == '\t') {
+				// Is this what we want?
+				x += 4.0f * (fs_scale * space_glyph_advance + params.kerning);
 			}
 
 			auto glyph = font_geometry.getGlyph(character);
@@ -741,10 +759,6 @@ namespace elm::renderer_2d {
 					ELM_CORE_ASSERT(false, "Unable to load missing glpyh glpyh");
 					return;
 				}
-			}
-
-			if (character == '\t') {
-				glyph = font_geometry.getGlyph(' ');
 			}
 
 			double al, ab, ar, at;
@@ -769,25 +783,25 @@ namespace elm::renderer_2d {
 			// Render
 			s_data.batch_text_vertex_buf_ptr->position = transform * glm::vec4(quad_min, 0.0f, 1.0f);;
 			s_data.batch_text_vertex_buf_ptr->uv = uv_min;
-			s_data.batch_text_vertex_buf_ptr->color = color;
+			s_data.batch_text_vertex_buf_ptr->color = params.color;
 			s_data.batch_text_vertex_buf_ptr->texture_slot = texture_slot;
 			++s_data.batch_text_vertex_buf_ptr;
 
 			s_data.batch_text_vertex_buf_ptr->position = transform * glm::vec4(quad_max.x, quad_min.y, 0.0f, 1.0f);;
 			s_data.batch_text_vertex_buf_ptr->uv = { uv_max.x, uv_min.y };
-			s_data.batch_text_vertex_buf_ptr->color = color;
+			s_data.batch_text_vertex_buf_ptr->color = params.color;
 			s_data.batch_text_vertex_buf_ptr->texture_slot = texture_slot;
 			++s_data.batch_text_vertex_buf_ptr;
 
 			s_data.batch_text_vertex_buf_ptr->position = transform * glm::vec4(quad_max, 0.0f, 1.0f);;
 			s_data.batch_text_vertex_buf_ptr->uv = uv_max;
-			s_data.batch_text_vertex_buf_ptr->color = color;
+			s_data.batch_text_vertex_buf_ptr->color = params.color;
 			s_data.batch_text_vertex_buf_ptr->texture_slot = texture_slot;
 			++s_data.batch_text_vertex_buf_ptr;
 
 			s_data.batch_text_vertex_buf_ptr->position = transform * glm::vec4(quad_min.x, quad_max.y, 0.0f, 1.0f);;
 			s_data.batch_text_vertex_buf_ptr->uv = { uv_min.x, uv_max.y };
-			s_data.batch_text_vertex_buf_ptr->color = color;
+			s_data.batch_text_vertex_buf_ptr->color = params.color;
 			s_data.batch_text_vertex_buf_ptr->texture_slot = texture_slot;
 			++s_data.batch_text_vertex_buf_ptr;
 
@@ -798,8 +812,7 @@ namespace elm::renderer_2d {
 				char next_character = text[i + 1];
 				font_geometry.getAdvance(advance, character, next_character);
 
-				float kerning_offset = 0.0f;
-				x += fs_scale * advance + kerning_offset;
+				x += fs_scale * advance + params.kerning;
 			}
 		}
 

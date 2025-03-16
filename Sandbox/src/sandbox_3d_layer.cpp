@@ -143,13 +143,14 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		elm::entity entity = m_scene->create_entity();
 
 		auto &circle_renderer = entity.add_component<elm::text_renderer_component>();
-		circle_renderer.text = "Sandbox";
+		circle_renderer.text = "Sandbox example\nThis is on a new line!";
 		circle_renderer.font = font;
 		circle_renderer.color = { 0.2f, 0.8f, 0.3f, 1.0f };
 
 		auto &tc = entity.add_component<elm::transform_component>();
-		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 1.0f })
-			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
+		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 1.25f })
+			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f })
+			* glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
 	}
 
 	// 3D meshes

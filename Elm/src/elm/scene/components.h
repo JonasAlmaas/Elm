@@ -43,6 +43,8 @@ namespace elm {
 		std::string text;
 		std::shared_ptr<font> font;
 		glm::vec4 color = glm::vec4(1.0f);
+		float kerning = 0.0f;
+		float line_spacing = 0.0f;
 
 		text_renderer_component(void) = default;
 		text_renderer_component(const text_renderer_component &) = default;

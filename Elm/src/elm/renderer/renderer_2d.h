@@ -17,6 +17,12 @@ namespace elm::renderer_2d {
 		inline uint32_t get_index_count(void) const { return quad_count * 6u + circle_count * 6u; }
 	};
 
+	struct text_render_params {
+		glm::vec4 color = glm::vec4(1.0f);
+		float kerning = 0.0f;
+		float line_spacing = 0.0f;
+	};
+
 	extern void init(void);
 	extern void shutdown(void);
 
@@ -65,7 +71,7 @@ namespace elm::renderer_2d {
 	extern void draw_line(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec4 &color = glm::vec4(1.0f));
 
 	// -- Draw text --
-	extern void draw_text(const std::string &text, const std::shared_ptr<font> &font, const glm::mat4 &transform, const glm::vec4 &color = glm::vec4(1.0f));
+	extern void draw_text(const std::string &text, const std::shared_ptr<font> &font, const glm::mat4 &transform, const struct text_render_params &params);
 
 	// -- Statistics --
 	extern struct statistics get_stats(void);
