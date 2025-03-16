@@ -6,14 +6,40 @@
 
 namespace elm {
 
+	static GLenum image_format_to_gl(image_format format)
+	{
+		switch (format) {
+		//case elm::image_format::R8: return
+		case elm::image_format::RGB8: return GL_RGB;
+		case elm::image_format::RGBA8: return GL_RGBA;
+		//case elm::image_format::RGBA32F: return
+		default:
+			ELM_CORE_ASSERT(false, "Unknown image format");
+			return 0;
+		}
+	}
+
+	static GLenum image_format_to_gl_internal(image_format format)
+	{
+		switch (format) {
+		//case elm::image_format::R8: return
+		case elm::image_format::RGB8: return GL_RGB8;
+		case elm::image_format::RGBA8: return GL_RGBA8;
+		//case elm::image_format::RGBA32F: return
+		default:
+			ELM_CORE_ASSERT(false, "Unknown image format");
+			return 0;
+		}
+	}
+
 	opengl_texture_2d::opengl_texture_2d(uint32_t width, uint32_t height, texture_2d_specification spec)
 		: m_width(width), m_height(height), m_spec(spec), m_fpath("<BUFFER>")
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		// TODO: Parameterize this
-		m_internal_format = GL_RGBA8;
-		m_data_format = GL_RGBA;
+		m_internal_format = image_format_to_gl_internal(spec.format);
+		m_data_format = image_format_to_gl(spec.format);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_renderer_id);
 		glTextureStorage2D(m_renderer_id, 1, m_internal_format, m_width, m_height);
