@@ -71,12 +71,8 @@ namespace elm {
 	};
 
 	struct point_light_component {
-		glm::vec3 color;
-		float intensity;
-		// Attenuation;
-		float constant;
-		float linear;
-		float quadratic;
+		glm::vec3 color = glm::vec3(1.0f);
+		float intensity = 1.0f;
 
 		point_light_component(void) = default;
 		point_light_component(const point_light_component &) = default;

@@ -14,7 +14,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	auto font = elm::font::get_default();
 
 	auto shader = elm::shader::create("content/shaders/texture_unit.glsl");
-	m_specular_generic_shader = elm::shader::create("content/shaders/specular_generic.glsl");
+	m_pbr_shader = elm::shader::create("content/shaders/pbr.glsl");
 	//auto unlit_generic_shader = elm::shader::create("content/shaders/unlit_generic.glsl");
 
 	auto cube_mesh = elm::mesh::create("content/meshes/cube.obj");
@@ -55,9 +55,6 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		auto &light = m_point_light.add_component<elm::point_light_component>();
 		light.color = { 1.0f, 0.0f, 1.0f };
 		light.intensity = 1.0f;
-		light.constant = 1.0f;
-		light.linear = 0.09f;
-		light.quadratic = 0.032f;
 
 		auto &tc = m_point_light.add_component<elm::transform_component>();
 		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 2.0f });
@@ -69,9 +66,6 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		auto &light = entity.add_component<elm::point_light_component>();
 		light.color = { 0.0f, 1.0f, 0.0f };
 		light.intensity = 1.0f;
-		light.constant = 1.0f;
-		light.linear = 0.09f;
-		light.quadratic = 0.032f;
 
 		auto &tc = entity.add_component<elm::transform_component>();
 		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 2.0f });
@@ -159,7 +153,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 		auto &renderer = entity.add_component<elm::mesh_renderer_component>();
 		renderer.mesh = cube_mesh;
-		renderer.shader = m_specular_generic_shader;
+		renderer.shader = m_pbr_shader;
 		renderer.textures.push_back(texture_checkerboard);
 
 		auto &tc = entity.add_component<elm::transform_component>();
@@ -171,7 +165,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 		auto &renderer = m_suzanne.add_component<elm::mesh_renderer_component>();
 		renderer.mesh = suzanne_mesh;
-		renderer.shader = m_specular_generic_shader;
+		renderer.shader = m_pbr_shader;
 		renderer.textures.push_back(texture_checkerboard);
 
 		auto &tc = m_suzanne.add_component<elm::transform_component>();
@@ -190,7 +184,7 @@ void sandbox_3d_layer::on_detach(void)
 void sandbox_3d_layer::on_update(elm::timestep ts)
 {
 	if (elm::input::is_key_pressed(elm::key::F5)) {
-		m_specular_generic_shader->reload();
+		m_pbr_shader->reload();
 	}
 
 	m_camera_controller.on_update(ts);
@@ -248,9 +242,6 @@ void sandbox_3d_layer::on_imgui_render(void)
 	ImGui::DragFloat("Speed##PointLight", &m_point_light_speed, 0.01f);
 	ImGui::ColorEdit3("Color##PointLight", glm::value_ptr(plc.color));
 	ImGui::DragFloat("Intensity##PointLight", &plc.intensity, 0.01f);
-	ImGui::DragFloat("Constant##PointLight", &plc.constant, 0.01f);
-	ImGui::DragFloat("Linear##PointLight", &plc.linear, 0.01f);
-	ImGui::DragFloat("Quadratic##PointLight", &plc.quadratic, 0.001f);
 
 	ImGui::End();
 

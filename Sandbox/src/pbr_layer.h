@@ -1,11 +1,12 @@
 #pragma once
 
 #include <elm.h>
+#include <memory>
 
-struct sandbox_3d_layer : elm::layer
+struct pbr_layer : elm::layer
 {
-	sandbox_3d_layer(void);
-	virtual ~sandbox_3d_layer(void) = default;
+	pbr_layer(void);
+	virtual ~pbr_layer(void) = default;
 
 	virtual void on_attach(void) override;
 	virtual void on_detach(void) override;
@@ -21,10 +22,4 @@ private:
 
 	std::shared_ptr<elm::scene> m_scene;
 	std::shared_ptr<elm::shader> m_pbr_shader;
-
-	elm::entity m_dir_light;
-	elm::entity m_point_light;
-	elm::entity m_suzanne;
-
-	float m_point_light_speed = 2.0f;
 };
