@@ -29,8 +29,10 @@ layout (location = 3) out flat int v_texture_slot;
 
 void main()
 {
+	mat3 normal_matrix = transpose(inverse(mat3(u_model.transform)));
+
 	v_output.uv = a_uv;
-	v_output.normal = a_normal;
+	v_output.normal = normalize(normal_matrix * a_normal);
 	v_output.frag_pos = (u_model.transform * vec4(a_position, 1.0)).xyz;
 	v_texture_slot = a_texture_slot;
 
@@ -156,4 +158,6 @@ void main()
 
 	vec4 color = texture(u_textures[v_texture_slot], v_input.uv);
 	o_color = vec4(color.rgb * light, color.a);
+
+	//o_color = vec4((normal + vec3(1.0, 1.0, 1.0)) * 0.5, 1.0);
 }
