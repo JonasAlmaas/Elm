@@ -47,10 +47,10 @@ sprite_sheet_layer::sprite_sheet_layer(void)
 void sprite_sheet_layer::on_attach(void)
 {
 	m_texture_grass_tileset = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png", {
-		.mag_filter = elm::texture_2d_filter::NEAREST
+		.mag_filter = elm::texture_filter::NEAREST
 	});
 	m_texture_water_tileset = elm::texture_2d::create("content/textures/sprout-lands/water_tileset.png", {
-		.mag_filter = elm::texture_2d_filter::NEAREST
+		.mag_filter = elm::texture_filter::NEAREST
 	});
 
 	for (int y = 0; y < 5; ++y) {

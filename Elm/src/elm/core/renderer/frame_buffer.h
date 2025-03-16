@@ -26,11 +26,11 @@ namespace elm {
 			: texture_format(format) {}
 
 		frame_buffer_texture_format texture_format = frame_buffer_texture_format::None;
-		texture_2d_wrap wrap_r = texture_2d_wrap::CLAMP_TO_EDGE;
-		texture_2d_wrap wrap_s = texture_2d_wrap::CLAMP_TO_EDGE;
-		texture_2d_wrap wrap_t = texture_2d_wrap::CLAMP_TO_EDGE;
-		texture_2d_filter min_filter = texture_2d_filter::LINEAR;
-		texture_2d_filter mag_filter = texture_2d_filter::NEAREST;
+		texture_wrap wrap_r = texture_wrap::CLAMP_TO_EDGE;
+		texture_wrap wrap_s = texture_wrap::CLAMP_TO_EDGE;
+		texture_wrap wrap_t = texture_wrap::CLAMP_TO_EDGE;
+		texture_filter min_filter = texture_filter::LINEAR;
+		texture_filter mag_filter = texture_filter::NEAREST;
 	};
 
 	struct frame_buffer_attachment_specification {

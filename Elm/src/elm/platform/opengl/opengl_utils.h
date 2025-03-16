@@ -6,6 +6,6 @@
 
 namespace elm::utils {
 
-	extern GLint texture_2d_filtering_to_gl(texture_2d_filter filter);
-	extern GLint texture_2d_wrap_to_gl(texture_2d_wrap wrap);
+	extern GLint texture_2d_filtering_to_gl(texture_filter filter);
+	extern GLint texture_2d_wrap_to_gl(texture_wrap wrap);
 }
