@@ -20,10 +20,9 @@ namespace elm::scene_renderer {
 
 	struct directional_light { // Strange order so it aligns in gpu memory. vec3 has an alignment of 16 byts
 		glm::vec3 direction;
-		float intensity;
+		float padding;
 		glm::vec3 color;
-		float ambient_intensity;
-		glm::vec3 ambient_color;
+		float padding2;
 	};
 
 	struct point_light {
@@ -37,7 +36,6 @@ namespace elm::scene_renderer {
 
 	struct lights_data {
 		struct directional_light dir_light;
-		uint32_t padding;
 		int point_light_count;
 		uint32_t padding2[3];
 		struct point_light point_lights[MAX_POINT_LIGHTS];
@@ -120,20 +118,16 @@ namespace elm::scene_renderer {
 
 		static struct lights_data s_lights_data;
 
-		// TODO: Make this work with the new PBR shader
-		/*{ // Directional light
+		{ // Directional light
 			auto view = reg.view<directional_light_component>();
 			ELM_CORE_ASSERT(view.size(), "Scene must have one directional light");
 			for (auto entity : view) {
 				auto &dlc = view.get<directional_light_component>(entity);
 
 				s_lights_data.dir_light.direction = dlc.direction;
-				s_lights_data.dir_light.color = dlc.color;
-				s_lights_data.dir_light.intensity = dlc.intensity;
-				s_lights_data.dir_light.ambient_color = dlc.ambient_color;
-				s_lights_data.dir_light.ambient_intensity = dlc.ambient_intensity;
+				s_lights_data.dir_light.color = dlc.color * dlc.intensity;
 			}
-		}*/
+		}
 
 		{ // Point lights
 			s_lights_data.point_light_count = 0;

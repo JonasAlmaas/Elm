@@ -63,8 +63,6 @@ namespace elm {
 		glm::vec3 direction;
 		glm::vec3 color;
 		float intensity;
-		glm::vec3 ambient_color;
-		float ambient_intensity;
 
 		directional_light_component(void) = default;
 		directional_light_component(const directional_light_component &) = default;

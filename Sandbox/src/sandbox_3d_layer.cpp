@@ -45,8 +45,6 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		light.direction = glm::normalize(glm::vec3(1, -1, -1));
 		light.color = { 1.0f, 0.79f, 0.56f };
 		light.intensity = 1.0f;
-		light.ambient_color = { 0.54f, 0.78f, 1.0f };
-		light.ambient_intensity = 0.4f;
 	}
 
 	{
@@ -234,8 +232,6 @@ void sandbox_3d_layer::on_imgui_render(void)
 	auto &dlc = m_dir_light.get_component<elm::directional_light_component>();
 	ImGui::ColorEdit3("Color##DirectionalLight", glm::value_ptr(dlc.color));
 	ImGui::DragFloat("Intensity##DirectionalLight", &dlc.intensity, 0.01f);
-	ImGui::ColorEdit3("Ambient color##DirectionalLight", glm::value_ptr(dlc.ambient_color));
-	ImGui::DragFloat("Ambient intensity##DirectionalLight", &dlc.ambient_intensity, 0.01f);
 
 	ImGui::Text("Point light");
 	auto &plc = m_point_light.get_component<elm::point_light_component>();

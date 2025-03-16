@@ -32,7 +32,7 @@ pbr_layer::pbr_layer(void)
 	m_scene->set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
 	m_scene->set_show_world_grid(false);
 
-	// Directional light (Currently not active)
+	// Directional light
 	{
 		elm::entity entity = m_scene->create_entity();
 
@@ -40,8 +40,6 @@ pbr_layer::pbr_layer(void)
 		light.direction = glm::normalize(glm::vec3(1, -1, -1));
 		light.color = { 1.0f, 0.79f, 0.56f };
 		light.intensity = 1.0f;
-		light.ambient_color = { 0.54f, 0.78f, 1.0f };
-		light.ambient_intensity = 0.4f;
 	}
 
 	// Point lights
