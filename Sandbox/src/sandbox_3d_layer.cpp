@@ -11,6 +11,8 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	m_camera_controller.set_pitch_deg(-55.0f);
 	m_camera_controller.set_yaw_deg(45.0f);
 
+	auto font = elm::font::get_default();
+
 	auto shader = elm::shader::create("content/shaders/texture_unit.glsl");
 	m_specular_generic_shader = elm::shader::create("content/shaders/specular_generic.glsl");
 	//auto unlit_generic_shader = elm::shader::create("content/shaders/unlit_generic.glsl");
@@ -25,6 +27,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		}
 	}
 	auto texture_checkerboard = elm::texture_2d::create(8, 8, {
+		.format = elm::image_format::RGBA8,
 		.mag_filter = elm::texture_2d_filter::NEAREST
 	});
 	texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
@@ -132,6 +135,20 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 		auto &tc = entity.add_component<elm::transform_component>();
 		tc.transform = glm::translate(glm::mat4(1.0f), { -1.0f, 1.0f, 0.0f })
+			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
+	}
+
+	// Text
+	{
+		elm::entity entity = m_scene->create_entity();
+
+		auto &circle_renderer = entity.add_component<elm::text_renderer_component>();
+		circle_renderer.text = "Sandbox";
+		circle_renderer.font = font;
+		circle_renderer.color = { 0.2f, 0.8f, 0.3f, 1.0f };
+
+		auto &tc = entity.add_component<elm::transform_component>();
+		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 1.0f })
 			* glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), { 1.0f, 0.0f, 0.0f });
 	}
 

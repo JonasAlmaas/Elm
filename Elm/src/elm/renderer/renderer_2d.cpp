@@ -5,6 +5,7 @@
 #include "elm/core/renderer/texture.h"
 #include "elm/core/renderer/uniform_buffer.h"
 #include "elm/core/renderer/vertex_array.h"
+#include "elm/renderer/msdf_data.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <array>
 
@@ -29,7 +30,14 @@ namespace elm::renderer_2d {
 		glm::vec3 position;
 		glm::vec4 color;
 	};
-	
+
+	struct text_vertex {
+		glm::vec3 position;
+		glm::vec2 uv;
+		glm::vec4 color;
+		int texture_slot;
+	};
+
 	struct renderer_2d_data {
 		static const uint32_t max_texture_slots = 32; // TODO: Render Capabilities
 
@@ -47,13 +55,14 @@ namespace elm::renderer_2d {
 		std::shared_ptr<shader> sprite_shader;
 		std::shared_ptr<shader> circle_shader;
 		std::shared_ptr<shader> line_shader;
+		std::shared_ptr<shader> text_shader;
 
 		std::shared_ptr<texture_2d> texture_blank; // Texture slot 0
 
 		// Sprite
 		std::shared_ptr<vertex_array> batch_sprite_vertex_array;
 		std::shared_ptr<vertex_buffer> batch_sprite_vertex_buffer;
-		uint32_t batch_sprite_count = 0;
+		uint32_t batch_sprite_count = 0u;
 		sprite_vertex *batch_sprite_vertex_buf_base = nullptr;
 		sprite_vertex *batch_sprite_vertex_buf_ptr = nullptr;
 		std::array<std::shared_ptr<texture_2d>, max_texture_slots> batch_sprite_texture_slots;
@@ -62,7 +71,7 @@ namespace elm::renderer_2d {
 		// Circle
 		std::shared_ptr<vertex_array> batch_circle_vertex_array;
 		std::shared_ptr<vertex_buffer> batch_circle_vertex_buffer;
-		uint32_t batch_circle_count = 0;
+		uint32_t batch_circle_count = 0u;
 		circle_vertex *batch_circle_vertex_buf_base = nullptr;
 		circle_vertex *batch_circle_vertex_buf_ptr = nullptr;
 
@@ -70,9 +79,18 @@ namespace elm::renderer_2d {
 		float line_thickness = 2.0f;
 		std::shared_ptr<vertex_array> batch_line_vertex_array;
 		std::shared_ptr<vertex_buffer> batch_line_vertex_buffer;
-		uint32_t batch_line_count = 0;
+		uint32_t batch_line_count = 0u;
 		line_vertex *batch_line_vertex_buf_base = nullptr;
 		line_vertex *batch_line_vertex_buf_ptr = nullptr;
+
+		// Text
+		std::shared_ptr<vertex_array> batch_text_vertex_array;
+		std::shared_ptr<vertex_buffer> batch_text_vertex_buffer;
+		uint32_t batch_text_glyph_count = 0u;
+		text_vertex *batch_text_vertex_buf_base = nullptr;
+		text_vertex *batch_text_vertex_buf_ptr = nullptr;
+		std::array<std::shared_ptr<texture_2d>, max_texture_slots> batch_text_texture_slots;
+		uint32_t batch_text_texture_slot_ix = 0u;
 
 		struct statistics stats;
 	};
@@ -100,9 +118,10 @@ namespace elm::renderer_2d {
 		s_data.camera_uniform_buffer = uniform_buffer::create(sizeof(struct renderer_2d_data::camera_data), 0);
 
 		// Load shaders
-		s_data.sprite_shader = elm::shader::create("content/shaders/sprite.glsl");
-		s_data.circle_shader = elm::shader::create("content/shaders/circle_unlit.glsl");
-		s_data.line_shader = elm::shader::create("content/shaders/line.glsl");
+		s_data.sprite_shader = shader::create("content/shaders/renderer_2d_sprite.glsl");
+		s_data.circle_shader = shader::create("content/shaders/renderer_2d_circle.glsl");
+		s_data.line_shader = shader::create("content/shaders/renderer_2d_line.glsl");
+		s_data.text_shader = shader::create("content/shaders/renderer_2d_text.glsl");
 
 		// Create blank white texture
 		s_data.texture_blank = texture_2d::create(1, 1);
@@ -111,14 +130,14 @@ namespace elm::renderer_2d {
 		s_data.batch_sprite_texture_slots[0] = s_data.texture_blank;
 
 		// -- Quad vertex array --
-		s_data.batch_sprite_vertex_array = elm::vertex_array::create();
+		s_data.batch_sprite_vertex_array = vertex_array::create();
 
-		s_data.batch_sprite_vertex_buffer = elm::vertex_buffer::create(renderer_2d_data::max_sprite_verticies * sizeof(sprite_vertex));
-		elm::vertex_buffer_layout quad_vb_layout = {
-			{ elm::shader_data_type::Float3, "a_position" },
-			{ elm::shader_data_type::Float2, "a_uv" },
-			{ elm::shader_data_type::Float4, "a_color" },
-			{ elm::shader_data_type::Int, "a_texture_slot" } };
+		s_data.batch_sprite_vertex_buffer = vertex_buffer::create(renderer_2d_data::max_sprite_verticies * sizeof(sprite_vertex));
+		vertex_buffer_layout quad_vb_layout = {
+			{ shader_data_type::Float3, "a_position" },
+			{ shader_data_type::Float2, "a_uv" },
+			{ shader_data_type::Float4, "a_color" },
+			{ shader_data_type::Int, "a_texture_slot" } };
 		s_data.batch_sprite_vertex_buffer->set_layout(&quad_vb_layout);
 		s_data.batch_sprite_vertex_array->add_vertex_buffer(s_data.batch_sprite_vertex_buffer);
 
@@ -133,38 +152,55 @@ namespace elm::renderer_2d {
 			quad_indices[i * 6 + 4] = i * 4 + 2;
 			quad_indices[i * 6 + 5] = i * 4 + 3;
 		}
-		auto quad_ib = elm::index_buffer::create(quad_indices, renderer_2d_data::max_sprite_indices);
+		auto quad_ib = index_buffer::create(quad_indices, renderer_2d_data::max_sprite_indices);
 		s_data.batch_sprite_vertex_array->set_index_buffer(quad_ib);
 
 		// -- Circle vertex array --
-		s_data.batch_circle_vertex_array = elm::vertex_array::create();
+		s_data.batch_circle_vertex_array = vertex_array::create();
 
-		s_data.batch_circle_vertex_buffer = elm::vertex_buffer::create(renderer_2d_data::max_sprite_verticies * sizeof(circle_vertex));
-		elm::vertex_buffer_layout circle_vb_layout = {
-			{ elm::shader_data_type::Float3, "a_world_position" },
-			{ elm::shader_data_type::Float3, "a_local_position" },
-			{ elm::shader_data_type::Float4, "a_color" },
-			{ elm::shader_data_type::Float, "a_thickness" },
-			{ elm::shader_data_type::Float, "a_fade" } };
+		s_data.batch_circle_vertex_buffer = vertex_buffer::create(renderer_2d_data::max_sprite_verticies * sizeof(circle_vertex));
+		vertex_buffer_layout circle_vb_layout = {
+			{ shader_data_type::Float3, "a_world_position" },
+			{ shader_data_type::Float3, "a_local_position" },
+			{ shader_data_type::Float4, "a_color" },
+			{ shader_data_type::Float, "a_thickness" },
+			{ shader_data_type::Float, "a_fade" } };
 		s_data.batch_circle_vertex_buffer->set_layout(&circle_vb_layout);
 		s_data.batch_circle_vertex_array->add_vertex_buffer(s_data.batch_circle_vertex_buffer);
 
 		s_data.batch_circle_vertex_buf_base = new circle_vertex[renderer_2d_data::max_sprite_verticies];
 
-		auto circle_ib = elm::index_buffer::create(quad_indices, renderer_2d_data::max_sprite_indices);
+		auto circle_ib = index_buffer::create(quad_indices, renderer_2d_data::max_sprite_indices);
 		s_data.batch_circle_vertex_array->set_index_buffer(circle_ib);
 
 		// -- Line vertex array --
-		s_data.batch_line_vertex_array = elm::vertex_array::create();
+		s_data.batch_line_vertex_array = vertex_array::create();
 
-		s_data.batch_line_vertex_buffer = elm::vertex_buffer::create(renderer_2d_data::max_sprite_verticies * sizeof(line_vertex));
-		elm::vertex_buffer_layout line_vb_layout = {
-			{ elm::shader_data_type::Float3, "a_position" },
-			{ elm::shader_data_type::Float4, "a_color" } };
+		s_data.batch_line_vertex_buffer = vertex_buffer::create(renderer_2d_data::max_sprite_verticies * sizeof(line_vertex));
+		vertex_buffer_layout line_vb_layout = {
+			{ shader_data_type::Float3, "a_position" },
+			{ shader_data_type::Float4, "a_color" } };
 		s_data.batch_line_vertex_buffer->set_layout(&line_vb_layout);
 		s_data.batch_line_vertex_array->add_vertex_buffer(s_data.batch_line_vertex_buffer);
 
 		s_data.batch_line_vertex_buf_base = new line_vertex[renderer_2d_data::max_sprite_verticies];
+
+		// -- Text vertex array --
+		s_data.batch_text_vertex_array = vertex_array::create();
+
+		s_data.batch_text_vertex_buffer = vertex_buffer::create(renderer_2d_data::max_sprite_verticies * sizeof(text_vertex));
+		vertex_buffer_layout text_vb_layout = {
+			{ shader_data_type::Float3, "a_position" },
+			{ shader_data_type::Float2, "a_uv" },
+			{ shader_data_type::Float4, "a_color" },
+			{ shader_data_type::Int, "a_texture_slot" } };
+		s_data.batch_text_vertex_buffer->set_layout(&text_vb_layout);
+		s_data.batch_text_vertex_array->add_vertex_buffer(s_data.batch_text_vertex_buffer);
+
+		auto text_ib = index_buffer::create(quad_indices, renderer_2d_data::max_sprite_indices);
+		s_data.batch_text_vertex_array->set_index_buffer(text_ib);
+
+		s_data.batch_text_vertex_buf_base = new text_vertex[renderer_2d_data::max_sprite_verticies];
 
 		delete[] quad_indices;
 	}
@@ -184,6 +220,10 @@ namespace elm::renderer_2d {
 		delete[] s_data.batch_line_vertex_buf_base;
 		s_data.batch_line_vertex_buf_base = nullptr;
 		s_data.batch_line_vertex_buf_ptr = nullptr;
+
+		delete[] s_data.batch_text_vertex_buf_base;
+		s_data.batch_text_vertex_buf_base = nullptr;
+		s_data.batch_text_vertex_buf_ptr = nullptr;
 	}
 
 	extern void begin_scene(const camera *camera)
@@ -203,6 +243,10 @@ namespace elm::renderer_2d {
 
 		s_data.batch_line_count = 0u;
 		s_data.batch_line_vertex_buf_ptr = s_data.batch_line_vertex_buf_base;
+
+		s_data.batch_text_glyph_count = 0u;
+		s_data.batch_text_vertex_buf_ptr = s_data.batch_text_vertex_buf_base;
+		s_data.batch_text_texture_slot_ix = 0u;
 	}
 
 	extern void end_scene(void)
@@ -272,11 +316,37 @@ namespace elm::renderer_2d {
 
 		s_data.line_shader->bind();
 		s_data.batch_line_vertex_array->bind();
-		elm::render_command::set_line_thickness(s_data.line_thickness);
+		render_command::set_line_thickness(s_data.line_thickness);
 		render_command::draw_line(s_data.batch_line_vertex_array, s_data.batch_line_count * 2);
 
 		s_data.batch_line_count = 0;
 		s_data.batch_line_vertex_buf_ptr = s_data.batch_line_vertex_buf_base;
+
+		++s_data.stats.draw_calls;
+	}
+
+	static void flush_text(void)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		if (s_data.batch_text_glyph_count == 0) {
+			return;
+		}
+
+		uint32_t data_size = (uint32_t)((uint8_t *)s_data.batch_text_vertex_buf_ptr - (uint8_t *)s_data.batch_text_vertex_buf_base);
+		s_data.batch_text_vertex_buffer->set_data(s_data.batch_text_vertex_buf_base, data_size);
+
+		for (uint32_t i = 0; i < s_data.batch_text_texture_slot_ix; ++i) {
+			s_data.batch_text_texture_slots[i]->bind(i);
+		}
+
+		s_data.text_shader->bind();
+		s_data.batch_text_vertex_array->bind();
+		render_command::draw_indexed(s_data.batch_text_vertex_array, s_data.batch_text_glyph_count * 6);
+
+		s_data.batch_text_glyph_count  = 0;
+		s_data.batch_text_vertex_buf_ptr = s_data.batch_text_vertex_buf_base;
+		s_data.batch_text_texture_slot_ix = 1;
 
 		++s_data.stats.draw_calls;
 	}
@@ -286,6 +356,7 @@ namespace elm::renderer_2d {
 		flush_sprites();
 		flush_circles();
 		flush_lines();
+		flush_text();
 	}
 
 #pragma region Sprites
@@ -613,6 +684,128 @@ namespace elm::renderer_2d {
 	extern void draw_line(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec4 &color)
 	{
 		draw_line(glm::vec3(p0, 0.0f), glm::vec3(p1, 0.0f), color);
+	}
+
+#pragma endregion
+
+#pragma region Text
+
+	extern void draw_text(
+		const std::string &text,
+		const std::shared_ptr<font> &font,
+		const glm::mat4 &transform,
+		const glm::vec4 &color)
+	{
+		const auto &font_geometry = font->get_msdf_data()->font_geometry;
+		const auto &metrics = font_geometry.getMetrics();
+		auto &atlas_texture = font->get_atlas_texture();
+
+		int texture_slot = -1;
+
+		for (uint32_t i = 0; i < s_data.batch_text_texture_slot_ix; ++i) {
+			if (s_data.batch_text_texture_slots[i]->equal(&*atlas_texture)) {
+				texture_slot = (int)i;
+				break;
+			}
+		}
+
+		if (texture_slot == -1) {
+			if (s_data.batch_text_texture_slot_ix >= renderer_2d_data::max_texture_slots) {
+				flush_text();
+			}
+
+			s_data.batch_text_texture_slots[s_data.batch_text_texture_slot_ix] = atlas_texture;
+			texture_slot = s_data.batch_text_texture_slot_ix++;
+		}
+
+		double x = 0.0, y = 0.0;
+		double fs_scale = 1.0 / (metrics.ascenderY - metrics.descenderY);
+		float line_height_offset = 0.0f;
+
+		for (size_t i = 0; i < text.size(); ++i) {
+			char character = text[i];
+			if (character == '\r') {
+				continue;
+			}
+
+			if (character == '\n') {
+				x = 0.0;
+				y -= fs_scale * metrics.lineHeight + line_height_offset;
+				continue;
+			}
+
+			auto glyph = font_geometry.getGlyph(character);
+			if (!glyph) {
+				glyph = font_geometry.getGlyph('?');
+				if (!glyph) {
+					ELM_CORE_ASSERT(false, "Unable to load missing glpyh glpyh");
+					return;
+				}
+			}
+
+			if (character == '\t') {
+				glyph = font_geometry.getGlyph(' ');
+			}
+
+			double al, ab, ar, at;
+			glyph->getQuadAtlasBounds(al, ab, ar, at);
+			glm::vec2 uv_min((float)al, (float)ab);
+			glm::vec2 uv_max((float)ar, (float)at);
+
+			double pl, pb, pr, pt;
+			glyph->getQuadPlaneBounds(pl, pb, pr, pt);
+			glm::vec2 quad_min((float)pl, (float)pb);
+			glm::vec2 quad_max((float)pr, (float)pt);
+
+			quad_min *= fs_scale, quad_max *= fs_scale;
+			quad_min += glm::vec2(x, y);
+			quad_max += glm::vec2(x, y);
+
+			float texel_width = 1.0f / atlas_texture->get_width();
+			float texel_height = 1.0f / atlas_texture->get_height();
+			uv_min *= glm::vec2(texel_width, texel_height);
+			uv_max *= glm::vec2(texel_width, texel_height);
+
+			// Render
+			s_data.batch_text_vertex_buf_ptr->position = transform * glm::vec4(quad_min, 0.0f, 1.0f);;
+			s_data.batch_text_vertex_buf_ptr->uv = uv_min;
+			s_data.batch_text_vertex_buf_ptr->color = color;
+			s_data.batch_text_vertex_buf_ptr->texture_slot = texture_slot;
+			++s_data.batch_text_vertex_buf_ptr;
+
+			s_data.batch_text_vertex_buf_ptr->position = transform * glm::vec4(quad_max.x, quad_min.y, 0.0f, 1.0f);;
+			s_data.batch_text_vertex_buf_ptr->uv = { uv_max.x, uv_min.y };
+			s_data.batch_text_vertex_buf_ptr->color = color;
+			s_data.batch_text_vertex_buf_ptr->texture_slot = texture_slot;
+			++s_data.batch_text_vertex_buf_ptr;
+
+			s_data.batch_text_vertex_buf_ptr->position = transform * glm::vec4(quad_max, 0.0f, 1.0f);;
+			s_data.batch_text_vertex_buf_ptr->uv = uv_max;
+			s_data.batch_text_vertex_buf_ptr->color = color;
+			s_data.batch_text_vertex_buf_ptr->texture_slot = texture_slot;
+			++s_data.batch_text_vertex_buf_ptr;
+
+			s_data.batch_text_vertex_buf_ptr->position = transform * glm::vec4(quad_min.x, quad_max.y, 0.0f, 1.0f);;
+			s_data.batch_text_vertex_buf_ptr->uv = { uv_min.x, uv_max.y };
+			s_data.batch_text_vertex_buf_ptr->color = color;
+			s_data.batch_text_vertex_buf_ptr->texture_slot = texture_slot;
+			++s_data.batch_text_vertex_buf_ptr;
+
+			++s_data.batch_text_glyph_count;
+
+			if (i < text.size() - 1) {
+				double advance = glyph->getAdvance();
+				char next_character = text[i + 1];
+				font_geometry.getAdvance(advance, character, next_character);
+
+				float kerning_offset = 0.0f;
+				x += fs_scale * advance + kerning_offset;
+			}
+		}
+
+		if (s_data.batch_text_glyph_count >= renderer_2d_data::max_sprites) {
+			flush_text();
+		}
 	}
 
 #pragma endregion

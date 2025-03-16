@@ -104,6 +104,17 @@ namespace elm::scene_renderer {
 		}
 	}
 
+	inline static void render_text_renderer_components(const entt::registry &reg)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		auto view = reg.view<transform_component, text_renderer_component>();
+		for (auto entity : view) {
+			auto [tc, rc] = view.get<transform_component, text_renderer_component>(entity);
+			renderer_2d::draw_text(rc.text, rc.font, tc.transform, rc.color);
+		}
+	}
+
 	inline static void prepare_lights(const entt::registry &reg)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
@@ -179,9 +190,9 @@ namespace elm::scene_renderer {
 
 		render_sprite_renderer_components(reg);
 		render_circle_renderer_components(reg);
+		render_text_renderer_components(reg);
 
 		renderer_2d::end_scene();
-
 		// -- Renderer 3d --
 		renderer::begin_scene(camera);
 

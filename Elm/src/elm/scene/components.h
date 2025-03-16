@@ -39,6 +39,15 @@ namespace elm {
 		circle_renderer_component(const circle_renderer_component &) = default;
 	};
 
+	struct text_renderer_component {
+		std::string text;
+		std::shared_ptr<font> font;
+		glm::vec4 color = glm::vec4(1.0f);
+
+		text_renderer_component(void) = default;
+		text_renderer_component(const text_renderer_component &) = default;
+	};
+
 	struct mesh_renderer_component {
 		std::shared_ptr<mesh> mesh;
 		std::shared_ptr<shader> shader;
