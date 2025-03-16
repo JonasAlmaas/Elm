@@ -4,6 +4,7 @@
 layout (location = 0) in vec3 a_position;
 layout (location = 1) in vec2 a_uv;
 layout (location = 2) in vec3 a_normal;
+layout (location = 3) in int a_texture_slot;
 
 layout (std140, binding = 0) uniform camera
 {
@@ -24,12 +25,14 @@ struct vertex_output
 };
 
 layout (location = 0) out vertex_output v_output;
+layout (location = 3) out flat int v_texture_slot;
 
 void main()
 {
 	v_output.uv = a_uv;
 	v_output.normal = a_normal;
 	v_output.frag_pos = (u_model.transform * vec4(a_position, 1.0)).xyz;
+	v_texture_slot = a_texture_slot;
 
 	gl_Position = u_camera.view_projection * u_model.transform * vec4(a_position, 1.0);
 }
@@ -69,6 +72,7 @@ struct point_light
 };
 
 layout (location = 0) in vertex_output v_input;
+layout (location = 3) in flat int v_texture_slot;
 
 layout (std140, binding = 0) uniform camera
 {
@@ -150,6 +154,6 @@ void main()
 		light += calc_point_light(normal, u_lights.point_lights[i]);
 	}
 
-	vec4 color = texture(u_textures[0], v_input.uv);
+	vec4 color = texture(u_textures[v_texture_slot], v_input.uv);
 	o_color = vec4(color.rgb * light, color.a);
 }
