@@ -20,29 +20,22 @@ namespace elm::scene_renderer {
 
 	struct directional_light { // Strange order so it aligns in gpu memory. vec3 has an alignment of 16 byts
 		glm::vec3 direction;
-		float intensity;
+		float padding;
 		glm::vec3 color;
-		float ambient_intensity;
-		glm::vec3 ambient_color;
+		float padding2;
 	};
 
-	struct point_light
-	{
+	struct point_light {
 		glm::vec3 position;
-		float intensity;
+		float padding;
 		glm::vec3 color;
-		// Attenuation;
-		float constant;
-		float linear;
-		float quadratic;
-		uint32_t padding[2];
+		float padding2;
 	};
 
 	enum {MAX_POINT_LIGHTS=4};
 
 	struct lights_data {
 		struct directional_light dir_light;
-		uint32_t padding;
 		int point_light_count;
 		uint32_t padding2[3];
 		struct point_light point_lights[MAX_POINT_LIGHTS];
@@ -71,10 +64,8 @@ namespace elm::scene_renderer {
 		auto view = reg.view<transform_component, mesh_renderer_component>();
 		for (auto entity : view) {
 			auto [tc, rc] = view.get<transform_component, mesh_renderer_component>(entity);
-			for (uint32_t i = 0; i < rc.textures.size(); ++i) {
-				rc.textures[i]->bind(i);
-			}
-			renderer::submit(rc.shader, rc.mesh->vertex_array, tc.transform);
+			rc.material->bind();
+			renderer::submit(rc.material->shader, rc.mesh->vertex_array, tc.transform);
 		}
 	}
 
@@ -125,6 +116,20 @@ namespace elm::scene_renderer {
 
 		static struct lights_data s_lights_data;
 
+		{ // Environment light
+			auto view = reg.view<environment_light_component>();
+			ELM_CORE_ASSERT(view.size(), "Scene must have one environment light");
+			for (auto entity : view) {
+				auto& elc = view.get<environment_light_component>(entity);
+
+				// TODO: Set this per draw maybe?
+				// Kinda assuming we are only using one shader...
+				elc.irradiance_map->bind(0);
+				elc.prefilter_map->bind(1);
+				elc.brdf_lut_map->bind(2);
+			}
+		}
+
 		{ // Directional light
 			auto view = reg.view<directional_light_component>();
 			ELM_CORE_ASSERT(view.size(), "Scene must have one directional light");
@@ -132,10 +137,7 @@ namespace elm::scene_renderer {
 				auto &dlc = view.get<directional_light_component>(entity);
 
 				s_lights_data.dir_light.direction = dlc.direction;
-				s_lights_data.dir_light.color = dlc.color;
-				s_lights_data.dir_light.intensity = dlc.intensity;
-				s_lights_data.dir_light.ambient_color = dlc.ambient_color;
-				s_lights_data.dir_light.ambient_intensity = dlc.ambient_intensity;
+				s_lights_data.dir_light.color = dlc.color * dlc.intensity;
 			}
 		}
 
@@ -150,11 +152,7 @@ namespace elm::scene_renderer {
 					auto &pl = s_lights_data.point_lights[s_lights_data.point_light_count];
 
 					elm::math::decompose_transform(tc.transform, &pl.position, nullptr, nullptr);
-					pl.color = plc.color;
-					pl.intensity = plc.intensity;
-					pl.linear = plc.linear;
-					pl.constant = plc.constant;
-					pl.quadratic = plc.quadratic;
+					pl.color = plc.color * plc.intensity;
 					
 					++s_lights_data.point_light_count;
 				} else {
@@ -174,7 +172,7 @@ namespace elm::scene_renderer {
 		// TODO: Configure world grid data
 
 		s_data.world_grid_shader->bind();
-		elm::render_command::draw_arrays(6);
+		elm::render_command::draw_triangles(6);
 	}
 
 	extern void render(std::shared_ptr<scene> scene, const camera *camera)
@@ -197,6 +195,7 @@ namespace elm::scene_renderer {
 		render_text_renderer_components(reg);
 
 		renderer_2d::end_scene();
+
 		// -- Renderer 3d --
 		renderer::begin_scene(camera);
 

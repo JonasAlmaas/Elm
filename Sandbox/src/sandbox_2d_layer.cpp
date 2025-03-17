@@ -11,7 +11,7 @@ sandbox_2d_layer::sandbox_2d_layer(void)
 void sandbox_2d_layer::on_attach(void)
 {
 	m_texture_grass_tileset = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png", {
-		.mag_filter = elm::texture_2d_filter::NEAREST
+		.mag_filter = elm::texture_filter::NEAREST
 	});
 
 	uint32_t checkerboard_data[8 * 8];
@@ -20,8 +20,10 @@ void sandbox_2d_layer::on_attach(void)
 			checkerboard_data[y * 8 + x] = (x + y) % 2 == 0 ? 0xFFFFFFFF : 0xFFCCCCCC;
 		}
 	}
-	m_texture_checkerboard = elm::texture_2d::create(8, 8, {
-		.mag_filter = elm::texture_2d_filter::NEAREST
+	m_texture_checkerboard = elm::texture_2d::create({
+		.width = 8,
+		.height = 8,
+		.mag_filter = elm::texture_filter::NEAREST
 	});
 	m_texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
 }

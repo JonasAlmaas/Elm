@@ -14,7 +14,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	auto font = elm::font::get_default();
 
 	auto shader = elm::shader::create("content/shaders/texture_unit.glsl");
-	m_specular_generic_shader = elm::shader::create("content/shaders/specular_generic.glsl");
+	m_pbr_shader = elm::shader::create("content/shaders/pbr.glsl");
 	//auto unlit_generic_shader = elm::shader::create("content/shaders/unlit_generic.glsl");
 
 	auto cube_mesh = elm::mesh::create("content/meshes/cube.obj");
@@ -26,9 +26,11 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 			checkerboard_data[y * 8 + x] = (x + y) % 2 == 0 ? 0xFFFFFFFF : 0xFFCCCCCC;
 		}
 	}
-	auto texture_checkerboard = elm::texture_2d::create(8, 8, {
+	auto texture_checkerboard = elm::texture_2d::create({
+		.width = 8,
+		.height = 8,
 		.format = elm::image_format::RGBA8,
-		.mag_filter = elm::texture_2d_filter::NEAREST
+		.mag_filter = elm::texture_filter::NEAREST
 	});
 	texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
 
@@ -36,6 +38,18 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	m_scene = elm::scene::create();
 	m_scene->set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
 	m_scene->set_show_world_grid(true);
+
+	// Environment light
+	{
+		auto cubemap = elm::cubemap::create("content/textures/skybox/minedump_flats.hdr", 512);
+
+		elm::entity entity = m_scene->create_entity();
+
+		auto& env = entity.add_component<elm::environment_light_component>();
+		env.irradiance_map = elm::cubemap::create_irradiance(cubemap, 32);
+		env.prefilter_map = elm::cubemap::create_prefilter(cubemap, 128);
+		env.brdf_lut_map = elm::cubemap::create_brdf_lut_map(512);
+	}
 
 	// Lights
 	{
@@ -45,8 +59,6 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		light.direction = glm::normalize(glm::vec3(1, -1, -1));
 		light.color = { 1.0f, 0.79f, 0.56f };
 		light.intensity = 1.0f;
-		light.ambient_color = { 0.54f, 0.78f, 1.0f };
-		light.ambient_intensity = 0.4f;
 	}
 
 	{
@@ -54,10 +66,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		
 		auto &light = m_point_light.add_component<elm::point_light_component>();
 		light.color = { 1.0f, 0.0f, 1.0f };
-		light.intensity = 1.0f;
-		light.constant = 1.0f;
-		light.linear = 0.09f;
-		light.quadratic = 0.032f;
+		light.intensity = 50.0f;
 
 		auto &tc = m_point_light.add_component<elm::transform_component>();
 		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 2.0f });
@@ -68,10 +77,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 		auto &light = entity.add_component<elm::point_light_component>();
 		light.color = { 0.0f, 1.0f, 0.0f };
-		light.intensity = 1.0f;
-		light.constant = 1.0f;
-		light.linear = 0.09f;
-		light.quadratic = 0.032f;
+		light.intensity = 50.0f;
 
 		auto &tc = entity.add_component<elm::transform_component>();
 		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 2.0f });
@@ -153,14 +159,36 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 			* glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
 	}
 
+	auto mat = std::make_shared<elm::pbr_material>();
+	{
+		auto roughness_map = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGB8, });
+		uint32_t roughness_data = 0xFF000000;
+		roughness_data |= (uint8_t)(0.15 * 255.0f);
+		roughness_map->set_data(&roughness_data, 3);
+
+		auto texture_black = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGB8, });
+		uint32_t black_texture_data = 0xFF000000;
+		texture_black->set_data(&black_texture_data, 3);
+
+		auto texture_white = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGB8, });
+		uint32_t white_texture_data = 0xFFFFFFFF;
+		texture_white->set_data(&white_texture_data, 3);
+
+		mat->shader = m_pbr_shader;
+		mat->albedo = texture_checkerboard;
+		mat->normal = texture_white; // TODO: Use a proper normal texture
+		mat->roughness = roughness_map;
+		mat->ao = texture_white;
+		mat->metalness = texture_black;
+	}
+
 	// 3D meshes
 	{
 		elm::entity entity = m_scene->create_entity();
 
 		auto &renderer = entity.add_component<elm::mesh_renderer_component>();
 		renderer.mesh = cube_mesh;
-		renderer.shader = m_specular_generic_shader;
-		renderer.textures.push_back(texture_checkerboard);
+		renderer.material = mat;
 
 		auto &tc = entity.add_component<elm::transform_component>();
 		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f });
@@ -171,8 +199,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 		auto &renderer = m_suzanne.add_component<elm::mesh_renderer_component>();
 		renderer.mesh = suzanne_mesh;
-		renderer.shader = m_specular_generic_shader;
-		renderer.textures.push_back(texture_checkerboard);
+		renderer.material = mat;
 
 		auto &tc = m_suzanne.add_component<elm::transform_component>();
 		tc.transform = glm::translate(glm::mat4(1.0f), { 2.0f, 0.0f, 0.0f });
@@ -190,7 +217,7 @@ void sandbox_3d_layer::on_detach(void)
 void sandbox_3d_layer::on_update(elm::timestep ts)
 {
 	if (elm::input::is_key_pressed(elm::key::F5)) {
-		m_specular_generic_shader->reload();
+		m_pbr_shader->reload();
 	}
 
 	m_camera_controller.on_update(ts);
@@ -240,17 +267,12 @@ void sandbox_3d_layer::on_imgui_render(void)
 	auto &dlc = m_dir_light.get_component<elm::directional_light_component>();
 	ImGui::ColorEdit3("Color##DirectionalLight", glm::value_ptr(dlc.color));
 	ImGui::DragFloat("Intensity##DirectionalLight", &dlc.intensity, 0.01f);
-	ImGui::ColorEdit3("Ambient color##DirectionalLight", glm::value_ptr(dlc.ambient_color));
-	ImGui::DragFloat("Ambient intensity##DirectionalLight", &dlc.ambient_intensity, 0.01f);
 
 	ImGui::Text("Point light");
 	auto &plc = m_point_light.get_component<elm::point_light_component>();
 	ImGui::DragFloat("Speed##PointLight", &m_point_light_speed, 0.01f);
 	ImGui::ColorEdit3("Color##PointLight", glm::value_ptr(plc.color));
 	ImGui::DragFloat("Intensity##PointLight", &plc.intensity, 0.01f);
-	ImGui::DragFloat("Constant##PointLight", &plc.constant, 0.01f);
-	ImGui::DragFloat("Linear##PointLight", &plc.linear, 0.01f);
-	ImGui::DragFloat("Quadratic##PointLight", &plc.quadratic, 0.001f);
 
 	ImGui::End();
 

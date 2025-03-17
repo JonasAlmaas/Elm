@@ -124,7 +124,7 @@ namespace elm::renderer_2d {
 		s_data.text_shader = shader::create("content/shaders/renderer_2d_text.glsl");
 
 		// Create blank white texture
-		s_data.texture_blank = texture_2d::create(1, 1);
+		s_data.texture_blank = texture_2d::create({ .width = 1, .height = 1 });
 		uint32_t t = 0xFFFFFFFFu;
 		s_data.texture_blank->set_data(&t, sizeof t);
 		s_data.batch_sprite_texture_slots[0] = s_data.texture_blank;

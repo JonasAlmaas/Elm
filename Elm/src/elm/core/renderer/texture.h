@@ -13,8 +13,35 @@ namespace elm {
 		None = 0,
 		R8,
 		RGB8,
+		RGB16F,
+		RGB32F,
 		RGBA8,
+		RGBA16F,
 		RGBA32F,
+	};
+
+	enum class texture_wrap {
+		CLAMP,
+		CLAMP_TO_EDGE,
+		REPEAT,
+	};
+
+	enum class texture_filter {
+		NEAREST,
+		LINEAR,
+		LINEAR_MIPMAP_LINEAR,
+	};
+
+	struct texture_specification {
+		uint32_t width = 1u;
+		uint32_t height = 1u;
+		image_format format = image_format::RGBA8;
+		texture_wrap wrap_s = texture_wrap::REPEAT;
+		texture_wrap wrap_t = texture_wrap::REPEAT;
+		texture_wrap wrap_r = texture_wrap::REPEAT;
+		texture_filter min_filter = texture_filter::LINEAR;
+		texture_filter mag_filter = texture_filter::LINEAR;
+		bool generate_mipmaps = false;
 	};
 
 	struct texture
@@ -30,37 +57,26 @@ namespace elm {
 
 		virtual void set_data(void *data, uint32_t size) = 0;
 
+		virtual const texture_specification &get_spec(void) = 0;
+
 		virtual bool equal(const texture *other) const = 0;
-	};
-
-	enum class texture_2d_wrap {
-		CLAMP,
-		CLAMP_TO_EDGE,
-		REPEAT,
-	};
-
-	enum class texture_2d_filter {
-		NEAREST,
-		LINEAR,
-	};
-
-	struct texture_2d_specification {
-		image_format format = image_format::RGBA8;
-		texture_2d_wrap wrap_s = texture_2d_wrap::REPEAT;
-		texture_2d_wrap wrap_t = texture_2d_wrap::REPEAT;
-		texture_2d_filter min_filter = texture_2d_filter::LINEAR;
-		texture_2d_filter mag_filter = texture_2d_filter::LINEAR;
 	};
 
 	struct texture_2d : texture
 	{
 		virtual ~texture_2d(void) = default;
 
-		virtual const texture_2d_specification &get_spec(void) = 0;
+	public:
+		static std::shared_ptr<texture_2d> create(const texture_specification &spec = texture_specification());
+		static std::shared_ptr<texture_2d> create(const std::string &fpath, const texture_specification &spec = texture_specification());
+	};
+
+	struct texture_cube : texture
+	{
+		virtual ~texture_cube(void) = default;
 
 	public:
-		static std::shared_ptr<texture_2d> create(uint32_t width, uint32_t height, texture_2d_specification spec = texture_2d_specification());
-		static std::shared_ptr<texture_2d> create(const std::string &fpath, texture_2d_specification spec = texture_2d_specification());
+		static std::shared_ptr<texture_cube> create(const texture_specification &spec = texture_specification());
 	};
 
 	struct sub_texture_2d

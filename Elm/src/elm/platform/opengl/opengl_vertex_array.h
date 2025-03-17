@@ -11,8 +11,8 @@ namespace elm {
 		opengl_vertex_array();
 		virtual ~opengl_vertex_array();
 
-		virtual void bind(void) const override;
-		virtual void unbind(void) const override;
+		virtual void bind(void) override;
+		virtual void unbind(void) override;
 
 		virtual void add_vertex_buffer(const std::shared_ptr<vertex_buffer> &vertex_buffer) override;
 		virtual void set_index_buffer(const std::shared_ptr<index_buffer> &index_buffer) override;

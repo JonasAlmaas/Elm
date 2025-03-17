@@ -16,6 +16,22 @@ namespace elm {
 		glEnable(GL_DEPTH_TEST);
 
 		glEnable(GL_LINE_SMOOTH);
+
+		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+	}
+
+	void opengl_renderer_api::get_viewport(uint32_t *x, uint32_t *y, uint32_t *width, uint32_t *height)
+	{
+		ELM_PROFILE_RENDERER_FUNCTION();
+
+		GLint viewport[4];
+
+		glGetIntegerv(GL_VIEWPORT, viewport);
+
+		*x = viewport[0];
+		*y = viewport[1];
+		*width = viewport[2];
+		*height = viewport[3];
 	}
 
 	void opengl_renderer_api::set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)

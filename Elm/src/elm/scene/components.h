@@ -3,6 +3,7 @@
 #include "elm/core/base.h"
 #include "elm/core/renderer/shader.h"
 #include "elm/core/renderer/texture.h"
+#include "elm/renderer/material.h"
 #include "elm/renderer/mesh.h"
 #include <glm/glm.hpp>
 #include <memory>
@@ -52,31 +53,33 @@ namespace elm {
 
 	struct mesh_renderer_component {
 		std::shared_ptr<mesh> mesh;
-		std::shared_ptr<shader> shader;
-		std::vector<std::shared_ptr<texture_2d>> textures;
-
+		std::shared_ptr<material> material; // TODO: Move to model_renderer_component
+		
 		mesh_renderer_component(void) = default;
 		mesh_renderer_component(const mesh_renderer_component &) = default;
+	};
+
+	struct environment_light_component {
+		std::shared_ptr<texture_cube> irradiance_map;
+		std::shared_ptr<texture_cube> prefilter_map;
+		std::shared_ptr<texture_2d> brdf_lut_map;
+
+		environment_light_component(void) = default;
+		environment_light_component(const environment_light_component&) = default;
 	};
 
 	struct directional_light_component {
 		glm::vec3 direction;
 		glm::vec3 color;
 		float intensity;
-		glm::vec3 ambient_color;
-		float ambient_intensity;
 
 		directional_light_component(void) = default;
 		directional_light_component(const directional_light_component &) = default;
 	};
 
 	struct point_light_component {
-		glm::vec3 color;
-		float intensity;
-		// Attenuation;
-		float constant;
-		float linear;
-		float quadratic;
+		glm::vec3 color = glm::vec3(1.0f);
+		float intensity = 1.0f;
 
 		point_light_component(void) = default;
 		point_light_component(const point_light_component &) = default;

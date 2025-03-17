@@ -26,11 +26,13 @@ namespace elm {
 
 		msdfgen::BitmapConstRef<T, N> bitmap = (msdfgen::BitmapConstRef<T, N>)generator.atlasStorage();
 
-		texture_2d_specification spec = {
-			spec.format = image_format::RGB8,
+		texture_specification spec = {
+			.width = (uint32_t)bitmap.width,
+			.height = (uint32_t)bitmap.height,
+			.format = image_format::RGB8,
 			/*spec.generate_mips = false, */
 		};
-		auto texture = texture_2d::create(bitmap.width, bitmap.height, spec);
+		auto texture = texture_2d::create(spec);
 		texture->set_data((void *)bitmap.pixels, bitmap.width * bitmap.height * 3);
 
 		return texture;

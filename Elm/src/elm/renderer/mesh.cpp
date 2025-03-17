@@ -10,7 +10,6 @@ namespace elm {
 		glm::vec3 position;
 		glm::vec2 uv;
 		glm::vec3 normal;
-		int texture_slot;
 	};
 
 	std::shared_ptr<mesh> mesh::create(const std::filesystem::path &fpath)
@@ -78,11 +77,10 @@ namespace elm {
 						glm::vec3( // Normal
 							attrib.normals[3 * (size_t)idx.normal_index + 0],
 							attrib.normals[3 * (size_t)idx.normal_index + 1],
-							attrib.normals[3 * (size_t)idx.normal_index + 2]),
-						// Texture slot
-						shapes[s].mesh.material_ids[f] != -1 ? shapes[s].mesh.material_ids[f] : 0);
+							attrib.normals[3 * (size_t)idx.normal_index + 2]));
 				}
 
+				//shapes[s].mesh.material_ids[f] != -1 ? shapes[s].mesh.material_ids[f] : 0
 				index_offset += fv;
 			}
 		}
@@ -93,8 +91,7 @@ namespace elm {
 		vertex_buffer_layout layout = {
 			{ elm::shader_data_type::Float3, "a_position" },
 			{ elm::shader_data_type::Float2, "a_uv" },
-			{ elm::shader_data_type::Float3, "a_normal" },
-			{ elm::shader_data_type::Int, "a_texture_slot" } };
+			{ elm::shader_data_type::Float3, "a_normal" } };
 		vb->set_layout(&layout);
 		va->add_vertex_buffer(vb);
 

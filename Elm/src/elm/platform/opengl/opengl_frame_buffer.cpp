@@ -190,10 +190,12 @@ namespace elm {
 		glBindFramebuffer(GL_FRAMEBUFFER, m_renderer_id);
 
 		bool is_multisampled = m_spec.samples > 1;
+		bool has_color_attachment = m_color_attachments.size() > 0;
+		bool has_depth_attachment = m_depth_attachment_spec.texture_format != frame_buffer_texture_format::None;
 
 		// Setup color attachments
 
-		if (m_color_attachment_specs.size()) {
+		if (has_color_attachment) {
 			m_color_attachments.resize(m_color_attachment_specs.size());
 			utils::create_textures(is_multisampled, m_color_attachments.data(), (uint32_t)m_color_attachments.size());
 
@@ -232,7 +234,7 @@ namespace elm {
 
 		// Setup depth attachment
 
-		if (m_depth_attachment_spec.texture_format != frame_buffer_texture_format::None) {
+		if (has_depth_attachment) {
 			utils::create_textures(is_multisampled, &m_depth_attachment, 1);
 			utils::bind_texture(is_multisampled, m_depth_attachment);
 
@@ -260,11 +262,13 @@ namespace elm {
 			ELM_CORE_ASSERT(m_color_attachments.size() <= 4, "More color attachments specified than what is support");
 			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 			glDrawBuffers((GLsizei)m_color_attachments.size(), buffers);
-		} else if (m_color_attachments.empty()) { // Only depth pass
+		} else if (m_color_attachments.empty() && has_depth_attachment) { // Only depth pass
 			glDrawBuffer(GL_NONE);
 		}
 
-		ELM_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete");
+		if (has_color_attachment || has_depth_attachment) {
+			ELM_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete");
+		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
