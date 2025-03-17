@@ -10,7 +10,7 @@ namespace elm {
 	{
 		switch (format) {
 		case elm::image_format::R8:
-			return GL_R;
+			return GL_RED;
 		case elm::image_format::RGB8:
 		case elm::image_format::RGB16F:
 		case elm::image_format::RGB32F:
@@ -98,7 +98,7 @@ namespace elm {
 		m_data_format = image_format_to_gl(spec.format);
 
 		ELM_CORE_ASSERT(
-			(channels == 1 && m_data_format == GL_R)
+			(channels == 1 && m_data_format == GL_RED)
 			|| (channels == 3 && m_data_format == GL_RGB)
 			|| (channels == 4 && m_data_format == GL_RGBA),
 			"Channel count does not match texture format");
@@ -139,8 +139,7 @@ namespace elm {
 
 		uint32_t channel_size = m_data_format == GL_RGBA ? 4
 			: m_data_format == GL_RGB ? 3
-			: m_data_format == GL_RG ? 2
-			: m_data_format == GL_R ? 1
+			: m_data_format == GL_RED ? 1
 			: 0;
 		ELM_ASSERT(size == m_width * m_height * channel_size, "Data must match texture size");
 
