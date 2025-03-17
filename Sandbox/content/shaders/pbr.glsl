@@ -21,6 +21,7 @@ struct vertex_output
 	vec2 uv;
 	vec3 normal;
 	vec3 frag_pos;
+	mat3 tbn;
 };
 
 layout (location = 0) out vertex_output v_output;
@@ -34,6 +35,17 @@ void main()
 	v_output.frag_pos = (u_model.transform * vec4(a_position, 1.0)).xyz;
 
 	gl_Position = u_camera.view_projection * u_model.transform * vec4(a_position, 1.0);
+
+	vec3 n = normalize(vec3(u_model.transform * vec4(a_normal, 0.0)));
+
+	// Generate an approximate tangent and bitangent
+	vec3 t = normalize(cross(n, vec3(0.0, 0.0, 1.0)));
+	if (length(t) < 0.001) {
+		t = normalize(cross(n, vec3(0.0, 1.0, 0.0)));
+	}
+	vec3 b = cross(n, t);
+
+	v_output.tbn = mat3(t, b, n);
 }
 
 #type fragment
@@ -48,6 +60,7 @@ struct vertex_output
 	vec2 uv;
 	vec3 normal;
 	vec3 frag_pos;
+	mat3 tbn;
 };
 
 struct directional_light
@@ -164,19 +177,18 @@ vec3 calculate_lighting(
 void main()
 {
 	vec3 albedo = texture(u_albedo_map, v_input.uv).rgb;
-	// TODO: Use u_normal_map
-	// vec3 norm = texture(u_normal_map, v_input.uv).rgb;
 	float roughness = texture(u_roughness_map, v_input.uv).r;
 	float ao = texture(u_ao_map, v_input.uv).r;
 	float metalness = texture(u_metalness_map, v_input.uv).r;
 	float alpha = 1.0;
 
-	// TODO: I don't know if this is the 'PBR' way
-	roughness = max(roughness, 0.04); // Make sure we don't loose the specular reflections
+	vec3 normal_map = texture(u_normal_map, v_input.uv).rgb;
+	vec3 normal_tangent_space = normalize(normal_map * 2.0 - 1.0); // Transform the normal map value from [0, 1] to [-1, 1]
+	vec3 normal_world_space = normalize(v_input.tbn * normal_tangent_space); // Transform the normal from tangent space to world space
 
-	// TODO: Get normal from normal map
-
-	vec3 n = normalize(v_input.normal); // Normal vector
+	// vec3 surface_normal = normalize(v_input.normal);
+	// vec3 n = normalize(v_input.normal);
+	vec3 n = normal_world_space;
 	vec3 v = normalize(u_camera.position - v_input.frag_pos); // View vector
 
 	// Calculate reflectance at normal incidence; if a dia-electric (like plastic) use base_reflectivity
@@ -240,10 +252,18 @@ void main()
 	o_color = vec4(color, alpha);
 
 	// -- Debug --
+	// o_color = vec4(normal_map, alpha);
+	// o_color = vec4(roughness, roughness, roughness, alpha);
+	// o_color = vec4(ao, ao, ao, alpha);
+	// o_color = vec4(metalness, metalness, metalness, alpha);
+
 	// o_color = vec4(diffuse, alpha);
 	// o_color = vec4(specular, alpha);
 	// o_color = vec4(brdf, 0.0, alpha);
+
 	// o_color = vec4(texture(u_irradiance_map, n).rgb, alpha); // Irradiance map
 	// o_color = vec4(textureLod(u_prefilter_map, n, 1).rgb, alpha); // Prefilter map
-	//o_color = vec4((n + vec3(1.0, 1.0, 1.0)) * 0.5, 1.0); // Surface normal debugging
+
+	// o_color = vec4((normalize(v_input.normal) + vec3(1.0, 1.0, 1.0)) * 0.5, 1.0); // Surface normal
+	// o_color = vec4((n + vec3(1.0, 1.0, 1.0)) * 0.5, 1.0); // Surface normal + normal map
 }
