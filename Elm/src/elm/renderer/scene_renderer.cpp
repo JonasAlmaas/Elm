@@ -195,6 +195,7 @@ namespace elm::scene_renderer {
 		render_text_renderer_components(reg);
 
 		renderer_2d::end_scene();
+
 		// -- Renderer 3d --
 		renderer::begin_scene(camera);
 
