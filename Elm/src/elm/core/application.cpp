@@ -113,7 +113,7 @@ namespace elm {
 
 		if (width == 0 || height == 0) {
 			m_minimized = true;
-			return false;
+			return true;
 		}
 
 		m_minimized = false;
