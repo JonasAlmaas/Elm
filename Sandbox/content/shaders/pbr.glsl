@@ -4,7 +4,7 @@
 layout (location = 0) in vec3 a_position;
 layout (location = 1) in vec2 a_uv;
 layout (location = 2) in vec3 a_normal;
-layout (location = 3) in int a_texture_slot;
+layout (location = 3) in int a_texture_slot; // TODO: Remove
 
 layout (std140, binding = 0) uniform camera
 {
@@ -25,7 +25,6 @@ struct vertex_output
 };
 
 layout (location = 0) out vertex_output v_output;
-layout (location = 3) out flat int v_texture_slot;
 
 void main()
 {
@@ -34,7 +33,6 @@ void main()
 	v_output.uv = a_uv;
 	v_output.normal = normalize(normal_matrix * a_normal);
 	v_output.frag_pos = (u_model.transform * vec4(a_position, 1.0)).xyz;
-	v_texture_slot = a_texture_slot;
 
 	gl_Position = u_camera.view_projection * u_model.transform * vec4(a_position, 1.0);
 }
@@ -66,7 +64,6 @@ struct point_light
 };
 
 layout (location = 0) in vertex_output v_input;
-layout (location = 3) in flat int v_texture_slot;
 
 layout (std140, binding = 0) uniform camera
 {
@@ -81,8 +78,13 @@ layout (std140, binding = 2) uniform lights
 	point_light point_lights[MAX_POINT_LIGHTS];
 } u_lights;
 
-layout (binding = 0) uniform sampler2D u_textures[32];
-layout (binding = 1) uniform samplerCube u_irradiance_map;
+layout (binding = 0) uniform sampler2D u_albedo_map;
+// u_normal_map;
+// u_roughness_map;
+// u_ao_map;
+// u_metalness_map;
+// u_alpha_map; // Maybe
+layout (binding = 6) uniform samplerCube u_irradiance_map;
 
 const float PI = 3.14159265359;
 
@@ -116,7 +118,7 @@ vec3 calculate_lighting(
 	vec3 n,
 	vec3 v,
 	vec3 albedo,
-	float metallic,
+	float metalness,
 	float roughness,
 	vec3 base_reflectivity,
 	vec3 light_dir,
@@ -145,7 +147,7 @@ vec3 calculate_lighting(
 	// Multiplying kd by the inverse metalness such the only non-metals
 	// have diffuse lighting, or a linear blend if partly metal
 	// (pure metals have no diffuse light).
-	kd *= 1.0 - metallic;
+	kd *= 1.0 - metalness;
 
 	// Note that 1) Angle or light to surface affects specular, not just diffuse
 	//           2) We mix albedo with diffuse, but not specular
@@ -155,11 +157,11 @@ vec3 calculate_lighting(
 void main()
 {
 	// TODO: Get from texture maps
-	vec3 albedo = texture(u_textures[v_texture_slot], v_input.uv).rgb;
+	vec3 albedo = texture(u_albedo_map, v_input.uv).rgb;
 	float alpha = 1.0;
-	float metallic = 0.0;
+	float metalness = 0.0;
 	float roughness = 0.3;
-	float ao = 0.0;
+	float ao = 1.0;
 
 	// TODO: I don't know if this is the 'PBR' way
 	roughness = max(roughness, 0.04); // Make sure we don't loose the specular reflections
@@ -171,7 +173,7 @@ void main()
 
 	// Calculate reflectance at normal incidence; if a dia-electric (like plastic) use base_reflectivity
 	// of 0.04 and if it's a metal, use the albedo color as base_reflectivity (metallic workflow)
-	vec3 base_reflectivity = mix(vec3(0.04), albedo, metallic);
+	vec3 base_reflectivity = mix(vec3(0.04), albedo, metalness);
 
 	// Reflectance equation
 	vec3 lo = vec3(0.0);
@@ -181,7 +183,7 @@ void main()
 		n,
 		v,
 		albedo,
-		metallic,
+		metalness,
 		roughness,
 		base_reflectivity,
 		-u_lights.dir_light.direction,
@@ -197,7 +199,7 @@ void main()
 			n,
 			v,
 			albedo,
-			metallic,
+			metalness,
 			roughness,
 			base_reflectivity,
 			u_lights.point_lights[i].position - v_input.frag_pos,
@@ -208,7 +210,7 @@ void main()
 
 	// Get ambient term from IBL
 	vec3 f = fresnel_schlick(n_dot_v, base_reflectivity);
-	vec3 kd = (1.0 - f) * (1.0 * metallic);
+	vec3 kd = (1.0 - f) * (1.0 - metalness);
 	vec3 diffuse = texture(u_irradiance_map, n).rgb * albedo * kd;
 
 	vec3 ambient = diffuse * ao;
@@ -222,5 +224,7 @@ void main()
 
 	o_color = vec4(color, alpha);
 
+	// -- Debug --
+	// o_color = vec4(texture(u_irradiance_map, n).rgb, alpha); // Irradiance map
 	//o_color = vec4((n + vec3(1.0, 1.0, 1.0)) * 0.5, 1.0); // Surface normal debugging
 }

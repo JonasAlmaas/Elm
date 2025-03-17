@@ -7,6 +7,10 @@
 pbr_layer::pbr_layer(void)
 	: layer("Sandbox3D"), m_camera_controller(60.0f, 16.0f / 9.0f)
 {
+}
+
+void pbr_layer::on_attach(void)
+{
 	m_camera_controller.set_position({ -1.5f, -1.5f, 1.5f });
 	m_camera_controller.set_pitch_deg(-55.0f);
 	m_camera_controller.set_yaw_deg(45.0f);
@@ -14,6 +18,7 @@ pbr_layer::pbr_layer(void)
 	m_pbr_shader = elm::shader::create("content/shaders/pbr.glsl");
 
 	auto cube_mesh = elm::mesh::create("content/meshes/cube.obj");
+	auto sphere_mesh = elm::mesh::create("content/meshes/sphere.obj");
 
 	uint32_t checkerboard_data[8 * 8];
 	for (int y = 0; y < 8; ++y) {
@@ -30,7 +35,7 @@ pbr_layer::pbr_layer(void)
 	texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
 
 	// Create cubemap
-	auto cubemap = elm::cubemap::create("content/textures/skybox/minedump_flats.hdr");
+	m_cubemap = elm::cubemap::create("content/textures/skybox/minedump_flats.hdr");
 
 	// -- Setup scene --
 	m_scene = elm::scene::create();
@@ -97,16 +102,13 @@ pbr_layer::pbr_layer(void)
 		elm::entity entity = m_scene->create_entity();
 
 		auto &renderer = entity.add_component<elm::mesh_renderer_component>();
-		renderer.mesh = cube_mesh;
+		//renderer.mesh = cube_mesh;
+		renderer.mesh = sphere_mesh;
 		renderer.shader = m_pbr_shader;
 		renderer.textures.push_back(texture_checkerboard);
 
 		entity.add_component<elm::transform_component>(glm::mat4(1.0f));
 	}
-}
-
-void pbr_layer::on_attach(void)
-{
 }
 
 void pbr_layer::on_detach(void)
@@ -121,6 +123,7 @@ void pbr_layer::on_update(elm::timestep ts)
 
 	m_camera_controller.on_update(ts);
 
+	m_cubemap->bind(6);
 	elm::scene_renderer::render(m_scene, m_camera_controller.get_camera());
 }
 

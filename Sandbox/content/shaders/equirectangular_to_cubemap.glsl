@@ -32,13 +32,13 @@ struct vertex_output
 };
 
 layout (location = 0) in vertex_output v_input;
-layout (binding = 0) uniform sampler2D u_environment_map;
+layout (binding = 0) uniform sampler2D u_texture;
 
 const vec2 inv_atan = vec2(0.1591, 0.3183);
 
 vec2 sample_spherical_map(vec3 v)
 {
-	vec2 uv = vec2(atan(v.z, v.x), asin(v.y));
+	vec2 uv = vec2(atan(v.y, v.x), asin(v.z));
 	uv *= inv_atan;
 	uv += 0.5;
 	return uv;
@@ -47,7 +47,7 @@ vec2 sample_spherical_map(vec3 v)
 void main()
 {
 	vec2 uv = sample_spherical_map(normalize(v_input.frag_pos));
-	vec3 color = texture(u_environment_map, uv).rgb;
+	vec3 color = texture(u_texture, uv).rgb;
 
 	o_color = vec4(color, 1.0);
 }

@@ -32,7 +32,7 @@ struct vertex_output
 };
 
 layout (location = 0) in vertex_output v_input;
-layout (binding = 0) uniform sampler2D u_environment_map;
+layout (binding = 0) uniform samplerCube u_environment_map;
 
 const float PI = 3.14159265359;
 
@@ -50,7 +50,7 @@ void main()
 	for (float phi = 0.0; phi < 2.0 * PI; phi += sample_delta) {
 		for (float theta = 0.0; theta < 0.5 * PI; theta += sample_delta) {
 			// Spherical to cartesian (in tangent space)
-			vec3 tangent_sample = vec3(sin(theta) * cos(phi), sin(theta) * sin(thi), cos(theta));
+			vec3 tangent_sample = vec3(sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta));
 			// Tangent to world space
 			vec3 sample_vec = tangent_sample.x * right + tangent_sample.y * up + tangent_sample.z * n;
 

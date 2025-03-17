@@ -1,15 +1,11 @@
 #pragma once
 
 #include "elm/core/base.h"
+#include "elm/core/renderer/texture.h"
 #include <filesystem>
 #include <memory>
 
-namespace elm {
+namespace elm::cubemap {
 
-	struct cubemap
-	{
-
-	public:
-		static std::shared_ptr<cubemap> create(const std::filesystem::path &fpath);
-	};
+	extern std::shared_ptr<texture_cube> create(const std::filesystem::path &fpath);
 }
