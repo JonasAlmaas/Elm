@@ -26,21 +26,34 @@ void pbr_layer::on_attach(void)
 			checkerboard_data[y * 8 + x] = (x + y) % 2 == 0 ? 0xFFFFFFFF : 0xFFCCCCCC;
 		}
 	}
-	auto texture_checkerboard = elm::texture_2d::create({
+	/*auto texture_checkerboard = elm::texture_2d::create({
 		.width = 8,
 		.height = 8,
 		.format = elm::image_format::RGBA8,
 		.mag_filter = elm::texture_filter::NEAREST
 	});
-	texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
+	texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);*/
 
-	auto white_texture = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGBA8, });
+	m_albedo_map = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGB8, });
+	uint32_t albedo_data = 0xFF000000;
+	albedo_data |= (uint8_t)(m_albedo.r * 255.0f);
+	albedo_data |= (uint8_t)(m_albedo.g * 255.0f) << 8;
+	albedo_data |= (uint8_t)(m_albedo.b * 255.0f) << 16;
+	m_albedo_map->set_data(&albedo_data, 3);
+
+	m_roughness_map = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGB8, });
+	uint32_t roughness_data = 0xFF000000;
+	roughness_data |= (uint8_t)(m_roughness * 255.0f);
+	m_roughness_map->set_data(&roughness_data, 3);
+
+	m_metalness_map = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGB8, });
+	uint32_t metalness_data = 0xFF000000;
+	metalness_data |= (uint8_t)(m_metalness * 255.0f);
+	m_metalness_map->set_data(&metalness_data, 3);
+
+	auto texture_white = elm::texture_2d::create({.width = 1, .height = 1, .format = elm::image_format::RGB8,});
 	uint32_t white_texture_data = 0xFFFFFFFF;
-	white_texture->set_data(&white_texture_data, sizeof white_texture_data);
-
-	auto black_texture = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGBA8, });
-	uint32_t black_texture_data = 0xFF000000;
-	black_texture->set_data(&black_texture_data, sizeof black_texture_data);
+	texture_white->set_data(&white_texture_data, 3);
 
 	// -- Setup scene --
 	m_scene = elm::scene::create();
@@ -118,11 +131,11 @@ void pbr_layer::on_attach(void)
 	{
 		auto mat = std::make_shared<elm::pbr_material>();
 		mat->shader = m_pbr_shader;
-		mat->albedo = texture_checkerboard;
-		mat->normal = white_texture;
-		mat->rougness = black_texture;
-		mat->ao = white_texture;
-		mat->metalness = black_texture;
+		mat->albedo = m_albedo_map;
+		mat->normal = texture_white; // TODO: Use a proper normal texture
+		mat->roughness = m_roughness_map;
+		mat->ao = texture_white;
+		mat->metalness = m_metalness_map;
 
 		elm::entity entity = m_scene->create_entity();
 
@@ -167,6 +180,26 @@ void pbr_layer::on_imgui_render(void)
 	static bool show_world_grid = false;
 	if (ImGui::Checkbox("Show world grid", &show_world_grid)) {
 		m_scene->set_show_world_grid(show_world_grid);
+	}
+
+	if (ImGui::ColorEdit3("Albedo", glm::value_ptr(m_albedo))) {
+		uint32_t data = 0xFF000000;
+		data |= (uint8_t)(m_albedo.r * 255.0f);
+		data |= (uint8_t)(m_albedo.g * 255.0f) << 8;
+		data |= (uint8_t)(m_albedo.b * 255.0f) << 16;
+		m_albedo_map->set_data(&data, 3);
+	}
+
+	if (ImGui::SliderFloat("Roughness", &m_roughness, 0.0f, 1.0f)) {
+		uint32_t data = 0xFF000000;
+		data |= (uint8_t)(m_roughness * 255.0f);
+		m_roughness_map->set_data(&data, 3);
+	}
+
+	if (ImGui::SliderFloat("Metalness", &m_metalness, 0.0f, 1.0f)) {
+		uint32_t data = 0xFF000000;
+		data |= (uint8_t)(m_metalness * 255.0f);
+		m_metalness_map->set_data(&data, 3);
 	}
 
 	ImGui::End();

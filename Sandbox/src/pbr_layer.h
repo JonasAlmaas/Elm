@@ -22,4 +22,12 @@ private:
 
 	std::shared_ptr<elm::scene> m_scene;
 	std::shared_ptr<elm::shader> m_pbr_shader;
+
+	std::shared_ptr<elm::texture_2d> m_albedo_map;
+	std::shared_ptr<elm::texture_2d> m_roughness_map;
+	std::shared_ptr<elm::texture_2d> m_metalness_map;
+
+	glm::vec3 m_albedo = { 1.0f, 1.0f, 1.0f };
+	float m_roughness = 0.3f;
+	float m_metalness = 0.0f;
 };

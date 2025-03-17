@@ -39,6 +39,18 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	m_scene->set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
 	m_scene->set_show_world_grid(true);
 
+	// Environment light
+	{
+		auto cubemap = elm::cubemap::create("content/textures/skybox/minedump_flats.hdr", 512);
+
+		elm::entity entity = m_scene->create_entity();
+
+		auto& env = entity.add_component<elm::environment_light_component>();
+		env.irradiance_map = elm::cubemap::create_irradiance(cubemap, 32);
+		env.prefilter_map = elm::cubemap::create_prefilter(cubemap, 128);
+		env.brdf_lut_map = elm::cubemap::create_brdf_lut_map(512);
+	}
+
 	// Lights
 	{
 		m_dir_light = m_scene->create_entity();
@@ -54,7 +66,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 		
 		auto &light = m_point_light.add_component<elm::point_light_component>();
 		light.color = { 1.0f, 0.0f, 1.0f };
-		light.intensity = 1.0f;
+		light.intensity = 50.0f;
 
 		auto &tc = m_point_light.add_component<elm::transform_component>();
 		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 2.0f });
@@ -65,7 +77,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 		auto &light = entity.add_component<elm::point_light_component>();
 		light.color = { 0.0f, 1.0f, 0.0f };
-		light.intensity = 1.0f;
+		light.intensity = 50.0f;
 
 		auto &tc = entity.add_component<elm::transform_component>();
 		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 2.0f });
@@ -147,14 +159,36 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 			* glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
 	}
 
+	auto mat = std::make_shared<elm::pbr_material>();
+	{
+		auto roughness_map = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGB8, });
+		uint32_t roughness_data = 0xFF000000;
+		roughness_data |= (uint8_t)(0.15 * 255.0f);
+		roughness_map->set_data(&roughness_data, 3);
+
+		auto texture_black = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGB8, });
+		uint32_t black_texture_data = 0xFF000000;
+		texture_black->set_data(&black_texture_data, 3);
+
+		auto texture_white = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGB8, });
+		uint32_t white_texture_data = 0xFFFFFFFF;
+		texture_white->set_data(&white_texture_data, 3);
+
+		mat->shader = m_pbr_shader;
+		mat->albedo = texture_checkerboard;
+		mat->normal = texture_white; // TODO: Use a proper normal texture
+		mat->roughness = roughness_map;
+		mat->ao = texture_white;
+		mat->metalness = texture_black;
+	}
+
 	// 3D meshes
-	/*{
+	{
 		elm::entity entity = m_scene->create_entity();
 
 		auto &renderer = entity.add_component<elm::mesh_renderer_component>();
 		renderer.mesh = cube_mesh;
-		renderer.shader = m_pbr_shader;
-		renderer.textures.push_back(texture_checkerboard);
+		renderer.material = mat;
 
 		auto &tc = entity.add_component<elm::transform_component>();
 		tc.transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f });
@@ -165,12 +199,11 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 		auto &renderer = m_suzanne.add_component<elm::mesh_renderer_component>();
 		renderer.mesh = suzanne_mesh;
-		renderer.shader = m_pbr_shader;
-		renderer.textures.push_back(texture_checkerboard);
+		renderer.material = mat;
 
 		auto &tc = m_suzanne.add_component<elm::transform_component>();
 		tc.transform = glm::translate(glm::mat4(1.0f), { 2.0f, 0.0f, 0.0f });
-	}*/
+	}
 }
 
 void sandbox_3d_layer::on_attach(void)

@@ -137,7 +137,11 @@ namespace elm {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		uint32_t channel_size = m_data_format == GL_RGBA ? 4 : 3;
+		uint32_t channel_size = m_data_format == GL_RGBA ? 4
+			: m_data_format == GL_RGB ? 3
+			: m_data_format == GL_RG ? 2
+			: m_data_format == GL_R ? 1
+			: 0;
 		ELM_ASSERT(size == m_width * m_height * channel_size, "Data must match texture size");
 
 		glTextureSubImage2D(m_renderer_id, 0, 0, 0, m_width, m_height, m_data_format, GL_UNSIGNED_BYTE, (const void *)data);
