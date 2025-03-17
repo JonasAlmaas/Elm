@@ -75,6 +75,10 @@ namespace elm {
 
 		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_S, utils::texture_2d_wrap_to_gl(m_spec.wrap_s));
 		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_T, utils::texture_2d_wrap_to_gl(m_spec.wrap_t));
+
+		if (m_spec.generate_mipmaps) {
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
 	}
 
 	opengl_texture_2d::opengl_texture_2d(const std::string &fpath, const texture_specification &spec)
@@ -107,6 +111,10 @@ namespace elm {
 
 		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_S, utils::texture_2d_wrap_to_gl(m_spec.wrap_s));
 		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_T, utils::texture_2d_wrap_to_gl(m_spec.wrap_t));
+
+		if (m_spec.generate_mipmaps) {
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
 
 		glTextureSubImage2D(m_renderer_id, 0, 0, 0, m_width, m_height, m_data_format, GL_UNSIGNED_BYTE, (const void *)data);
 
@@ -161,6 +169,10 @@ namespace elm {
 		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_S, utils::texture_2d_wrap_to_gl(m_spec.wrap_s));
 		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_T, utils::texture_2d_wrap_to_gl(m_spec.wrap_t));
 		glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_R, utils::texture_2d_wrap_to_gl(m_spec.wrap_r));
+
+		if (m_spec.generate_mipmaps) {
+			glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+		}
 	}
 
 	opengl_texture_cube::~opengl_texture_cube(void)

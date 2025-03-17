@@ -7,6 +7,7 @@ namespace elm::utils {
 		switch (filter) {
 		case elm::texture_filter::NEAREST: return GL_NEAREST;
 		case elm::texture_filter::LINEAR: return GL_LINEAR;
+		case elm::texture_filter::LINEAR_MIPMAP_LINEAR: return GL_LINEAR_MIPMAP_LINEAR;
 		default:
 			ELM_CORE_ASSERT(false, "Unknown texture 2d filter");
 			return GL_LINEAR;

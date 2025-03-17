@@ -29,6 +29,7 @@ namespace elm {
 	enum class texture_filter {
 		NEAREST,
 		LINEAR,
+		LINEAR_MIPMAP_LINEAR,
 	};
 
 	struct texture_specification {
@@ -40,6 +41,7 @@ namespace elm {
 		texture_wrap wrap_r = texture_wrap::REPEAT;
 		texture_filter min_filter = texture_filter::LINEAR;
 		texture_filter mag_filter = texture_filter::LINEAR;
+		bool generate_mipmaps = false;
 	};
 
 	struct texture

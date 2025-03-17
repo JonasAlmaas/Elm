@@ -85,6 +85,8 @@ layout (binding = 0) uniform sampler2D u_albedo_map;
 // u_metalness_map;
 // u_alpha_map; // Maybe
 layout (binding = 6) uniform samplerCube u_irradiance_map;
+layout (binding = 7) uniform samplerCube u_prefilter_map;
+layout (binding = 8) uniform sampler2D u_brdf_lut;
 
 const float PI = 3.14159265359;
 
@@ -106,12 +108,18 @@ float geometry_smith(float n_dot_v, float n_dot_l, float roughness)
 	return ggx1 * ggx2;
 }
 
-vec3 fresnel_schlick(float h_dot_v, vec3 base_reflectivity)
+vec3 fresnel_schlick(float h_dot_v, vec3 f0)
 {
-	// 'base_reflectivity' in range 0 to 1
-	// return range of 'base_reflectivity' to 1
+	// 'f0' in range 0 to 1
+	// return range of 'f0' to 1
 	// Increases as 'h_dot_v' decreases (more reflective when the surface is view at larger angles)
-	return base_reflectivity + (1.0 - base_reflectivity) * pow(1.0 - h_dot_v, 5.0);
+	return f0 + (1.0 - f0) * pow(1.0 - h_dot_v, 5.0);
+}
+
+vec3 fresnel_schlick_roughness(float h_dot_v, vec3 f0, float roughness)
+{
+	// Greater roughness less fresnel
+	return f0 + (max(vec3(1.0 - roughness), f0) - f0) * pow(1.0 - h_dot_v, 5.0);
 }
 
 vec3 calculate_lighting(
@@ -209,11 +217,18 @@ void main()
 	float n_dot_v = max(dot(n, v), 0.0000001); // Prevent divide by zero
 
 	// Get ambient term from IBL
-	vec3 f = fresnel_schlick(n_dot_v, base_reflectivity);
+	vec3 f = fresnel_schlick_roughness(n_dot_v, base_reflectivity, roughness);
 	vec3 kd = (1.0 - f) * (1.0 - metalness);
 	vec3 diffuse = texture(u_irradiance_map, n).rgb * albedo * kd;
 
-	vec3 ambient = diffuse * ao;
+	// Sample both the pre-filter map and the BRDF lut and combine them together
+	// as per the split-sum approximation to get the IBL specular
+	const float MAX_REFLECTION_LOD = 4.0;
+	vec3 prefiltered_color = textureLod(u_prefilter_map, reflect(-v, n), roughness * MAX_REFLECTION_LOD).rgb;
+	vec2 brdf = texture(u_brdf_lut, vec2(n_dot_v, roughness)).xy;
+	vec3 specular = prefiltered_color * (f * brdf.x + brdf.y);
+
+	vec3 ambient = (diffuse + specular) * ao;
 
 	vec3 color = ambient + lo;
 
@@ -226,5 +241,6 @@ void main()
 
 	// -- Debug --
 	// o_color = vec4(texture(u_irradiance_map, n).rgb, alpha); // Irradiance map
+	// o_color = vec4(textureLod(u_prefilter_map, n, 1).rgb, alpha); // Prefilter map
 	//o_color = vec4((n + vec3(1.0, 1.0, 1.0)) * 0.5, 1.0); // Surface normal debugging
 }
