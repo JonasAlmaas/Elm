@@ -64,10 +64,8 @@ namespace elm::scene_renderer {
 		auto view = reg.view<transform_component, mesh_renderer_component>();
 		for (auto entity : view) {
 			auto [tc, rc] = view.get<transform_component, mesh_renderer_component>(entity);
-			for (uint32_t i = 0; i < rc.textures.size(); ++i) {
-				rc.textures[i]->bind(i);
-			}
-			renderer::submit(rc.shader, rc.mesh->vertex_array, tc.transform);
+			rc.material->bind();
+			renderer::submit(rc.material->shader, rc.mesh->vertex_array, tc.transform);
 		}
 	}
 
@@ -117,6 +115,20 @@ namespace elm::scene_renderer {
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		static struct lights_data s_lights_data;
+
+		{ // Environment light
+			auto view = reg.view<environment_light_component>();
+			ELM_CORE_ASSERT(view.size(), "Scene must have one environment light");
+			for (auto entity : view) {
+				auto& elc = view.get<environment_light_component>(entity);
+
+				// TODO: Set this per draw maybe?
+				// Kinda assuming we are only using one shader...
+				elc.irradiance_map->bind(0);
+				elc.prefilter_map->bind(1);
+				elc.brdf_lut_map->bind(2);
+			}
+		}
 
 		{ // Directional light
 			auto view = reg.view<directional_light_component>();

@@ -45,6 +45,7 @@
 
 #include <elm/renderer/cubemap.h>
 #include <elm/renderer/font.h>
+#include <elm/renderer/material.h>
 #include <elm/renderer/mesh.h>
 
 #include <elm/camera/orthographic_camera.h>

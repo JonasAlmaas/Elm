@@ -34,16 +34,30 @@ void pbr_layer::on_attach(void)
 	});
 	texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
 
-	// Create cubemap
-	auto cubemap = elm::cubemap::create("content/textures/skybox/minedump_flats.hdr", 512);
-	m_irradiance_map = elm::cubemap::create_irradiance(cubemap, 32);
-	m_prefilter_map = elm::cubemap::create_prefilter(cubemap, 128);
-	m_brdf_lut_map = elm::cubemap::create_brdf_lut_map(512);
+	auto white_texture = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGBA8, });
+	uint32_t white_texture_data = 0xFFFFFFFF;
+	white_texture->set_data(&white_texture_data, sizeof white_texture_data);
+
+	auto black_texture = elm::texture_2d::create({ .width = 1, .height = 1, .format = elm::image_format::RGBA8, });
+	uint32_t black_texture_data = 0xFF000000;
+	black_texture->set_data(&black_texture_data, sizeof black_texture_data);
 
 	// -- Setup scene --
 	m_scene = elm::scene::create();
 	m_scene->set_clear_color({ 0.1f, 0.1f, 0.1f, 1.0f });
 	m_scene->set_show_world_grid(false);
+
+	// Environment light
+	{
+		auto cubemap = elm::cubemap::create("content/textures/skybox/minedump_flats.hdr", 512);
+
+		elm::entity entity = m_scene->create_entity();
+
+		auto& env = entity.add_component<elm::environment_light_component>();
+		env.irradiance_map = elm::cubemap::create_irradiance(cubemap, 32);
+		env.prefilter_map = elm::cubemap::create_prefilter(cubemap, 128);
+		env.brdf_lut_map = elm::cubemap::create_brdf_lut_map(512);
+	}
 
 	// Directional light
 	{
@@ -102,13 +116,20 @@ void pbr_layer::on_attach(void)
 
 	// Meshes
 	{
+		auto mat = std::make_shared<elm::pbr_material>();
+		mat->shader = m_pbr_shader;
+		mat->albedo = texture_checkerboard;
+		mat->normal = white_texture;
+		mat->rougness = black_texture;
+		mat->ao = white_texture;
+		mat->metalness = black_texture;
+
 		elm::entity entity = m_scene->create_entity();
 
 		auto &renderer = entity.add_component<elm::mesh_renderer_component>();
 		//renderer.mesh = cube_mesh;
 		renderer.mesh = sphere_mesh;
-		renderer.shader = m_pbr_shader;
-		renderer.textures.push_back(texture_checkerboard);
+		renderer.material = mat;
 
 		entity.add_component<elm::transform_component>(glm::mat4(1.0f));
 	}
@@ -126,9 +147,6 @@ void pbr_layer::on_update(elm::timestep ts)
 
 	m_camera_controller.on_update(ts);
 
-	m_irradiance_map->bind(6);
-	m_prefilter_map->bind(7);
-	m_brdf_lut_map->bind(8);
 	elm::scene_renderer::render(m_scene, m_camera_controller.get_camera());
 }
 

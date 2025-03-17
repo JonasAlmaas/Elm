@@ -22,7 +22,4 @@ private:
 
 	std::shared_ptr<elm::scene> m_scene;
 	std::shared_ptr<elm::shader> m_pbr_shader;
-
-	std::shared_ptr<elm::texture_cube> m_irradiance_map, m_prefilter_map;
-	std::shared_ptr<elm::texture_2d> m_brdf_lut_map;
 };

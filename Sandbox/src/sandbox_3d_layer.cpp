@@ -148,7 +148,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	}
 
 	// 3D meshes
-	{
+	/*{
 		elm::entity entity = m_scene->create_entity();
 
 		auto &renderer = entity.add_component<elm::mesh_renderer_component>();
@@ -170,7 +170,7 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 
 		auto &tc = m_suzanne.add_component<elm::transform_component>();
 		tc.transform = glm::translate(glm::mat4(1.0f), { 2.0f, 0.0f, 0.0f });
-	}
+	}*/
 }
 
 void sandbox_3d_layer::on_attach(void)

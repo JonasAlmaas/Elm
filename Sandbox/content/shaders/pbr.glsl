@@ -78,15 +78,15 @@ layout (std140, binding = 2) uniform lights
 	point_light point_lights[MAX_POINT_LIGHTS];
 } u_lights;
 
-layout (binding = 0) uniform sampler2D u_albedo_map;
-// u_normal_map;
-// u_roughness_map;
-// u_ao_map;
-// u_metalness_map;
-// u_alpha_map; // Maybe
-layout (binding = 6) uniform samplerCube u_irradiance_map;
-layout (binding = 7) uniform samplerCube u_prefilter_map;
-layout (binding = 8) uniform sampler2D u_brdf_lut;
+layout (binding = 0) uniform samplerCube u_irradiance_map;
+layout (binding = 1) uniform samplerCube u_prefilter_map;
+layout (binding = 2) uniform sampler2D u_brdf_lut;
+layout (binding = 3) uniform sampler2D u_albedo_map;
+layout (binding = 4) uniform sampler2D u_normal_map;
+layout (binding = 5) uniform sampler2D u_roughness_map;
+layout (binding = 6) uniform sampler2D u_ao_map;
+layout (binding = 7) uniform sampler2D u_metalness_map;
+// layout (binding = 8) uniform sampler2D u_alpha_map; // Maybe?
 
 const float PI = 3.14159265359;
 
@@ -164,12 +164,13 @@ vec3 calculate_lighting(
 
 void main()
 {
-	// TODO: Get from texture maps
 	vec3 albedo = texture(u_albedo_map, v_input.uv).rgb;
+	// TODO: Use u_normal_map
+	// vec3 norm = texture(u_normal_map, v_input.uv).rgb;
+	float roughness = texture(u_roughness_map, v_input.uv).r;
+	float ao = texture(u_ao_map, v_input.uv).r;
+	float metalness = texture(u_metalness_map, v_input.uv).r;
 	float alpha = 1.0;
-	float metalness = 0.0;
-	float roughness = 0.3;
-	float ao = 1.0;
 
 	// TODO: I don't know if this is the 'PBR' way
 	roughness = max(roughness, 0.04); // Make sure we don't loose the specular reflections
