@@ -4,7 +4,6 @@
 layout (location = 0) in vec3 a_position;
 layout (location = 1) in vec2 a_uv;
 layout (location = 2) in vec3 a_normal;
-layout (location = 3) in int a_texture_slot; // TODO: Remove
 
 layout (std140, binding = 0) uniform camera
 {
