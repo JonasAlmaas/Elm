@@ -12,8 +12,8 @@ namespace elm {
 	{
 		virtual ~vertex_array(void) = default;
 
-		virtual void bind(void) const = 0;
-		virtual void unbind(void) const = 0;
+		virtual void bind(void) = 0;
+		virtual void unbind(void) = 0;
 
 		virtual void add_vertex_buffer(const std::shared_ptr<vertex_buffer> &vertex_buffer) = 0;
 		virtual void set_index_buffer(const std::shared_ptr<index_buffer> &index_buffer) = 0;

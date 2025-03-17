@@ -160,7 +160,7 @@ namespace elm::scene_renderer {
 		// TODO: Configure world grid data
 
 		s_data.world_grid_shader->bind();
-		elm::render_command::draw_arrays(6);
+		elm::render_command::draw_triangles(6);
 	}
 
 	extern void render(std::shared_ptr<scene> scene, const camera *camera)
