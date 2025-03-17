@@ -240,6 +240,9 @@ void main()
 	o_color = vec4(color, alpha);
 
 	// -- Debug --
+	// o_color = vec4(diffuse, alpha);
+	// o_color = vec4(specular, alpha);
+	// o_color = vec4(brdf, 0.0, alpha);
 	// o_color = vec4(texture(u_irradiance_map, n).rgb, alpha); // Irradiance map
 	// o_color = vec4(textureLod(u_prefilter_map, n, 1).rgb, alpha); // Prefilter map
 	//o_color = vec4((n + vec3(1.0, 1.0, 1.0)) * 0.5, 1.0); // Surface normal debugging

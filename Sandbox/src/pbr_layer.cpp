@@ -38,6 +38,7 @@ void pbr_layer::on_attach(void)
 	auto cubemap = elm::cubemap::create("content/textures/skybox/minedump_flats.hdr", 512);
 	m_irradiance_map = elm::cubemap::create_irradiance(cubemap, 32);
 	m_prefilter_map = elm::cubemap::create_prefilter(cubemap, 128);
+	m_brdf_lut_map = elm::cubemap::create_brdf_lut_map(512);
 
 	// -- Setup scene --
 	m_scene = elm::scene::create();
@@ -127,6 +128,7 @@ void pbr_layer::on_update(elm::timestep ts)
 
 	m_irradiance_map->bind(6);
 	m_prefilter_map->bind(7);
+	m_brdf_lut_map->bind(8);
 	elm::scene_renderer::render(m_scene, m_camera_controller.get_camera());
 }
 
