@@ -1,6 +1,7 @@
 #include "application.h"
 #include "elm/core/time.h"
 #include "elm/renderer/renderer.h"
+#include "elm/random.h"
 
 namespace elm {
 
@@ -25,6 +26,7 @@ namespace elm {
 			.vsync = m_spec.vsync});
 		m_window->set_event_callback(ELM_BIND_EVENT_FN(application::on_event));
 
+		random::init();
 		renderer::init();
 
 		m_imgui_layer = new imgui_layer();

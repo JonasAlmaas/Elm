@@ -59,3 +59,7 @@
 #include <elm/scene/entity.h>
 #include <elm/scene/components.h>
 // --------------------------
+
+// --- Misc -----------------
+#include <elm/random.h>
+// --------------------------
