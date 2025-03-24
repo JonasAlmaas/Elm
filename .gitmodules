@@ -6,6 +6,10 @@
 	path = Elm/vendor/glfw
 	url = https://github.com/JonasAlmaas/glfw.git
 	branch = master
+[submodule "Elm/vendor/imgui"]
+	path = Elm/vendor/imgui
+	url = https://github.com/ocornut/imgui.git
+	branch = docking
 [submodule "Elm/vendor/glm"]
 	path = Elm/vendor/glm
 	url = https://github.com/g-truc/glm
