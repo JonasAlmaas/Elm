@@ -323,6 +323,7 @@ namespace elm {
 				std::ofstream out(cache_path, std::ios::out | std::ios::binary);
 				if (out.is_open()) {
 					auto &data = m_opengl_spirv[kind];
+					out.write((const char *)&checksum_from_spirv, sizeof(checksum_from_spirv));
 					out.write((char *)data.data(), data.size() * sizeof(uint32_t));
 					out.flush();
 					out.close();
