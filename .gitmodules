@@ -4,7 +4,7 @@
 	branch = v1.x
 [submodule "Elm/vendor/glfw"]
 	path = Elm/vendor/glfw
-	url = https://github.com/JonasAlmaas/glfw.git
+	url = https://github.com/glfw/glfw.git
 	branch = master
 [submodule "Elm/vendor/imgui"]
 	path = Elm/vendor/imgui
