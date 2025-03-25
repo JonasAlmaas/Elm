@@ -27,4 +27,7 @@ private:
 	uint32_t m_frame_time_acc_ix = 0u;
 	float m_frame_time_acc = 0.0f;
 	float m_avg_frame_delta = 0.0f;
+
+	elm::math::spline m_spline;
+	elm::math::spline m_spline2;
 };

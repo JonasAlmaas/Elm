@@ -26,6 +26,22 @@ void sandbox_2d_layer::on_attach(void)
 		.mag_filter = elm::texture_filter::NEAREST
 	});
 	m_texture_checkerboard->set_data((void *)checkerboard_data, sizeof checkerboard_data);
+
+	m_spline.points.push_back({-0.5f, 0.5f, 0.1f});
+	m_spline.points.push_back({ -1.5f, -0.5f, 0.1f });
+	m_spline.points.push_back({ 0.5f, -0.5f, 0.1f });
+	m_spline.points.push_back({ 0.0f, 0.5f, 0.1f });
+	m_spline.looped = true;
+	m_spline.invalidate();
+
+	for (int i = 0; i < 10; i++) {
+		m_spline2.points.push_back({
+			0.8f * sinf((float)i / 10.0f * 3.14159f * 2.0f),
+			0.8f * cosf((float)i / 10.0f * 3.14159f * 2.0f),
+			0.0f });
+	}
+	m_spline2.looped = false;
+	m_spline2.invalidate();
 }
 
 void sandbox_2d_layer::on_detach(void)
@@ -50,8 +66,8 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 	elm::renderer_2d::reset_stats();
 	elm::renderer_2d::begin_scene(m_camera_controller.get_camera());
 
-	for (int y = 0; y < 200; ++y) {
-		for (int x = 0; x < 200; ++x) {
+	for (int y = 0; y < 50; ++y) {
+		for (int x = 0; x < 50; ++x) {
 			elm::renderer_2d::draw_sprite(
 				{ 2.0f + x, 2.0f + y },
 				{ 1.0f, 1.0f },
@@ -64,7 +80,7 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 	elm::renderer_2d::draw_sprite({ 1.0f, 1.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 	elm::renderer_2d::draw_sprite({ 0.0f, 1.0f }, { 1.0f, 1.0f }, { 0.2f, 0.3f, 0.8f, 1.0f });
 
-	elm::renderer_2d::draw_sprite({ 0.0f, 0.0f }, { 1.5f, 1.0f }, m_texture_grass_tileset);
+	elm::renderer_2d::draw_sprite({ -2.0f, 0.0f }, { 1.5f, 1.0f }, m_texture_grass_tileset);
 
 	static float s_rotation = 0.0f;
 	s_rotation += 50.0f * ts.get_seconds();
@@ -75,6 +91,34 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 		glm::vec4(0.2f, 0.3f, 0.8f, 1.0f));
 
 	elm::renderer_2d::draw_line({ -1.0f, -1.0f }, { 0.0f, -2.0f }, { 1.0f, 0.0f, 1.0f, 1.0f });
+
+	{
+		for (auto &p : m_spline.points) {
+			elm::renderer_2d::draw_sprite({ p.x, p.y, 0.2f }, { 0.01f, 0.01f });
+		}
+
+		glm::vec3 prev_p = m_spline.get_point(0.0f);
+		const float step_size = 0.1f;
+		for (float t = step_size; t <= m_spline.length + step_size; t += step_size) {
+			glm::vec3 p = m_spline.get_point(m_spline.get_normalised_offset(t));
+			elm::renderer_2d::draw_line(prev_p, p, { 1.0f, 0.0f, 1.0f, 1.0f });
+			prev_p = p;
+		}
+	}
+
+	{
+		for (auto &p : m_spline2.points) {
+			elm::renderer_2d::draw_sprite({ p.x, p.y, 0.2f }, { 0.01f, 0.01f });
+		}
+
+		glm::vec3 prev_p = m_spline2.get_point(0.0f);
+		const float step_size = 0.1f;
+		for (float t = step_size; t <= m_spline2.length + step_size; t += step_size) {
+			glm::vec3 p = m_spline2.get_point(m_spline2.get_normalised_offset(t));
+			elm::renderer_2d::draw_line(prev_p, p, { 0.0f, 1.0f, 0.0f, 1.0f });
+			prev_p = p;
+		}
+	}
 
 	elm::renderer_2d::end_scene();
 }

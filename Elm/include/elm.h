@@ -36,6 +36,7 @@
 
 // --- Math -----------------
 #include <elm/math/math.h>
+#include <elm/math/spline.h>
 // --------------------------
 
 // --- Renderer -------------
