@@ -66,7 +66,7 @@ namespace elm::random {
 
 	extern float f32_fast(uint32_t &seed)
 	{
-		seed = (float)pcg_hash(seed);
+		seed = pcg_hash(seed);
 		return (float)seed / (float)UINT32_MAX;
 	}
 
