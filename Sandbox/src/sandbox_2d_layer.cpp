@@ -31,16 +31,17 @@ void sandbox_2d_layer::on_attach(void)
 	m_spline.points.push_back({ -1.5f, -0.5f, 0.1f });
 	m_spline.points.push_back({ 0.5f, -0.5f, 0.1f });
 	m_spline.points.push_back({ 0.0f, 0.5f, 0.1f });
-	m_spline.looped = true;
+	m_spline.points.push_back({ 0.5f, 1.0f, 0.1f });
+	m_spline.looped = false;
 	m_spline.invalidate();
 
 	for (int i = 0; i < 10; i++) {
 		m_spline2.points.push_back({
 			0.8f * sinf((float)i / 10.0f * 3.14159f * 2.0f),
 			0.8f * cosf((float)i / 10.0f * 3.14159f * 2.0f),
-			0.0f });
+			0.1f });
 	}
-	m_spline2.looped = false;
+	m_spline2.looped = true;
 	m_spline2.invalidate();
 }
 
@@ -113,7 +114,7 @@ void sandbox_2d_layer::on_update(elm::timestep ts)
 
 		glm::vec3 prev_p = m_spline2.get_point(0.0f);
 		const float step_size = 0.1f;
-		for (float t = step_size; t <= m_spline2.length + step_size; t += step_size) {
+		for (float t = step_size; t <= m_spline2.length; t += step_size) {
 			glm::vec3 p = m_spline2.get_point(m_spline2.get_normalised_offset(t));
 			elm::renderer_2d::draw_line(prev_p, p, { 0.0f, 1.0f, 0.0f, 1.0f });
 			prev_p = p;

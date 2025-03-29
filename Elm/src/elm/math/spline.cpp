@@ -21,27 +21,20 @@ namespace elm::math {
 
 	glm::vec3 spline::get_point(float t) const
 	{
-		// Sanitize input
-		if (glm::abs(t - glm::floor(t)) < std::numeric_limits<float>::epsilon()) {
-			return this->looped
-				? this->points[(int)t]
-				: this->points[(int)t + 1];
-		}
-
-		int p0, p1, p2, p3;
+		uint32_t p0, p1, p2, p3;
 		if (this->looped) {
-			p1 = (int)t;
-			p2 = (p1 + 1) % this->points.size();
-			p3 = (p2 + 1) % this->points.size();
-			p0 = p1 >= 1 ? p1 - 1 : (int)this->points.size() - 1;
+			p1 = glm::min((uint32_t)t, (uint32_t)(this->points.size() - 1u));
+			p2 = (p1 + 1u) % this->points.size();
+			p3 = (p2 + 1u) % this->points.size();
+			p0 = p1 >= 1u ? p1 - 1u : (uint32_t)this->points.size() - 1u;
+			t = t - (float)glm::min((uint32_t)t, (uint32_t)(this->points.size() - 1u));
 		} else {
-			p1 = (int)t + 1;
+			p1 = glm::min((uint32_t)t + 1u, (uint32_t)(this->points.size() - 3u));
 			p2 = p1 + 1;
 			p3 = p2 + 1;
 			p0 = p1 - 1;
+			t = t - (float)glm::min((uint32_t)t, (uint32_t)(this->points.size() - 4u));
 		}
-
-		t = t - (int)t;
 		
 		float tt = t * t;
 		float ttt = tt * t;
@@ -59,20 +52,20 @@ namespace elm::math {
 
 	glm::vec3 spline::get_forward(float t) const
 	{
-		int p0, p1, p2, p3;
+		uint32_t p0, p1, p2, p3;
 		if (this->looped) {
-			p1 = (int)t;
-			p2 = (p1 + 1) % this->points.size();
-			p3 = (p2 + 1) % this->points.size();
-			p0 = p1 >= 1 ? p1 - 1 : (int)this->points.size() - 1;
+			p1 = glm::min((uint32_t)t, (uint32_t)(this->points.size() - 1u));
+			p2 = (p1 + 1u) % this->points.size();
+			p3 = (p2 + 1u) % this->points.size();
+			p0 = p1 >= 1u ? p1 - 1u : (uint32_t)this->points.size() - 1u;
+			t = t - (float)glm::min((uint32_t)t, (uint32_t)(this->points.size() - 1u));
 		} else {
-			p1 = (int)t + 1;
+			p1 = glm::min((uint32_t)t + 1u, (uint32_t)(this->points.size() - 3u));
 			p2 = p1 + 1;
 			p3 = p2 + 1;
 			p0 = p1 - 1;
+			t = t - (float)glm::min((uint32_t)t, (uint32_t)(this->points.size() - 4u));
 		}
-
-		t = t - (int)t;
 
 		float tt = t * t;
 		float ttt = tt * t;
