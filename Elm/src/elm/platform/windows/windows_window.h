@@ -21,7 +21,7 @@ namespace elm {
 		virtual void on_update(bool minimized) override;
 
 		virtual inline uint32_t get_width(void) const override { return m_data.width; }
-		virtual inline uint32_t get_height(void) const override { return m_data.width; }
+		virtual inline uint32_t get_height(void) const override { return m_data.height; }
 
 		// Window attributes
 		virtual void set_event_callback(const std::function<void(event &)> & cb) override;
