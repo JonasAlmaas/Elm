@@ -185,7 +185,7 @@ namespace elm::scene_renderer {
 		render_command::clear();
 
 		render_command::set_depth_test(true);
-		render_command::set_depth_fn(depth_function::Less);
+		render_command::set_depth_fn(depth_function::LESS);
 
 		// -- Renderer 2d --
 		renderer_2d::begin_scene(camera);

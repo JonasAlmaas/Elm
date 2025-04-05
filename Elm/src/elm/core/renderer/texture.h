@@ -10,7 +10,7 @@
 namespace elm {
 
 	enum class image_format {
-		None = 0,
+		NONE = 0,
 		R8,
 		RGB8,
 		RGB16F,

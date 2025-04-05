@@ -7,19 +7,19 @@ namespace elm {
 	static GLenum shader_data_type_to_opengl_base_type(shader_data_type type)
 	{
 		switch (type) {
-		case elm::shader_data_type::Bool:
+		case elm::shader_data_type::BOOL:
 			return GL_BOOL;
-		case elm::shader_data_type::Int:
-		case elm::shader_data_type::Int2:
-		case elm::shader_data_type::Int3:
-		case elm::shader_data_type::Int4:
+		case elm::shader_data_type::INT:
+		case elm::shader_data_type::INT2:
+		case elm::shader_data_type::INT3:
+		case elm::shader_data_type::INT4:
 			return GL_INT;
-		case elm::shader_data_type::Float:
-		case elm::shader_data_type::Float2:
-		case elm::shader_data_type::Float3:
-		case elm::shader_data_type::Float4:
-		case elm::shader_data_type::Mat3:
-		case elm::shader_data_type::Mat4:
+		case elm::shader_data_type::FLOAT:
+		case elm::shader_data_type::FLOAT2:
+		case elm::shader_data_type::FLOAT3:
+		case elm::shader_data_type::FLOAT4:
+		case elm::shader_data_type::MAT3:
+		case elm::shader_data_type::MAT4:
 			return GL_FLOAT;
 		}
 
@@ -64,10 +64,10 @@ namespace elm {
 		uint32_t vb_ix = 0;
 		for (const auto &el : *layout) {
 			switch (el.type) {
-			case shader_data_type::Float:
-			case shader_data_type::Float2:
-			case shader_data_type::Float3:
-			case shader_data_type::Float4:
+			case shader_data_type::FLOAT:
+			case shader_data_type::FLOAT2:
+			case shader_data_type::FLOAT3:
+			case shader_data_type::FLOAT4:
 				glEnableVertexAttribArray(vb_ix);
 				glVertexAttribPointer(
 					vb_ix,
@@ -78,11 +78,11 @@ namespace elm {
 					(const void*)el.offset);
 				++vb_ix;
 				break;
-			case shader_data_type::Int:
-			case shader_data_type::Int2:
-			case shader_data_type::Int3:
-			case shader_data_type::Int4:
-			case shader_data_type::Bool:
+			case shader_data_type::INT:
+			case shader_data_type::INT2:
+			case shader_data_type::INT3:
+			case shader_data_type::INT4:
+			case shader_data_type::BOOL:
 				glEnableVertexAttribArray(vb_ix);
 				glVertexAttribIPointer(
 					vb_ix,
@@ -92,8 +92,8 @@ namespace elm {
 					(const void *)el.offset);
 				++vb_ix;
 				break;
-			case shader_data_type::Mat3:
-			case shader_data_type::Mat4:
+			case shader_data_type::MAT3:
+			case shader_data_type::MAT4:
 			{
 				uint32_t count = el.get_component_count();
 				for (uint32_t i = 0; i < count; ++i) {

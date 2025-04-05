@@ -73,7 +73,7 @@ namespace elm::cubemap {
 		if (!s_va) {
 			s_va = vertex_array::create();
 			auto vb = vertex_buffer::create((const void *)s_vertices, sizeof s_vertices);
-			vertex_buffer_layout layout = { { shader_data_type::Float3, "a_position" } };
+			vertex_buffer_layout layout = { { shader_data_type::FLOAT3, "a_position" } };
 			vb->set_layout(&layout);
 			s_va->add_vertex_buffer(vb);
 		}
@@ -98,8 +98,8 @@ namespace elm::cubemap {
 			s_va = vertex_array::create();
 			auto vb = vertex_buffer::create((const void*)s_vertices, sizeof s_vertices);
 			vertex_buffer_layout layout = {
-				{ shader_data_type::Float3, "a_position" },
-				{ shader_data_type::Float2, "a_uv" } };
+				{ shader_data_type::FLOAT3, "a_position" },
+				{ shader_data_type::FLOAT2, "a_uv" } };
 			vb->set_layout(&layout);
 			s_va->add_vertex_buffer(vb);
 		}

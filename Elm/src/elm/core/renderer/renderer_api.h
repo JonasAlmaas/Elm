@@ -9,14 +9,14 @@
 namespace elm {
 
 	enum class depth_function {
-		Never,
-		Always,
-		Equal,
-		NotEqual,
-		Less, // Default
-		Greater,
-		LessEqual,
-		GreaterEqual
+		NEVER,
+		ALWAYS,
+		EQUAL,
+		NOTEQUAL,
+		LESS, // Default
+		GREATER,
+		LESSEQUAL,
+		GREATEREQUAL
 	};
 
 	struct renderer_api

@@ -17,7 +17,7 @@ example_layer::example_layer(void)
 
 		auto vb = elm::vertex_buffer::create((void *)vertices, sizeof vertices);
 		elm::vertex_buffer_layout layout = {
-			{ elm::shader_data_type::Float3, "a_position" }};
+			{ elm::shader_data_type::FLOAT3, "a_position" }};
 		vb->set_layout(&layout);
 		m_triangle_va->add_vertex_buffer(vb);
 
@@ -38,8 +38,8 @@ example_layer::example_layer(void)
 
 		auto vb = elm::vertex_buffer::create((void *)vertices, sizeof vertices);
 		elm::vertex_buffer_layout layout = {
-			{ elm::shader_data_type::Float3, "a_position" },
-			{ elm::shader_data_type::Float2, "a_uv" } };
+			{ elm::shader_data_type::FLOAT3, "a_position" },
+			{ elm::shader_data_type::FLOAT2, "a_uv" } };
 		vb->set_layout(&layout);
 		m_square_va->add_vertex_buffer(vb);
 

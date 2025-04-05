@@ -89,9 +89,9 @@ namespace elm {
 
 		auto vb = vertex_buffer::create((const void *)vertices.data(), (uint32_t)vertices.size() * sizeof(mesh_vertex));
 		vertex_buffer_layout layout = {
-			{ elm::shader_data_type::Float3, "a_position" },
-			{ elm::shader_data_type::Float2, "a_uv" },
-			{ elm::shader_data_type::Float3, "a_normal" } };
+			{ elm::shader_data_type::FLOAT3, "a_position" },
+			{ elm::shader_data_type::FLOAT2, "a_uv" },
+			{ elm::shader_data_type::FLOAT3, "a_normal" } };
 		vb->set_layout(&layout);
 		va->add_vertex_buffer(vb);
 

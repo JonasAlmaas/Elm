@@ -73,14 +73,14 @@ namespace elm {
 		GLenum gl_func;
 
 		switch (fn) {
-		case depth_function::Never: gl_func = GL_NEVER; break;
-		case depth_function::Always: gl_func = GL_ALWAYS; break;
-		case depth_function::Equal: gl_func = GL_EQUAL; break;
-		case depth_function::NotEqual: gl_func = GL_NOTEQUAL; break;
-		case depth_function::Less: gl_func = GL_LESS; break;
-		case depth_function::Greater: gl_func = GL_GREATER; break;
-		case depth_function::LessEqual: gl_func = GL_LEQUAL; break;
-		case depth_function::GreaterEqual: gl_func = GL_GEQUAL; break;
+		case depth_function::NEVER: gl_func = GL_NEVER; break;
+		case depth_function::ALWAYS: gl_func = GL_ALWAYS; break;
+		case depth_function::EQUAL: gl_func = GL_EQUAL; break;
+		case depth_function::NOTEQUAL: gl_func = GL_NOTEQUAL; break;
+		case depth_function::LESS: gl_func = GL_LESS; break;
+		case depth_function::GREATER: gl_func = GL_GREATER; break;
+		case depth_function::LESSEQUAL: gl_func = GL_LEQUAL; break;
+		case depth_function::GREATEREQUAL: gl_func = GL_GEQUAL; break;
 		default:
 			ELM_CORE_ASSERT(false, "Unknwon depth function");
 			gl_func = GL_LESS;

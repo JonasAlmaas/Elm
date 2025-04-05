@@ -134,10 +134,10 @@ namespace elm::renderer_2d {
 
 		s_data.batch_sprite_vertex_buffer = vertex_buffer::create(renderer_2d_data::max_sprite_verticies * sizeof(sprite_vertex));
 		vertex_buffer_layout quad_vb_layout = {
-			{ shader_data_type::Float3, "a_position" },
-			{ shader_data_type::Float2, "a_uv" },
-			{ shader_data_type::Float4, "a_color" },
-			{ shader_data_type::Int, "a_texture_slot" } };
+			{ shader_data_type::FLOAT3, "a_position" },
+			{ shader_data_type::FLOAT2, "a_uv" },
+			{ shader_data_type::FLOAT4, "a_color" },
+			{ shader_data_type::INT, "a_texture_slot" } };
 		s_data.batch_sprite_vertex_buffer->set_layout(&quad_vb_layout);
 		s_data.batch_sprite_vertex_array->add_vertex_buffer(s_data.batch_sprite_vertex_buffer);
 
@@ -160,11 +160,11 @@ namespace elm::renderer_2d {
 
 		s_data.batch_circle_vertex_buffer = vertex_buffer::create(renderer_2d_data::max_sprite_verticies * sizeof(circle_vertex));
 		vertex_buffer_layout circle_vb_layout = {
-			{ shader_data_type::Float3, "a_world_position" },
-			{ shader_data_type::Float3, "a_local_position" },
-			{ shader_data_type::Float4, "a_color" },
-			{ shader_data_type::Float, "a_thickness" },
-			{ shader_data_type::Float, "a_fade" } };
+			{ shader_data_type::FLOAT3, "a_world_position" },
+			{ shader_data_type::FLOAT3, "a_local_position" },
+			{ shader_data_type::FLOAT4, "a_color" },
+			{ shader_data_type::FLOAT, "a_thickness" },
+			{ shader_data_type::FLOAT, "a_fade" } };
 		s_data.batch_circle_vertex_buffer->set_layout(&circle_vb_layout);
 		s_data.batch_circle_vertex_array->add_vertex_buffer(s_data.batch_circle_vertex_buffer);
 
@@ -178,8 +178,8 @@ namespace elm::renderer_2d {
 
 		s_data.batch_line_vertex_buffer = vertex_buffer::create(renderer_2d_data::max_sprite_verticies * sizeof(line_vertex));
 		vertex_buffer_layout line_vb_layout = {
-			{ shader_data_type::Float3, "a_position" },
-			{ shader_data_type::Float4, "a_color" } };
+			{ shader_data_type::FLOAT3, "a_position" },
+			{ shader_data_type::FLOAT4, "a_color" } };
 		s_data.batch_line_vertex_buffer->set_layout(&line_vb_layout);
 		s_data.batch_line_vertex_array->add_vertex_buffer(s_data.batch_line_vertex_buffer);
 
@@ -190,10 +190,10 @@ namespace elm::renderer_2d {
 
 		s_data.batch_text_vertex_buffer = vertex_buffer::create(renderer_2d_data::max_sprite_verticies * sizeof(text_vertex));
 		vertex_buffer_layout text_vb_layout = {
-			{ shader_data_type::Float3, "a_position" },
-			{ shader_data_type::Float2, "a_uv" },
-			{ shader_data_type::Float4, "a_color" },
-			{ shader_data_type::Int, "a_texture_slot" } };
+			{ shader_data_type::FLOAT3, "a_position" },
+			{ shader_data_type::FLOAT2, "a_uv" },
+			{ shader_data_type::FLOAT4, "a_color" },
+			{ shader_data_type::INT, "a_texture_slot" } };
 		s_data.batch_text_vertex_buffer->set_layout(&text_vb_layout);
 		s_data.batch_text_vertex_array->add_vertex_buffer(s_data.batch_text_vertex_buffer);
 
