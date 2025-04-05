@@ -1,8 +1,8 @@
-#include "elm/core/file_dialog.h"
+#include "elm/core/file_dialog.hpp"
 
 #ifdef ELM_PLATFORM_WINDOWS
 
-#include "elm/core/application.h"
+#include "elm/core/application.hpp"
 
 #include <commdlg.h>
 #include <GLFW/glfw3.h>

@@ -1,6 +1,6 @@
-#include "opengl_shader.h"
-#include "elm/core/timer.h"
-#include "elm/utils/crc32.h"
+#include "opengl_shader.hpp"
+#include "elm/core/timer.hpp"
+#include "elm/utils/crc32.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <glad/glad.h>
 #include <shaderc/shaderc.hpp>
@@ -124,7 +124,7 @@ namespace elm {
 	}
 
 	opengl_shader::opengl_shader(const std::filesystem::path &fpath)
-		: m_renderer_id(UINT32_MAX), m_fpath(fpath), m_name(fpath.stem().string())
+		: renderer_id(UINT32_MAX), fpath(fpath), name(fpath.stem().string())
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -136,7 +136,7 @@ namespace elm {
 			const std::string &name,
 			const std::string &vertex_src,
 			const std::string &fragment_src)
-		: m_renderer_id(UINT32_MAX), m_name(name), m_fpath(name)
+		: renderer_id(UINT32_MAX), name(name), fpath(name)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -146,23 +146,23 @@ namespace elm {
 			{ GL_VERTEX_SHADER, vertex_src },
 			{ GL_FRAGMENT_SHADER, fragment_src }};
 		timer timer;
-		ELM_CORE_INFO("Compiling shader \"{0}\"...", m_name);
+		ELM_CORE_INFO("Compiling shader \"{0}\"...", this->name);
 		compile_or_get_vulkan_binaries(shader_sources);
 		compile_or_get_opengl_binaries();
 		create_program();
-		ELM_CORE_INFO("Shader compilation of \"{0}\" complete in {1} ms", m_name, timer.elapsed_milliseconds());
+		ELM_CORE_INFO("Shader compilation of \"{0}\" complete in {1} ms", this->name, timer.elapsed_milliseconds());
 	}
 
 	opengl_shader::~opengl_shader(void)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		glDeleteProgram(m_renderer_id);
+		glDeleteProgram(this->renderer_id);
 	}
 
 	void opengl_shader::bind(void)
 	{
-		glUseProgram(m_renderer_id);
+		glUseProgram(this->renderer_id);
 	}
 
 	void opengl_shader::unbind(void)
@@ -178,23 +178,23 @@ namespace elm {
 
 	void opengl_shader::load_from_file(void)
 	{
-		std::string shader_source = read_file(m_fpath);
+		std::string shader_source = read_file(this->fpath);
 		auto shader_sources = preprocess(shader_source);
 
 		timer timer;
-		ELM_CORE_INFO("Compiling shader \"{0}\"...", m_name);
+		ELM_CORE_INFO("Compiling shader \"{0}\"...", this->name);
 		compile_or_get_vulkan_binaries(shader_sources);
 		compile_or_get_opengl_binaries();
 		create_program();
-		ELM_CORE_INFO("Shader compilation of \"{0}\" complete in {1} ms", m_name, timer.elapsed_milliseconds());
+		ELM_CORE_INFO("Shader compilation of \"{0}\" complete in {1} ms", this->name, timer.elapsed_milliseconds());
 	}
 
 	void opengl_shader::delete_binaries(void)
 	{
 		if (std::filesystem::exists(s_cache_directory)) {
 			for (auto &kind : { GL_VERTEX_SHADER, GL_FRAGMENT_SHADER }) {
-				std::filesystem::path cachedOpenGLPath = s_cache_directory / (m_fpath.filename().string() + glshader_kind_cached_opengl_file_extension(kind));
-				std::filesystem::path cachedVulkanPath = s_cache_directory / (m_fpath.filename().string() + glshader_kind_cached_vulkan_file_extension(kind));
+				std::filesystem::path cachedOpenGLPath = s_cache_directory / (this->fpath.filename().string() + glshader_kind_cached_opengl_file_extension(kind));
+				std::filesystem::path cachedVulkanPath = s_cache_directory / (this->fpath.filename().string() + glshader_kind_cached_vulkan_file_extension(kind));
 				remove(cachedOpenGLPath);
 				remove(cachedVulkanPath);
 			}
@@ -214,13 +214,13 @@ namespace elm {
 			options.SetOptimizationLevel(shaderc_optimization_level_performance);
 		}
 
-		m_vulkan_spirv.clear();
+		this->vulkan_spirv.clear();
 
 		for (auto &&[kind, source] : shader_sources) {
 			bool has_valid_cache = false;
 			uint32_t checksum_from_source = crc32((uint8_t *)source.data(), (uint32_t)source.size());
 
-			std::filesystem::path shader_fpath = m_fpath;
+			std::filesystem::path shader_fpath = this->fpath;
 			std::filesystem::path cache_path = s_cache_directory / (shader_fpath.filename().string() + glshader_kind_cached_vulkan_file_extension(kind));
 
 			std::ifstream in(cache_path, std::ios::in | std::ios::binary);
@@ -236,24 +236,28 @@ namespace elm {
 
 				if (has_valid_cache) {
 					size -= sizeof(checksum_from_file);
-					auto &data = m_vulkan_spirv[kind];
+					auto &data = this->vulkan_spirv[kind];
 					data.resize(size / sizeof(uint32_t));
 					in.read((char *)data.data(), size);
 				}
 			}
 
 			if (!has_valid_cache) {
-				shaderc::SpvCompilationResult res = compiler.CompileGlslToSpv(source, glshader_kind_to_shaderc(kind), (const char *)m_fpath.c_str(), options);
+				shaderc::SpvCompilationResult res = compiler.CompileGlslToSpv(
+					source,
+					glshader_kind_to_shaderc(kind),
+					(const char *)this->fpath.c_str(),
+					options);
 				if (res.GetCompilationStatus() != shaderc_compilation_status_success) {
 					ELM_CORE_ERROR(res.GetErrorMessage());
 					ELM_CORE_ASSERT(false, "Shader Compilation Failed!");
 				}
 
-				m_vulkan_spirv[kind] = std::vector<uint32_t>(res.cbegin(), res.cend());
+				this->vulkan_spirv[kind] = std::vector<uint32_t>(res.cbegin(), res.cend());
 
 				std::ofstream out(cache_path, std::ios::out | std::ios::binary);
 				if (out.is_open()) {
-					auto &data = m_vulkan_spirv[kind];
+					auto &data = this->vulkan_spirv[kind];
 					out.write((const char *)&checksum_from_source, sizeof(checksum_from_source));
 					out.write((char *)data.data(), data.size() * sizeof(uint32_t));
 					out.flush();
@@ -262,7 +266,7 @@ namespace elm {
 			}
 		}
 
-		for (auto &&[kind, data] : m_vulkan_spirv) {
+		for (auto &&[kind, data] : this->vulkan_spirv) {
 			reflect(kind, data);
 		}
 	}
@@ -280,13 +284,13 @@ namespace elm {
 			options.SetOptimizationLevel(shaderc_optimization_level_performance);
 		}
 
-		m_opengl_spirv.clear();
+		this->opengl_spirv.clear();
 
-		for (auto &&[kind, spirv] : m_vulkan_spirv) {
+		for (auto &&[kind, spirv] : this->vulkan_spirv) {
 			bool has_valid_cache = false;
 			uint32_t checksum_from_spirv = crc32((uint8_t *)spirv.data(), (uint32_t)(spirv.size() * sizeof(uint32_t)));
 
-			std::filesystem::path shader_fpath = m_fpath;
+			std::filesystem::path shader_fpath = this->fpath;
 			std::filesystem::path cache_path = s_cache_directory / (shader_fpath.filename().string() + glshader_kind_cached_opengl_file_extension(kind));
 
 			std::ifstream in(cache_path, std::ios::in | std::ios::binary);
@@ -302,7 +306,7 @@ namespace elm {
 
 				if (has_valid_cache) {
 					size -= sizeof(checksum_from_file);
-					auto &data = m_opengl_spirv[kind];
+					auto &data = this->opengl_spirv[kind];
 					data.resize(size / sizeof(uint32_t));
 					in.read((char *)data.data(), size);
 				}
@@ -312,17 +316,21 @@ namespace elm {
 				spirv_cross::CompilerGLSL glsl_compiler(spirv);
 				auto source = glsl_compiler.compile(); // OpenGL source code
 
-				shaderc::SpvCompilationResult res = compiler.CompileGlslToSpv(source, glshader_kind_to_shaderc(kind), (const char *)m_fpath.c_str(), options);
+				shaderc::SpvCompilationResult res = compiler.CompileGlslToSpv(
+					source,
+					glshader_kind_to_shaderc(kind),
+					(const char *)this->fpath.c_str(),
+					options);
 				if (res.GetCompilationStatus() != shaderc_compilation_status_success) {
 					ELM_CORE_ERROR(res.GetErrorMessage());
 					ELM_CORE_ASSERT(false, "Shader Compilation Failed!");
 				}
 
-				m_opengl_spirv[kind] = std::vector<uint32_t>(res.cbegin(), res.cend());
+				this->opengl_spirv[kind] = std::vector<uint32_t>(res.cbegin(), res.cend());
 
 				std::ofstream out(cache_path, std::ios::out | std::ios::binary);
 				if (out.is_open()) {
-					auto &data = m_opengl_spirv[kind];
+					auto &data = this->opengl_spirv[kind];
 					out.write((const char *)&checksum_from_spirv, sizeof(checksum_from_spirv));
 					out.write((char *)data.data(), data.size() * sizeof(uint32_t));
 					out.flush();
@@ -339,7 +347,7 @@ namespace elm {
 		GLuint program = glCreateProgram();
 
 		std::vector<GLuint> shader_ids;
-		for (auto &&[kind, spirv] : m_opengl_spirv) {
+		for (auto &&[kind, spirv] : this->opengl_spirv) {
 			GLuint shader_id = shader_ids.emplace_back(glCreateShader(kind));
 			glShaderBinary(1, &shader_id, GL_SHADER_BINARY_FORMAT_SPIR_V, spirv.data(), (GLsizei)(spirv.size() * sizeof(uint32_t)));
 			glSpecializeShader(shader_id, "main", 0, nullptr, nullptr);
@@ -373,7 +381,7 @@ namespace elm {
 			glDeleteShader(shader);
 		}
 
-		m_renderer_id = program;
+		this->renderer_id = program;
 	}
 
 	void opengl_shader::reflect(uint32_t kind, const std::vector<uint32_t> &shader_data)
@@ -381,7 +389,7 @@ namespace elm {
 		spirv_cross::Compiler compiler(shader_data);
 		spirv_cross::ShaderResources resources = compiler.get_shader_resources();
 
-		ELM_CORE_TRACE("opengl_shader::reflect - {0} {1}", glshader_kind_to_string(kind), m_fpath.string());
+		ELM_CORE_TRACE("opengl_shader::reflect - {0} {1}", glshader_kind_to_string(kind), this->fpath.string());
 		ELM_CORE_TRACE("  {0} uniform buffers", resources.uniform_buffers.size());
 		ELM_CORE_TRACE("  {0} resources", resources.sampled_images.size());
 

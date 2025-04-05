@@ -1,11 +1,10 @@
-#include "renderer_2d.h"
-
-#include "elm/core/renderer/render_command.h"
-#include "elm/core/renderer/shader.h"
-#include "elm/core/renderer/texture.h"
-#include "elm/core/renderer/uniform_buffer.h"
-#include "elm/core/renderer/vertex_array.h"
-#include "elm/renderer/msdf_data.h"
+#include "renderer_2d.hpp"
+#include "elm/core/renderer/render_command.hpp"
+#include "elm/core/renderer/shader.hpp"
+#include "elm/core/renderer/texture.hpp"
+#include "elm/core/renderer/uniform_buffer.hpp"
+#include "elm/core/renderer/vertex_array.hpp"
+#include "elm/renderer/msdf_data.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <array>
 

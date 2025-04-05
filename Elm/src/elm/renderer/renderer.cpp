@@ -1,9 +1,9 @@
-#include "renderer.h"
-#include "renderer_2d.h"
-#include "scene_renderer.h"
-#include "elm/core/renderer/uniform_buffer.h"
-#include "elm/core/renderer/render_command.h"
-#include "elm/math/math.h"
+#include "renderer.hpp"
+#include "renderer_2d.hpp"
+#include "scene_renderer.hpp"
+#include "elm/core/renderer/uniform_buffer.hpp"
+#include "elm/core/renderer/render_command.hpp"
+#include "elm/math/math.hpp"
 
 namespace elm::renderer {
 

@@ -1,4 +1,4 @@
-#include "shader_library.h"
+#include "shader_library.hpp"
 
 namespace elm {
 
@@ -7,7 +7,7 @@ namespace elm {
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		ELM_CORE_ASSERT(!contains(name), "Shader already exists");
-		m_shaders[name] = shader;
+		this->shaders[name] = shader;
 	}
 
 	void shader_library::add(const std::shared_ptr<shader> &shader)
@@ -36,6 +36,6 @@ namespace elm {
 	std::shared_ptr<shader> shader_library::get(const std::string &name)
 	{
 		ELM_CORE_ASSERT(contains(name), "Shader not found");
-		return m_shaders[name];
+		return this->shaders[name];
 	}
 }

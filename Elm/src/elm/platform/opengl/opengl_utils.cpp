@@ -1,4 +1,4 @@
-#include "opengl_utils.h"
+#include "opengl_utils.hpp"
 
 namespace elm::utils {
 

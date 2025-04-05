@@ -1,12 +1,14 @@
-#include "sandbox_app.h"
-#include "dockspace_layer.h"
-#include "example_layer.h"
-#include "sandbox_2d_layer.h"
-#include "sandbox_3d_layer.h"
-#include "sprite_sheet_layer.h"
-#include "pbr_layer.h"
+#include "sandbox_app.hpp"
+#include "dockspace_layer.hpp"
+#include "example_layer.hpp"
+#include "sandbox_2d_layer.hpp"
+#include "sandbox_3d_layer.hpp"
+#include "sprite_sheet_layer.hpp"
+#include "pbr_layer.hpp"
 
-sandbox::sandbox(const struct elm::application_specification &spec, struct elm::application_command_line_args args)
+sandbox::sandbox(
+		const struct elm::application_specification &spec,
+		struct elm::application_command_line_args args)
 	: elm::application(spec, args)
 {
 	//push_layer(new example_layer());

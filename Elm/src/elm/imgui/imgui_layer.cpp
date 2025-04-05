@@ -1,6 +1,6 @@
-#include "imgui_layer.h"
+#include "imgui_layer.hpp"
 
-#include "elm/core/application.h"
+#include "elm/core/application.hpp"
 
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
@@ -17,10 +17,6 @@ namespace elm {
 
 	imgui_layer::imgui_layer(void)
 		: layer("ImGuiLayer")
-	{
-	}
-
-	imgui_layer::~imgui_layer(void)
 	{
 	}
 
@@ -62,7 +58,7 @@ namespace elm {
 	{
 		ELM_PROFILE_FUNCTION();
 
-		if (!m_block_events) {
+		if (!this->block_events) {
 			return;
 		}
 

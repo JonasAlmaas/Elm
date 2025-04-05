@@ -1,16 +1,13 @@
-#include <elm.h>
-#include <elm/core/entypoiny.h>
-
-#include "sandbox_app.h"
+#include "sandbox_app.hpp"
+#include <elm.hpp>
+#include <elm/core/entypoiny.hpp>
 
 namespace elm {
 
 	application* application::create(struct application_command_line_args args)
 	{
-		return new sandbox(
-			{
-				.name = "Sandbox"
-			},
-			args);
+		elm::application_specification spec;
+		spec.name = "Sandbox";
+		return new sandbox(spec, args);
 	}
 }

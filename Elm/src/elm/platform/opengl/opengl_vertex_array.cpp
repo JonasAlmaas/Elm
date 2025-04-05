@@ -1,4 +1,4 @@
-#include "opengl_vertex_array.h"
+#include "opengl_vertex_array.hpp"
 
 #include <glad/glad.h>
 
@@ -31,19 +31,19 @@ namespace elm {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		glGenVertexArrays(1, &m_renderer_id);
+		glGenVertexArrays(1, &this->renderer_id);
 	}
 
 	opengl_vertex_array::~opengl_vertex_array()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		glDeleteBuffers(1, &m_renderer_id);
+		glDeleteBuffers(1, &this->renderer_id);
 	}
 
 	void opengl_vertex_array::bind(void)
 	{
-		glBindVertexArray(m_renderer_id);
+		glBindVertexArray(this->renderer_id);
 	}
 
 	void opengl_vertex_array::unbind(void)
@@ -55,7 +55,7 @@ namespace elm {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		glBindVertexArray(m_renderer_id);
+		glBindVertexArray(this->renderer_id);
 		vertex_buffer->bind();
 
 		const auto layout = vertex_buffer->get_layout();
@@ -116,16 +116,16 @@ namespace elm {
 			}
 		}
 
-		m_vertex_buffers.push_back(vertex_buffer);
+		this->vbs.push_back(vertex_buffer);
 	}
 
 	void opengl_vertex_array::set_index_buffer(const std::shared_ptr<index_buffer> &index_buffer)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		glBindVertexArray(m_renderer_id);
-		index_buffer->bind();
+		this->ib = index_buffer;
 
-		m_index_buffer = index_buffer;
+		glBindVertexArray(this->renderer_id);
+		this->ib->bind();
 	}
 }

@@ -1,68 +1,68 @@
-#include "application.h"
-#include "elm/core/time.h"
-#include "elm/renderer/renderer.h"
-#include "elm/random.h"
+#include "application.hpp"
+#include "elm/core/time.hpp"
+#include "elm/renderer/renderer.hpp"
+#include "elm/random.hpp"
 
 namespace elm {
 
 	application* application::s_instance = nullptr;
 
 	application::application(const struct application_specification &spec, struct application_command_line_args args)
-		: m_spec(spec), m_cmd_line_args(args)
+		: spec(spec), cmd_line_args(args)
 	{
 		ELM_PROFILE_FUNCTION();
 
 		ELM_CORE_ASSERT(!s_instance, "Application already exists");
 		s_instance = this;
 
-		if (!m_spec.cwd.empty()) {
-			std::filesystem::current_path(m_spec.cwd);
+		if (!this->spec.cwd.empty()) {
+			std::filesystem::current_path(this->spec.cwd);
 		}
 
-		m_window = window::create({
-			.title = m_spec.name,
-			.width = m_spec.window_width,
-			.height = m_spec.window_height,
-			.vsync = m_spec.vsync});
-		m_window->set_event_callback(ELM_BIND_EVENT_FN(application::on_event));
+		this->window = window::create({
+			.title = this->spec.name,
+			.width = this->spec.window_width,
+			.height = this->spec.window_height,
+			.vsync = this->spec.vsync});
+		this->window->set_event_callback(ELM_BIND_EVENT_FN(application::on_event));
 
 		random::init();
 		renderer::init();
 
-		m_imgui_layer = new imgui_layer();
-		push_overlay(m_imgui_layer);
+		this->imgui_l = new imgui_layer();
+		push_overlay(this->imgui_l);
 	}
 
 	void application::run(void)
 	{
 		ELM_PROFILE_FUNCTION();
 
-		while (m_running) {
+		while (this->running) {
 			ELM_PROFILE_SCOPE("application::run() - Run loop");
 
 			float time = time::get_seconds();
-			timestep timestep(time - m_last_frame_time_sec);
-			m_last_frame_time_sec = time;
+			timestep timestep(time - this->last_frame_time_sec);
+			this->last_frame_time_sec = time;
 
-			if (!m_minimized) {
-				m_telemetry.on_update(timestep);
+			if (!this->minimized) {
+				this->telemetry.on_update(timestep);
 
 				ELM_PROFILE_SCOPE("application::run() - Layer stack on_update()");
-				for (auto layer : m_layer_stack) {
+				for (auto layer : this->layer_stack) {
 					layer->on_update(timestep);
 				}
 			}
 
-			m_imgui_layer->begin();
+			this->imgui_l->begin();
 			{
 				ELM_PROFILE_SCOPE("application::run() - Layer stack on_imgui_render()");
-				for (auto layer : m_layer_stack) {
+				for (auto layer : this->layer_stack) {
 					layer->on_imgui_render();
 				}
 			}
-			m_imgui_layer->end();
+			this->imgui_l->end();
 
-			m_window->on_update(m_minimized);
+			this->window->on_update(this->minimized);
 		}
 
 		renderer::shutdown();
@@ -72,14 +72,14 @@ namespace elm {
 	{
 		ELM_PROFILE_FUNCTION();
 
-		m_layer_stack.push_layer(layer);
+		this->layer_stack.push_layer(layer);
 	}
 
 	void application::push_overlay(layer* layer)
 	{
 		ELM_PROFILE_FUNCTION();
 
-		m_layer_stack.push_overlay(layer);
+		this->layer_stack.push_overlay(layer);
 	}
 
 	void application::on_event(event& e)
@@ -90,7 +90,7 @@ namespace elm {
 		dispatcher.dispatch<window_close_event>(ELM_BIND_EVENT_FN(application::on_window_close));
 		dispatcher.dispatch<window_resize_event>(ELM_BIND_EVENT_FN(application::on_window_resize));
 
-		for (auto it = m_layer_stack.end(); it != m_layer_stack.begin(); ) {
+		for (auto it = this->layer_stack.end(); it != this->layer_stack.begin(); ) {
 			if (e.handled) {
 				break;
 			}
@@ -102,7 +102,7 @@ namespace elm {
 	{
 		ELM_PROFILE_FUNCTION();
 
-		m_running = false;
+		this->running = false;
 		return true;
 	}
 
@@ -114,11 +114,11 @@ namespace elm {
 		uint32_t height = e.get_height();
 
 		if (width == 0 || height == 0) {
-			m_minimized = true;
+			this->minimized = true;
 			return true;
 		}
 
-		m_minimized = false;
+		this->minimized = false;
 
 		renderer::on_viewport_resize(width, height);
 

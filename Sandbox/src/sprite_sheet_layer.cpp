@@ -1,5 +1,4 @@
-#include "sprite_sheet_layer.h"
-
+#include "sprite_sheet_layer.hpp"
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -40,27 +39,27 @@ static uint32_t s_map[MAP_SIZE * MAP_SIZE] = {
 };
 
 sprite_sheet_layer::sprite_sheet_layer(void)
-	: layer("Sandbox2D"), m_camera_controller(16.0f / 9.0f, false)
+	: layer("Sandbox2D"), camera_controller(16.0f / 9.0f, false)
 {
 }
 
 void sprite_sheet_layer::on_attach(void)
 {
-	m_texture_grass_tileset = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png", {
+	this->texture_grass_tileset = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png", {
 		.mag_filter = elm::texture_filter::NEAREST
 	});
-	m_texture_water_tileset = elm::texture_2d::create("content/textures/sprout-lands/water_tileset.png", {
+	this->texture_water_tileset = elm::texture_2d::create("content/textures/sprout-lands/water_tileset.png", {
 		.mag_filter = elm::texture_filter::NEAREST
 	});
 
 	for (int y = 0; y < 5; ++y) {
 		for (int x = 0; x < 11; ++x) {
-			m_texture_atlas_grass_tileset[y * 11 + x] = elm::sub_texture_2d::from_atlas(m_texture_grass_tileset, 16, 16, x, y);
+			this->texture_atlas_grass_tileset[y * 11 + x] = elm::sub_texture_2d::from_atlas(this->texture_grass_tileset, 16, 16, x, y);
 		}
 	}
 
 	for (int x = 0; x < 4; ++x) {
-		m_texture_sprite_water[x] = elm::sub_texture_2d::from_atlas(m_texture_water_tileset, 16, 16, x, 0);
+		this->texture_sprite_water[x] = elm::sub_texture_2d::from_atlas(this->texture_water_tileset, 16, 16, x, 0);
 	}
 }
 
@@ -72,7 +71,7 @@ void sprite_sheet_layer::on_update(elm::timestep ts)
 {
 	calculate_fps(ts);
 
-	m_camera_controller.on_update(ts);
+	this->camera_controller.on_update(ts);
 
 	static float prev_tick_time_s = 0.0f;
 	float time = elm::time::get_seconds();
@@ -85,7 +84,7 @@ void sprite_sheet_layer::on_update(elm::timestep ts)
 	elm::render_command::clear();
 
 	elm::renderer_2d::reset_stats();
-	elm::renderer_2d::begin_scene(m_camera_controller.get_camera());
+	elm::renderer_2d::begin_scene(this->camera_controller.get_camera());
 
 	for (int y = 0; y < MAP_SIZE; ++y) {
 		for (int x = 0; x < MAP_SIZE; ++x) {
@@ -94,18 +93,18 @@ void sprite_sheet_layer::on_update(elm::timestep ts)
 			glm::vec2 size = { 0.25f, 0.25f };
 
 			if (tile != 13) {
-				elm::renderer_2d::draw_sprite(glm::vec3(pos, -0.1f), size, m_texture_sprite_water[m_water_ix]);
+				elm::renderer_2d::draw_sprite(glm::vec3(pos, -0.1f), size, this->texture_sprite_water[this->animation_ix]);
 			}
 
 			if (tile) {
-				elm::renderer_2d::draw_sprite(pos, size, m_texture_atlas_grass_tileset[tile - 1]);
+				elm::renderer_2d::draw_sprite(pos, size, this->texture_atlas_grass_tileset[tile - 1]);
 			}
 		}
 	}
 
 	/*for (int y = 0; y < 5; ++y) {
 		for (int x = 0; x < 11; ++x) {
-			elm::renderer_2d::draw_sprite({ x, 5 - y }, { 1.0f, 1.0f }, m_texture_atlas_grass_tileset[y * 11 + x]);
+			elm::renderer_2d::draw_sprite({ x, 5 - y }, { 1.0f, 1.0f }, this->texture_atlas_grass_tileset[y * 11 + x]);
 		}
 	}*/
 
@@ -114,7 +113,7 @@ void sprite_sheet_layer::on_update(elm::timestep ts)
 
 void sprite_sheet_layer::on_event(elm::event &e)
 {
-	m_camera_controller.on_event(e);
+	this->camera_controller.on_event(e);
 
 	elm::event_dispatcher dispatcher(e);
 
@@ -126,7 +125,7 @@ void sprite_sheet_layer::on_imgui_render(void)
 	elm::renderer_2d::statistics stats = elm::renderer_2d::get_stats();
 
 	ImGui::Begin("Statistics");
-	ImGui::Text("FPS: %.2f", 1.0f / m_avg_frame_delta);
+	ImGui::Text("FPS: %.2f", 1.0f / this->avg_frame_delta);
 	ImGui::Text("Quad count: %d", stats.quad_count);
 	ImGui::Text("Draw calls: %d", stats.draw_calls);
 
@@ -152,7 +151,7 @@ void sprite_sheet_layer::calculate_fps(elm::timestep ts)
 	s_frame_time_acc += ts.get_seconds();
 	++s_frame_time_acc_ix;
 	if (s_frame_time_acc_ix >= 30) {
-		m_avg_frame_delta = s_frame_time_acc / (float)s_frame_time_acc_ix;
+		this->avg_frame_delta = s_frame_time_acc / (float)s_frame_time_acc_ix;
 		s_frame_time_acc = 0.0f;
 		s_frame_time_acc_ix = 0;
 	}
@@ -160,13 +159,13 @@ void sprite_sheet_layer::calculate_fps(elm::timestep ts)
 
 void sprite_sheet_layer::tick(void)
 {
-	if (++m_water_ix > 3) {
-		m_water_ix = 0;
+	if (++this->animation_ix > 3) {
+		this->animation_ix = 0;
 	}
 }
 
 bool sprite_sheet_layer::on_window_resize(elm::window_resize_event &e)
 {
-	m_camera_controller.resize_viewport(e.get_width(), e.get_height());
+	this->camera_controller.resize_viewport(e.get_width(), e.get_height());
 	return false;
 }

@@ -1,4 +1,4 @@
-#include "elm/core/time.h"
+#include "elm/core/time.hpp"
 
 #ifdef ELM_PLATFORM_WINDOWS
 

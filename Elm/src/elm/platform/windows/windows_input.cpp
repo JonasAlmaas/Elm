@@ -1,8 +1,8 @@
-#include "elm/core/input/input.h"
+#include "elm/core/input/input.hpp"
 
 #ifdef ELM_PLATFORM_WINDOWS
 
-#include "elm/core/application.h"
+#include "elm/core/application.hpp"
 #include <GLFW/glfw3.h>
 
 namespace elm::input {

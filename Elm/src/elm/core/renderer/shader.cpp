@@ -1,7 +1,7 @@
-#include "shader.h"
+#include "shader.hpp"
 
-#include "renderer_api.h"
-#include "elm/platform/opengl/opengl_shader.h"
+#include "renderer_api.hpp"
+#include "elm/platform/opengl/opengl_shader.hpp"
 
 namespace elm {
 

@@ -1,7 +1,7 @@
-#include "window.h"
+#include "window.hpp"
 
 #ifdef ELM_PLATFORM_WINDOWS
-#include "elm/platform/windows/windows_window.h"
+#include "elm/platform/windows/windows_window.hpp"
 #endif
 
 namespace elm {

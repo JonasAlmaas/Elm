@@ -1,7 +1,7 @@
-#include "vertex_buffer.h"
+#include "vertex_buffer.hpp"
 
-#include "renderer_api.h"
-#include "elm/platform/opengl/opengl_vertex_buffer.h"
+#include "renderer_api.hpp"
+#include "elm/platform/opengl/opengl_vertex_buffer.hpp"
 
 namespace elm {
 

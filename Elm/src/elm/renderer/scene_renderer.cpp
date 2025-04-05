@@ -1,11 +1,11 @@
-#include "scene_renderer.h"
-#include "elm/core/renderer/render_command.h"
-#include "elm/core/renderer/shader.h"
-#include "elm/core/renderer/uniform_buffer.h"
-#include "elm/math/math.h"
-#include "elm/renderer/renderer.h"
-#include "elm/renderer/renderer_2d.h"
-#include "elm/scene/components.h"
+#include "scene_renderer.hpp"
+#include "elm/core/renderer/render_command.hpp"
+#include "elm/core/renderer/shader.hpp"
+#include "elm/core/renderer/uniform_buffer.hpp"
+#include "elm/math/math.hpp"
+#include "elm/renderer/renderer.hpp"
+#include "elm/renderer/renderer_2d.hpp"
+#include "elm/scene/components.hpp"
 #include <glm/glm.hpp>
 
 // Temp

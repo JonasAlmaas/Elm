@@ -1,6 +1,6 @@
-#include "font.h"
+#include "font.hpp"
 
-#include "msdf_data.h"
+#include "msdf_data.hpp"
 #include <FontGeometry.h>
 #include <GlyphGeometry.h>
 
@@ -39,7 +39,7 @@ namespace elm {
 	}
 
 	font::font(const std::filesystem::path &fpath)
-		: m_data(new msdf_data())
+		: data(new msdf_data())
 	{
 		auto ft = msdfgen::initializeFreetype();
 		ELM_CORE_ASSERT(ft);
@@ -69,8 +69,8 @@ namespace elm {
 		}
 
 		double font_scale = 1.0;
-		m_data->font_geometry = msdf_atlas::FontGeometry(&m_data->glyphs);
-		int glyphs_loaded = m_data->font_geometry.loadCharset(font, font_scale, charset);
+		this->data->font_geometry = msdf_atlas::FontGeometry(&this->data->glyphs);
+		int glyphs_loaded = this->data->font_geometry.loadCharset(font, font_scale, charset);
 		ELM_CORE_INFO("Loaded {} glyphs from font (out of {})", glyphs_loaded, charset.size());
 
 		double em_size = 40.0;
@@ -82,7 +82,7 @@ namespace elm {
 		atlas_packer.setInnerUnitPadding(0);
 		atlas_packer.setOuterUnitPadding(0);
 		atlas_packer.setScale(em_size);
-		int remaining = atlas_packer.pack(m_data->glyphs.data(), (int)m_data->glyphs.size());
+		int remaining = atlas_packer.pack(this->data->glyphs.data(), (int)this->data->glyphs.size());
 		ELM_CORE_ASSERT(remaining == 0);
 
 		int width, height;
@@ -98,24 +98,24 @@ namespace elm {
 		uint64_t coloring_seed = 0;
 		bool expensive_coloring = false;
 		if (expensive_coloring) {
-			msdf_atlas::Workload([&glyphs = m_data->glyphs, &coloring_seed](int i, int thread_no) -> bool {
+			msdf_atlas::Workload([&glyphs = this->data->glyphs, &coloring_seed](int i, int thread_no) -> bool {
 				uint64_t glyph_seed = (LCG_MULTIPLIER * (coloring_seed ^ i) + LCG_INCREMENT) * !!coloring_seed;
 				glyphs[i].edgeColoring(msdfgen::edgeColoringInkTrap, DEFAULT_ANGLE_THRESHOLD, glyph_seed);
 				return true;
-			}, (int)m_data->glyphs.size()).finish(THREAD_COUNT);
+			}, (int)this->data->glyphs.size()).finish(THREAD_COUNT);
 		} else {
 			uint64_t glyph_seed = coloring_seed;
-			for (auto &glyph : m_data->glyphs) {
+			for (auto &glyph : this->data->glyphs) {
 				glyph_seed *= LCG_MULTIPLIER;
 				glyph.edgeColoring(msdfgen::edgeColoringInkTrap, DEFAULT_ANGLE_THRESHOLD, glyph_seed);
 			}
 		}
 
-		m_atlas_texture = create_atlas<uint8_t, float, 3, msdf_atlas::msdfGenerator>(
+		this->atlas_texture = create_atlas<uint8_t, float, 3, msdf_atlas::msdfGenerator>(
 			"Test",
 			(float)em_size,
-			m_data->glyphs,
-			m_data->font_geometry,
+			this->data->glyphs,
+			this->data->font_geometry,
 			width,
 			height);
 
@@ -125,7 +125,7 @@ namespace elm {
 
 	font::~font(void)
 	{
-		delete m_data;
+		delete this->data;
 	}
 
 	std::shared_ptr<font> font::create(const std::filesystem::path &fpath)

@@ -1,4 +1,4 @@
-#include "opengl_vertex_buffer.h"
+#include "opengl_vertex_buffer.hpp"
 
 #include <glad/glad.h>
 
@@ -8,8 +8,8 @@ namespace elm {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		glCreateBuffers(1, &m_renderer_id);
-		glBindBuffer(GL_ARRAY_BUFFER, m_renderer_id);
+		glCreateBuffers(1, &this->renderer_id);
+		glBindBuffer(GL_ARRAY_BUFFER, this->renderer_id);
 		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
 	}
 
@@ -17,8 +17,8 @@ namespace elm {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		glCreateBuffers(1, &m_renderer_id);
-		glBindBuffer(GL_ARRAY_BUFFER, m_renderer_id);
+		glCreateBuffers(1, &this->renderer_id);
+		glBindBuffer(GL_ARRAY_BUFFER, this->renderer_id);
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 	}
 
@@ -26,12 +26,12 @@ namespace elm {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		glDeleteBuffers(1, &m_renderer_id);
+		glDeleteBuffers(1, &this->renderer_id);
 	}
 
 	void opengl_vertex_buffer::bind(void) const
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, m_renderer_id);
+		glBindBuffer(GL_ARRAY_BUFFER, this->renderer_id);
 	}
 
 	void opengl_vertex_buffer::unbind(void) const
@@ -43,12 +43,12 @@ namespace elm {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		glBindBuffer(GL_ARRAY_BUFFER, m_renderer_id);
+		glBindBuffer(GL_ARRAY_BUFFER, this->renderer_id);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
 	}
 
 	void opengl_vertex_buffer::set_layout(const vertex_buffer_layout *layout)
 	{
-		m_layout = *layout;
+		this->layout = *layout;
 	}
 }

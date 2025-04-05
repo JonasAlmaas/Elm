@@ -1,31 +1,30 @@
-#include "orthographic_camera.h"
+#include "orthographic_camera.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace elm {
 
 	orthographic_camera::orthographic_camera(float left, float right, float bottom, float top)
-		: m_projection_matrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f)),
-		m_view_matrix(1.0f)
+		: projection(glm::ortho(left, right, bottom, top, -1.0f, 1.0f)), view(1.0f)
 	{
 		ELM_PROFILE_FUNCTION();
 
-		m_view_projection_matrix = m_projection_matrix * m_view_matrix;
+		this->view_projection = this->projection * this->view;
 	}
 
 	void orthographic_camera::set_projection(float left, float right, float bottom, float top)
 	{
 		ELM_PROFILE_FUNCTION();
 
-		m_projection_matrix = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
-		m_view_projection_matrix = m_projection_matrix * m_view_matrix;
+		this->projection = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
+		this->view_projection = this->projection * this->view;
 	}
 
 	void orthographic_camera::set_view_matrix(const glm::mat4 &view_matrix)
 	{
 		ELM_PROFILE_FUNCTION();
 
-		m_view_matrix = view_matrix;
-		m_view_projection_matrix = m_projection_matrix * m_view_matrix;
+		this->view = view_matrix;
+		this->view_projection = this->projection * this->view;
 	}
 }

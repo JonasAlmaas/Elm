@@ -1,8 +1,8 @@
-#include "cubemap.h"
-#include "elm/core/renderer/frame_buffer.h"
-#include "elm/core/renderer/render_command.h"
-#include "elm/core/renderer/shader.h"
-#include "elm/core/renderer/uniform_buffer.h"
+#include "cubemap.hpp"
+#include "elm/core/renderer/frame_buffer.hpp"
+#include "elm/core/renderer/render_command.hpp"
+#include "elm/core/renderer/shader.hpp"
+#include "elm/core/renderer/uniform_buffer.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/glm.hpp>
 

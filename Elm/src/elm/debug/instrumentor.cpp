@@ -1,25 +1,25 @@
-#include "instrumentor.h"
+#include "instrumentor.hpp"
 
 namespace elm {
 
 	void instrumentor::begin_session(const std::string &name, const std::string &fpath)
 	{
-		std::lock_guard lock(m_mutex);
-		if (m_current_session) {
+		std::lock_guard lock(this->mutex);
+		if (this->current_session) {
 			// If there is already a current session, then close it before beginning new one.
 			// Subsequent profiling output meant for the original session will end up in the
 			// newly opened session instead. That's better than having badly formatted
 			// profiling output.
 			if (log::get_core_logger()) { // Edge case: BeginSession() might be before log::init()
-				ELM_CORE_ERROR("Instrumentor::BeginSession('{0}') when session \"{1}\" already open", name, m_current_session->name);
+				ELM_CORE_ERROR("Instrumentor::BeginSession('{0}') when session \"{1}\" already open", name, this->current_session->name);
 			}
 			internal_end_session();
 		}
 
-		m_output_stream.open(fpath);
+		this->output_stream.open(fpath);
 
-		if (m_output_stream.is_open()) {
-			m_current_session = new instrumentation_session({ name });
+		if (this->output_stream.is_open()) {
+			this->current_session = new instrumentation_session({ name });
 			write_header();
 		} else {
 			if (log::get_core_logger()) { // Edge case: BeginSession() might be before log::init()
@@ -30,7 +30,7 @@ namespace elm {
 
 	void instrumentor::end_session(void)
 	{
-		std::lock_guard lock(m_mutex);
+		std::lock_guard lock(this->mutex);
 		internal_end_session();
 	}
 
@@ -50,15 +50,15 @@ namespace elm {
 		json << "\"ts\":" << result.start_us.count();
 		json << "}";
 
-		std::lock_guard lock(m_mutex);
-		if (m_current_session) {
-			m_output_stream << json.str();
-			m_output_stream.flush();
+		std::lock_guard lock(this->mutex);
+		if (this->current_session) {
+			this->output_stream << json.str();
+			this->output_stream.flush();
 		}
 	}
 
 	instrumentor::instrumentor(void)
-		: m_current_session(nullptr)
+		: current_session(nullptr)
 	{
 	}
 
@@ -69,34 +69,34 @@ namespace elm {
 
 	void instrumentor::write_header(void)
 	{
-		m_output_stream << "{\"otherData\": {},\"traceEvents\":[{}";
-		m_output_stream.flush();
+		this->output_stream << "{\"otherData\": {},\"traceEvents\":[{}";
+		this->output_stream.flush();
 	}
 
 	void instrumentor::write_footer(void)
 	{
-		m_output_stream << "]}";
-		m_output_stream.flush();
+		this->output_stream << "]}";
+		this->output_stream.flush();
 	}
 
 	void instrumentor::internal_end_session(void)
 	{
-		if (m_current_session) {
+		if (this->current_session) {
 			write_footer();
-			m_output_stream.close();
-			delete m_current_session;
-			m_current_session = nullptr;
+			this->output_stream.close();
+			delete this->current_session;
+			this->current_session = nullptr;
 		}
 	}
 
 	instrumentation_timer::instrumentation_timer(const char *name)
-		: m_name(name), m_start_timepoint(std::chrono::steady_clock::now()), m_stopped(false)
+		: name(name), start_timepoint(std::chrono::steady_clock::now()), stopped(false)
 	{
 	}
 
 	instrumentation_timer::~instrumentation_timer()
 	{
-		if (!m_stopped) {
+		if (!this->stopped) {
 			stop();
 		}
 	}
@@ -104,12 +104,12 @@ namespace elm {
 	void instrumentation_timer::stop()
 	{
 		auto end_timepoint = std::chrono::steady_clock::now();
-		auto high_res_start = std::chrono::duration<double, std::micro>{ m_start_timepoint.time_since_epoch() };
+		auto high_res_start = std::chrono::duration<double, std::micro>{ this->start_timepoint.time_since_epoch() };
 		auto elapsed_time = std::chrono::time_point_cast<std::chrono::microseconds>(end_timepoint).time_since_epoch()
-			- std::chrono::time_point_cast<std::chrono::microseconds>(m_start_timepoint).time_since_epoch();
+			- std::chrono::time_point_cast<std::chrono::microseconds>(this->start_timepoint).time_since_epoch();
 
-		instrumentor::get()->write_profile({ m_name, high_res_start, elapsed_time, std::this_thread::get_id() });
+		instrumentor::get()->write_profile({ this->name, high_res_start, elapsed_time, std::this_thread::get_id() });
 
-		m_stopped = true;
+		this->stopped = true;
 	}
 }

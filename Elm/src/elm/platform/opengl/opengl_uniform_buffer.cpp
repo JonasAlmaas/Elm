@@ -1,33 +1,33 @@
-#include "opengl_uniform_buffer.h"
+#include "opengl_uniform_buffer.hpp"
 #include <glad/glad.h>
 
 namespace elm {
 
 	opengl_uniform_buffer::opengl_uniform_buffer(uint32_t size, uint32_t binding)
-		: m_binding(binding)
+		: binding(binding)
 	{
-		glCreateBuffers(1, &m_renderer_id);
-		glNamedBufferData(m_renderer_id, size, nullptr, GL_DYNAMIC_DRAW);
-		glBindBufferBase(GL_UNIFORM_BUFFER, m_binding, m_renderer_id);
+		glCreateBuffers(1, &this->renderer_id);
+		glNamedBufferData(this->renderer_id, size, nullptr, GL_DYNAMIC_DRAW);
+		glBindBufferBase(GL_UNIFORM_BUFFER, this->binding, this->renderer_id);
 	}
 
 	opengl_uniform_buffer::~opengl_uniform_buffer(void)
 	{
-		glDeleteBuffers(1, &m_renderer_id);
+		glDeleteBuffers(1, &this->renderer_id);
 	}
 
 	void opengl_uniform_buffer::bind(void)
 	{
-		glBindBufferBase(GL_UNIFORM_BUFFER, m_binding, m_renderer_id);
+		glBindBufferBase(GL_UNIFORM_BUFFER, this->binding, this->renderer_id);
 	}
 
 	void opengl_uniform_buffer::unbind(void)
 	{
-		glBindBufferBase(GL_UNIFORM_BUFFER, m_binding, 0);
+		glBindBufferBase(GL_UNIFORM_BUFFER, this->binding, 0);
 	}
 
 	void opengl_uniform_buffer::set_data(const void *data, uint32_t size, uint32_t offset)
 	{
-		glNamedBufferSubData(m_renderer_id, offset, size, data);
+		glNamedBufferSubData(this->renderer_id, offset, size, data);
 	}
 }

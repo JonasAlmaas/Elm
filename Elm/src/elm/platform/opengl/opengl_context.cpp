@@ -1,4 +1,4 @@
-#include "opengl_context.h"
+#include "opengl_context.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -6,16 +6,16 @@
 namespace elm {
 
 	opengl_context::opengl_context(GLFWwindow *window)
-		: m_window(window)
+		: window(window)
 	{
-		ELM_CORE_ASSERT(m_window, "Window handle is null");
+		ELM_CORE_ASSERT(this->window, "Window handle is null");
 	}
 
 	void opengl_context::init(void)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		glfwMakeContextCurrent(m_window);
+		glfwMakeContextCurrent(this->window);
 
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		ELM_CORE_ASSERT(status, "Failed to initialize glad");
@@ -32,6 +32,6 @@ namespace elm {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		glfwSwapBuffers(m_window);
+		glfwSwapBuffers(this->window);
 	}
 }

@@ -8,6 +8,8 @@ project "Elm"
 
 	files {
 		"src/**.h",
+		"src/**.c",
+		"src/**.hpp",
 		"src/**.cpp",
 
 		"include/**.h",

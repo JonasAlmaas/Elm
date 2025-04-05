@@ -1,7 +1,7 @@
-#include "frame_buffer.h"
+#include "frame_buffer.hpp"
 
-#include "renderer_api.h"
-#include "elm/platform/opengl/opengl_frame_buffer.h"
+#include "renderer_api.hpp"
+#include "elm/platform/opengl/opengl_frame_buffer.hpp"
 
 namespace elm {
 

@@ -1,5 +1,4 @@
-#include "mesh.h"
-
+#include "mesh.hpp"
 #include <glm/glm.hpp>
 #include <tiny_obj_loader.h>
 #include <vector>

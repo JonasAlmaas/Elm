@@ -1,7 +1,7 @@
-#include "vertex_array.h"
+#include "vertex_array.hpp"
 
-#include "renderer_api.h"
-#include "elm/platform/opengl/opengl_vertex_array.h"
+#include "renderer_api.hpp"
+#include "elm/platform/opengl/opengl_vertex_array.hpp"
 
 namespace elm {
 

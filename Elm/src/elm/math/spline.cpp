@@ -1,4 +1,4 @@
-#include "spline.h"
+#include "spline.hpp"
 
 namespace elm::math {
 

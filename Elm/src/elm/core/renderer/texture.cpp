@@ -1,7 +1,7 @@
-#include "texture.h"
+#include "texture.hpp"
 
-#include "renderer_api.h"
-#include "elm/platform/opengl/opengl_texture.h"
+#include "renderer_api.hpp"
+#include "elm/platform/opengl/opengl_texture.hpp"
 
 namespace elm {
 

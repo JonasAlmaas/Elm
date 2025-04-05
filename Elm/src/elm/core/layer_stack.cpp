@@ -1,4 +1,4 @@
-#include "layer_stack.h"
+#include "layer_stack.hpp"
 
 namespace elm {
 
@@ -10,7 +10,7 @@ namespace elm {
 	{
 		ELM_PROFILE_FUNCTION();
 
-		for (auto l : m_layers) {
+		for (auto l : this->layers) {
 			l->on_detach();
 			delete l;
 		}
@@ -20,8 +20,8 @@ namespace elm {
 	{
 		ELM_PROFILE_FUNCTION();
 
-		m_layers.emplace(m_layers.begin() + m_layer_insert_ix, layer);
-		++m_layer_insert_ix;
+		this->layers.emplace(this->layers.begin() + this->layer_insert_ix, layer);
+		++this->layer_insert_ix;
 		layer->on_attach();
 	}
 
@@ -29,7 +29,7 @@ namespace elm {
 	{
 		ELM_PROFILE_FUNCTION();
 
-		m_layers.emplace_back(layer);
+		this->layers.emplace_back(layer);
 		layer->on_attach();
 	}
 
@@ -37,10 +37,10 @@ namespace elm {
 	{
 		ELM_PROFILE_FUNCTION();
 
-		auto it = std::find(m_layers.begin(), m_layers.end(), layer);
-		if (it != m_layers.end()) {
-			m_layers.erase(it);
-			--m_layer_insert_ix;
+		auto it = std::find(this->layers.begin(), this->layers.end(), layer);
+		if (it != this->layers.end()) {
+			this->layers.erase(it);
+			--this->layer_insert_ix;
 			layer->on_detach();
 			delete layer;
 			return true;
@@ -53,9 +53,9 @@ namespace elm {
 	{
 		ELM_PROFILE_FUNCTION();
 
-		auto it = std::find(m_layers.begin(), m_layers.end(), layer);
-		if (it != m_layers.end()) {
-			m_layers.erase(it);
+		auto it = std::find(this->layers.begin(), this->layers.end(), layer);
+		if (it != this->layers.end()) {
+			this->layers.erase(it);
 			layer->on_detach();
 			delete layer;
 			return true;

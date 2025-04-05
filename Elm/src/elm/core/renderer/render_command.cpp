@@ -1,6 +1,6 @@
-#include "render_command.h"
+#include "render_command.hpp"
 
-#include "elm/platform/opengl/opengl_renderer_api.h"
+#include "elm/platform/opengl/opengl_renderer_api.hpp"
 
 namespace elm {
 

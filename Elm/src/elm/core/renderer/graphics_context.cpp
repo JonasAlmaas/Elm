@@ -1,7 +1,7 @@
-#include "graphics_context.h"
+#include "graphics_context.hpp"
 
-#include "renderer_api.h"
-#include "elm/platform/opengl/opengl_context.h"
+#include "renderer_api.hpp"
+#include "elm/platform/opengl/opengl_context.hpp"
 
 namespace elm {
 

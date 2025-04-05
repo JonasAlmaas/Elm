@@ -1,7 +1,7 @@
-#include "uniform_buffer.h"
+#include "uniform_buffer.hpp"
 
-#include "renderer_api.h"
-#include "elm/platform/opengl/opengl_uniform_buffer.h"
+#include "renderer_api.hpp"
+#include "elm/platform/opengl/opengl_uniform_buffer.hpp"
 
 namespace elm {
 
