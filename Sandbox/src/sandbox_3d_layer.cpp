@@ -216,7 +216,7 @@ void sandbox_3d_layer::on_detach(void)
 
 void sandbox_3d_layer::on_update(elm::timestep ts)
 {
-	if (elm::input::is_key_pressed(elm::key::F5)) {
+	if (elm::input::key_pressed(elm::key::F5)) {
 		this->pbr_shader->reload();
 	}
 
