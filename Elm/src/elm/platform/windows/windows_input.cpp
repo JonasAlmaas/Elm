@@ -28,18 +28,6 @@ namespace elm::input {
 		glfwGetCursorPos(window, &xpos, &ypos);
 		return { (float)xpos, (float)ypos };
 	}
-
-	extern float get_mouse_x(void)
-	{
-		auto [x, y] = get_mouse_pos();
-		return x;
-	}
-
-	extern float get_mouse_y(void)
-	{
-		auto [x, y] = get_mouse_pos();
-		return y;
-	}
 }
 
 #endif /* ELM_PLATFORM_WINDOWS */
