@@ -8,18 +8,16 @@
 namespace elm::renderer {
 
 	struct renderer_data {
-		struct camera_data {
+		struct {
 			glm::mat4 view_projection;
 			glm::vec3 position;
-		};
-		camera_data camera_buffer;
-		std::shared_ptr<uniform_buffer> camera_uniform_buffer;
+		} camera;
+		std::shared_ptr<uniform_buffer> camera_ub;
 
-		struct model_data {
+		struct {
 			glm::mat4 transform;
-		};
-		model_data model_buffer;
-		std::shared_ptr<uniform_buffer> model_uniform_buffer;
+		} model;
+		std::shared_ptr<uniform_buffer> model_ub;
 	};
 
 	static struct renderer_data s_data;
@@ -32,8 +30,8 @@ namespace elm::renderer {
 		renderer_2d::init();
 		scene_renderer::init();
 
-		s_data.camera_uniform_buffer = uniform_buffer::create(sizeof(struct renderer_data::camera_data), 0);
-		s_data.model_uniform_buffer = uniform_buffer::create(sizeof(struct renderer_data::model_data), 1);
+		s_data.camera_ub = uniform_buffer::create(sizeof renderer_data::camera, 0);
+		s_data.model_ub = uniform_buffer::create(sizeof renderer_data::model, 1);
 	}
 
 	extern void shutdown(void)
@@ -55,15 +53,15 @@ namespace elm::renderer {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		s_data.camera_buffer.view_projection = camera->get_view_projection();
+		s_data.camera.view_projection = camera->get_view_projection();
 		math::decompose_transform(
 			glm::inverse(camera->get_view()),
-			&s_data.camera_buffer.position,
+			&s_data.camera.position,
 			nullptr,
 			nullptr);
 
-		s_data.camera_uniform_buffer->bind();
-		s_data.camera_uniform_buffer->set_data((const void *)&s_data.camera_buffer, sizeof s_data.camera_buffer);
+		s_data.camera_ub->bind();
+		s_data.camera_ub->set_data((const void *)&s_data.camera, sizeof s_data.camera);
 	}
 
 	extern void end_scene(void)
@@ -78,9 +76,10 @@ namespace elm::renderer {
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		s_data.model_buffer.transform = transform;
-		s_data.model_uniform_buffer->bind();
-		s_data.model_uniform_buffer->set_data((const void *)&s_data.model_buffer, sizeof s_data.model_buffer);
+		s_data.model.transform = transform;
+
+		s_data.model_ub->bind();
+		s_data.model_ub->set_data((const void *)&s_data.model, sizeof s_data.model);
 
 		shader->bind();
 		vertex_array->bind();

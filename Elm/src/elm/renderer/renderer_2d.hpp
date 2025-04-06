@@ -9,12 +9,6 @@ namespace elm::renderer_2d {
 
 	struct statistics {
 		uint32_t draw_calls = 0u;
-		uint32_t quad_count = 0u;
-		uint32_t circle_count = 0u;
-		uint32_t line_count = 0u;
-
-		inline uint32_t get_vertex_count(void) const { return quad_count * 4u + circle_count * 4u + line_count * 2u; }
-		inline uint32_t get_index_count(void) const { return quad_count * 6u + circle_count * 6u; }
 	};
 
 	struct text_render_params {

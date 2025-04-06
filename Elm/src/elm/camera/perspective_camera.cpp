@@ -13,7 +13,7 @@ namespace elm {
 		far_clip(far_clip),
 		view(1.0f),
 		projection(glm::perspective(glm::radians(this->fov), this->aspect_ratio, this->near_clip, this->far_clip)),
-		view_projection(this->projection *this->view)
+		view_projection(this->projection * this->view)
 	{
 	}
 

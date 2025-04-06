@@ -51,14 +51,6 @@ namespace elm {
 		text_renderer_component(const text_renderer_component &) = default;
 	};
 
-	struct mesh_renderer_component {
-		std::shared_ptr<mesh> mesh;
-		std::shared_ptr<material> material; // TODO: Move to model_renderer_component
-		
-		mesh_renderer_component(void) = default;
-		mesh_renderer_component(const mesh_renderer_component &) = default;
-	};
-
 	struct environment_light_component {
 		std::shared_ptr<texture_cube> irradiance_map;
 		std::shared_ptr<texture_cube> prefilter_map;
@@ -83,5 +75,13 @@ namespace elm {
 
 		point_light_component(void) = default;
 		point_light_component(const point_light_component &) = default;
+	};
+
+	struct mesh_renderer_component {
+		std::shared_ptr<mesh> mesh;
+		std::shared_ptr<material> material; // TODO: Move to model_renderer_component
+
+		mesh_renderer_component(void) = default;
+		mesh_renderer_component(const mesh_renderer_component &) = default;
 	};
 }

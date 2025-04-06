@@ -398,8 +398,6 @@ namespace elm::renderer_2d {
 		if (s_data.batch_sprite_count >= renderer_2d_data::max_sprites) {
 			flush_sprites();
 		}
-
-		++s_data.stats.quad_count;
 	}
 
 	extern void draw_sprite(
@@ -642,8 +640,6 @@ namespace elm::renderer_2d {
 		if (s_data.batch_circle_count >= renderer_2d_data::max_sprites) {
 			flush_circles();
 		}
-
-		++s_data.stats.circle_count;
 	}
 
 #pragma endregion
@@ -676,8 +672,6 @@ namespace elm::renderer_2d {
 		if (s_data.batch_line_count >= renderer_2d_data::max_sprites) {
 			flush_lines();
 		}
-
-		++s_data.stats.line_count;
 	}
 
 	extern void draw_line(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec4 &color)

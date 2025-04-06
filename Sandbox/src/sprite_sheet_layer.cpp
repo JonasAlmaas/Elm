@@ -126,7 +126,6 @@ void sprite_sheet_layer::on_imgui_render(void)
 
 	ImGui::Begin("Statistics");
 	ImGui::Text("FPS: %.2f", 1.0f / this->avg_frame_delta);
-	ImGui::Text("Quad count: %d", stats.quad_count);
 	ImGui::Text("Draw calls: %d", stats.draw_calls);
 
 	/*uint32_t mem_usage = stats.get_memory_usage();

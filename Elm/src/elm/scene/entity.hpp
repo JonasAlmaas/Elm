@@ -8,8 +8,10 @@ namespace elm {
 	struct entity
 	{
 		entity(void) = default;
-		entity(entt::registry *registry);
-		entity(entt::registry *registry, entt::entity entity_handle);
+		entity(entt::registry *registry)
+			: registry(registry), entity_handle(registry->create()) {}
+		entity(entt::registry *registry, entt::entity entity_handle)
+			: registry(registry), entity_handle(entity_handle) {}
 		entity(const entity &) = default;
 
 		template<typename T, typename... Args>
