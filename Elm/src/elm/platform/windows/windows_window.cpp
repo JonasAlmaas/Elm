@@ -105,22 +105,22 @@ namespace elm {
 			data->event_callback(e);
 		});
 
-		glfwSetKeyCallback(this->window, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
+		glfwSetKeyCallback(this->window, [](GLFWwindow *window, int key_code, int scancode, int action, int mods) {
 			WindowData *data = (WindowData*)glfwGetWindowUserPointer(window);
 
 			switch (action) {
 			case GLFW_PRESS: {
-				key_pressed_event e(key, 0);
+				key_pressed_event e((elm::key)key_code, 0);
 				data->event_callback(e);
 				break;
 			}
 			case GLFW_RELEASE: {
-				key_released_event e(key);
+				key_released_event e((elm::key)key_code);
 				data->event_callback(e);
 				break;
 			}
 			case GLFW_REPEAT: {
-				key_pressed_event e(key, 1);
+				key_pressed_event e((elm::key)key_code, 1);
 				data->event_callback(e);
 				break;
 			}
@@ -129,7 +129,7 @@ namespace elm {
 
 		glfwSetCharCallback(this->window, [](GLFWwindow* window, unsigned int key_code) {
 			WindowData *data = (WindowData*)glfwGetWindowUserPointer(window);
-			key_typed_event e(key_code);
+			key_typed_event e((elm::key)key_code);
 			data->event_callback(e);
 		});
 
@@ -138,12 +138,12 @@ namespace elm {
 
 			switch (action) {
 			case GLFW_PRESS: {
-				mouse_button_pressed_event e(button);
+				mouse_button_pressed_event e((elm::mouse)button);
 				data->event_callback(e);
 				break;
 			}
 			case GLFW_RELEASE: {
-				mouse_button_released_event e(button);
+				mouse_button_released_event e((elm::mouse)button);
 				data->event_callback(e);
 				break;
 			}

@@ -7,17 +7,17 @@
 
 namespace elm::input {
 
-	extern bool key_pressed(key_code key_code)
+	extern bool key_pressed(key key_code)
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(application::get()->get_window()->get_native_window());
-		int state = glfwGetKey(window, key_code);
+		int state = glfwGetKey(window, (uint16_t)key_code);
 		return state == GLFW_PRESS;
 	}
 
-	extern bool mouse_button_pressed(mouse_code button)
+	extern bool mouse_button_pressed(mouse button)
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(application::get()->get_window()->get_native_window());
-		int state = glfwGetMouseButton(window, button);
+		int state = glfwGetMouseButton(window, (uint16_t)button);
 		return state == GLFW_PRESS;
 	}
 

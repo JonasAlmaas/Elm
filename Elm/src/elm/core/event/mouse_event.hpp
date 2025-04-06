@@ -8,26 +8,26 @@ namespace elm {
 
 	struct mouse_button_event : event
 	{
-		inline mouse_code get_mouse_button(void) const { return this->button; }
+		inline mouse get_mouse_button(void) const { return this->button; }
 
 		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_INPUT | EVENT_CATEGORY_MOUSE | EVENT_CATEGORY_MOUSE_BUTTON)
 
 	protected:
-		mouse_button_event(mouse_code button)
+		mouse_button_event(mouse button)
 			: button(button) {}
 
-		mouse_code button;
+		mouse button;
 	};
 
 	struct mouse_button_pressed_event : mouse_button_event
 	{
-		mouse_button_pressed_event(mouse_code button)
+		mouse_button_pressed_event(mouse button)
 			: mouse_button_event(button) {}
 
 		std::string to_string() const override
 		{
 			std::stringstream ss;
-			ss << get_name() << ": " << this->button;
+			ss << get_name() << ": " << (uint16_t)this->button;
 			return ss.str();
 		}
 
@@ -36,13 +36,13 @@ namespace elm {
 
 	struct mouse_button_released_event : mouse_button_event
 	{
-		mouse_button_released_event(mouse_code button)
+		mouse_button_released_event(mouse button)
 			: mouse_button_event(button) {}
 
 		std::string to_string() const override
 		{
 			std::stringstream ss;
-			ss << get_name() << ": " << this->button;
+			ss << get_name() << ": " << (uint16_t)this->button;
 			return ss.str();
 		}
 

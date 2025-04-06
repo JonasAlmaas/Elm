@@ -6,7 +6,7 @@
 
 namespace elm::input {
 
-	extern bool key_pressed(key_code key_code);
+	extern bool key_pressed(key key_code);
 	template<int... KEY_CODE> inline bool any_key_pressed(void)
 	{
 		return (key_pressed(KEY_CODE) || ...);
@@ -15,7 +15,9 @@ namespace elm::input {
 	{
 		return (key_pressed(KEY_CODE) && ...);
 	}
-	extern bool mouse_button_pressed(mouse_code button);
+
+	extern bool mouse_button_pressed(mouse button);
+
 	extern std::pair<float, float> get_mouse_pos(void);
 	inline float get_mouse_x(void)
 	{

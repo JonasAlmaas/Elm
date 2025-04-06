@@ -70,7 +70,7 @@ namespace elm {
 			this->is_moving_down = false;
 		}
 
-		if (input::mouse_button_pressed(mouse::Button1)) {
+		if (input::mouse_button_pressed(mouse::BUTTON1)) {
 			if (!this->is_paning) {
 				application::get()->get_window()->disable_cursor();
 				this->last_mouse_x = input::get_mouse_x();

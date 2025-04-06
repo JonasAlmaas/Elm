@@ -8,20 +8,20 @@ namespace elm {
 
 	struct key_event : event
 	{
-		inline key_code get_key_code() const { return this->keycode; }
+		inline key get_key_code() const { return this->keycode; }
 
 		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_KEYBOARD | EVENT_CATEGORY_INPUT)
 
 	protected:
-		key_event(key_code keycode)
+		key_event(key keycode)
 			: keycode(keycode) {}
 
-		key_code keycode;
+		key keycode;
 	};
 
 	struct key_pressed_event : key_event
 	{
-		key_pressed_event(key_code keycode, bool is_repeat=false)
+		key_pressed_event(key keycode, bool is_repeat=false)
 			: key_event(keycode), is_repeating(is_repeat) {}
 
 		bool is_repeat() const { return this->is_repeating; }
@@ -29,7 +29,7 @@ namespace elm {
 		std::string to_string() const override
 		{
 			std::stringstream ss;
-			ss << get_name() << ": " << this->keycode << " (repeat = " << this->is_repeating << ")";
+			ss << get_name() << ": " << (uint16_t)this->keycode << " (repeat = " << this->is_repeating << ")";
 			return ss.str();
 		}
 
@@ -41,13 +41,13 @@ namespace elm {
 
 	struct key_released_event : key_event
 	{
-		key_released_event(key_code keycode)
+		key_released_event(key keycode)
 			: key_event(keycode) {}
 
 		std::string to_string() const override
 		{
 			std::stringstream ss;
-			ss << get_name() << ": " << this->keycode;
+			ss << get_name() << ": " << (uint16_t)this->keycode;
 			return ss.str();
 		}
 
@@ -56,13 +56,13 @@ namespace elm {
 
 	struct key_typed_event : key_event
 	{
-		key_typed_event(key_code keycode)
+		key_typed_event(key keycode)
 			: key_event(keycode) {}
 
 		std::string to_string() const override
 		{
 			std::stringstream ss;
-			ss << get_name() << ": " << this->keycode;
+			ss << get_name() << ": " << (uint16_t)this->keycode;
 			return ss.str();
 		}
 
