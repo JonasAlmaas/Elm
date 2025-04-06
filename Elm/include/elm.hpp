@@ -5,6 +5,7 @@
 
 #include <elm/core/application.hpp>
 #include <elm/core/file_dialog.hpp>
+#include <elm/core/input.hpp>
 #include <elm/core/layer.hpp>
 #include <elm/core/log.hpp>
 #include <elm/core/time.hpp>
@@ -14,10 +15,6 @@
 #include <elm/core/event/key_event.hpp>
 #include <elm/core/event/mouse_event.hpp>
 #include <elm/core/event/window_event.hpp>
-
-#include <elm/core/input/input.hpp>
-#include <elm/core/input/key_code.hpp>
-#include <elm/core/input/mouse_code.hpp>
 // --------------------------
 
 // --- Core - Renderer ------

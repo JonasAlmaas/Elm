@@ -1,5 +1,6 @@
 #pragma once
 
+#include "elm/core/base.hpp"
 #include <stdint.h>
 
 namespace elm {
@@ -137,4 +138,48 @@ namespace elm {
 		RIGHT_SUPER = 347,
 		MENU = 348
 	};
+
+	enum class mouse {
+		// From glfw3.h
+		BUTTON0 = 0,
+		BUTTON1 = 1,
+		BUTTON2 = 2,
+		BUTTON3 = 3,
+		BUTTON4 = 4,
+		BUTTON5 = 5,
+		BUTTON6 = 6,
+		BUTTON7 = 7,
+
+		BUTTON_LAST = BUTTON7,
+		BUTTON_LEFT = BUTTON0,
+		BUTTON_RIGHT = BUTTON1,
+		BUTTON_MIDDLE = BUTTON2
+	};
+
+	namespace input {
+
+		extern bool key_pressed(key key_code);
+		template<int... KEY_CODE> inline bool any_key_pressed(void)
+		{
+			return (key_pressed(KEY_CODE) || ...);
+		}
+		template<int... KEY_CODE> inline bool all_keys_pressed(void)
+		{
+			return (key_pressed(KEY_CODE) && ...);
+		}
+
+		extern bool mouse_button_pressed(mouse button);
+
+		extern std::pair<float, float> get_mouse_pos(void);
+		inline float get_mouse_x(void)
+		{
+			auto [x, y] = get_mouse_pos();
+			return x;
+		}
+		inline float get_mouse_y(void)
+		{
+			auto [x, y] = get_mouse_pos();
+			return y;
+		}
+	}
 }

@@ -1,6 +1,6 @@
 #include "perspective_camera_controller.hpp"
 
-#include "elm/core/input/input.hpp"
+#include "elm/core/input.hpp"
 #include "elm/core/application.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>

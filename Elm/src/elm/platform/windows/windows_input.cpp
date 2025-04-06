@@ -1,4 +1,4 @@
-#include "elm/core/input/input.hpp"
+#include "elm/core/input.hpp"
 
 #ifdef ELM_PLATFORM_WINDOWS
 

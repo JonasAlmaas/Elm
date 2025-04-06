@@ -1,7 +1,6 @@
 #include "orthographic_camera_controller.hpp"
 
-#include "elm/core/input/input.hpp"
-#include "elm/core/input/key_code.hpp"
+#include "elm/core/input.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace elm {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "event.hpp"
-#include "elm/core/input/key_code.hpp"
+#include "elm/core/input.hpp"
 #include <sstream>
 
 namespace elm {
