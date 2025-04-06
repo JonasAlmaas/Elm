@@ -2,10 +2,6 @@
 
 namespace elm {
 
-	layer_stack::layer_stack(void)
-	{
-	}
-
 	layer_stack::~layer_stack(void)
 	{
 		ELM_PROFILE_FUNCTION();

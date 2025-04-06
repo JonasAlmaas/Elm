@@ -13,8 +13,8 @@ namespace elm::log {
 
 	extern void init(void);
 
-	extern std::shared_ptr<spdlog::logger> &get_core_logger();
-	extern std::shared_ptr<spdlog::logger> &get_client_logger();
+	extern std::shared_ptr<spdlog::logger> &get_core_logger(void);
+	extern std::shared_ptr<spdlog::logger> &get_client_logger(void);
 }
 
 #define ELM_CORE_TRACE(...)             ::elm::log::get_core_logger()->trace(__VA_ARGS__)
