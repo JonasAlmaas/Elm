@@ -36,8 +36,11 @@ namespace elm {
 			return &instance;
 		}
 	private:
-		instrumentor(void);
-		~instrumentor(void);
+		instrumentor(void): current_session(nullptr) {}
+		~instrumentor(void)
+		{
+			end_session();
+		}
 
 		void write_header(void);
 		void write_footer(void);
@@ -54,8 +57,18 @@ namespace elm {
 
 	struct instrumentation_timer
 	{
-		instrumentation_timer(const char *name);
-		~instrumentation_timer();
+		instrumentation_timer(const char *name):
+			name(name),
+			start_timepoint(std::chrono::steady_clock::now()), stopped(false)
+		{
+		}
+
+		~instrumentation_timer(void)
+		{
+			if (!this->stopped) {
+				stop();
+			}
+		}
 
 		void stop();
 

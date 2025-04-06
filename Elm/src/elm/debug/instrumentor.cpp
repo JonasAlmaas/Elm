@@ -34,7 +34,6 @@ namespace elm {
 		internal_end_session();
 	}
 
-
 	void instrumentor::write_profile(const profile_result &result)
 	{
 		std::stringstream json;
@@ -57,16 +56,6 @@ namespace elm {
 		}
 	}
 
-	instrumentor::instrumentor(void)
-		: current_session(nullptr)
-	{
-	}
-
-	instrumentor::~instrumentor(void)
-	{
-		end_session();
-	}
-
 	void instrumentor::write_header(void)
 	{
 		this->output_stream << "{\"otherData\": {},\"traceEvents\":[{}";
@@ -86,18 +75,6 @@ namespace elm {
 			this->output_stream.close();
 			delete this->current_session;
 			this->current_session = nullptr;
-		}
-	}
-
-	instrumentation_timer::instrumentation_timer(const char *name)
-		: name(name), start_timepoint(std::chrono::steady_clock::now()), stopped(false)
-	{
-	}
-
-	instrumentation_timer::~instrumentation_timer()
-	{
-		if (!this->stopped) {
-			stop();
 		}
 	}
 
