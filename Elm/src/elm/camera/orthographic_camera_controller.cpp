@@ -23,31 +23,31 @@ namespace elm {
 
 		bool dirty_view = false;
 
-		if (input::is_key_pressed(key::A)) {
+		if (input::key_pressed(key::A)) {
 			this->position.x -= glm::cos(glm::radians(this->rotation_deg)) * this->translation_speed * ts.get_seconds();
 			this->position.y -= glm::sin(glm::radians(this->rotation_deg)) * this->translation_speed * ts.get_seconds();
 			dirty_view = true;
-		} else if (elm::input::is_key_pressed(elm::key::D)) {
+		} else if (elm::input::key_pressed(elm::key::D)) {
 			this->position.x += glm::cos(glm::radians(this->rotation_deg)) * this->translation_speed * ts.get_seconds();
 			this->position.y += glm::sin(glm::radians(this->rotation_deg)) * this->translation_speed * ts.get_seconds();
 			dirty_view = true;
 		}
 
-		if (elm::input::is_key_pressed(elm::key::W)) {
+		if (elm::input::key_pressed(elm::key::W)) {
 			this->position.x += -glm::sin(glm::radians(this->rotation_deg)) * this->translation_speed * ts.get_seconds();
 			this->position.y += glm::cos(glm::radians(this->rotation_deg)) * this->translation_speed * ts.get_seconds();
 			dirty_view = true;
-		} else if (elm::input::is_key_pressed(elm::key::S)) {
+		} else if (elm::input::key_pressed(elm::key::S)) {
 			this->position.x -= -glm::sin(glm::radians(this->rotation_deg)) * this->translation_speed * ts.get_seconds();
 			this->position.y -= glm::cos(glm::radians(this->rotation_deg)) * this->translation_speed * ts.get_seconds();
 			dirty_view = true;
 		}
 
 		if (this->enable_rotation) {
-			if (elm::input::is_key_pressed(elm::key::Q)) {
+			if (elm::input::key_pressed(elm::key::Q)) {
 				this->rotation_deg += this->rotation_speed * ts.get_seconds();
 				dirty_view = true;
-			} else if (elm::input::is_key_pressed(elm::key::E)) {
+			} else if (elm::input::key_pressed(elm::key::E)) {
 				this->rotation_deg -= this->rotation_speed * ts.get_seconds();
 				dirty_view = true;
 			}

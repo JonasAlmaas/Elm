@@ -18,7 +18,7 @@ namespace elm {
 	{
 		float dirty_view = false;
 
-		if (!this->is_moving_right && input::is_key_pressed(key::A)) {
+		if (!this->is_moving_right && input::key_pressed(key::A)) {
 			this->is_moving_left = true;
 			this->position.x -= glm::cos(-this->yaw_rad) * this->movement_speed * ts.get_seconds();
 			this->position.y -= glm::sin(-this->yaw_rad) * this->movement_speed * ts.get_seconds();
@@ -27,7 +27,7 @@ namespace elm {
 			this->is_moving_left = false;
 		}
 
-		if (!this->is_moving_left && input::is_key_pressed(key::D)) {
+		if (!this->is_moving_left && input::key_pressed(key::D)) {
 			this->is_moving_right = true;
 			this->position.x += glm::cos(-this->yaw_rad) * this->movement_speed * ts.get_seconds();
 			this->position.y += glm::sin(-this->yaw_rad) * this->movement_speed * ts.get_seconds();
@@ -36,7 +36,7 @@ namespace elm {
 			this->is_moving_right = false;
 		}
 
-		if (!this->is_moving_backwards && input::is_key_pressed(key::W)) {
+		if (!this->is_moving_backwards && input::key_pressed(key::W)) {
 			this->is_moving_forward = true;
 			this->position.x += -glm::sin(-this->yaw_rad) * this->movement_speed * ts.get_seconds();
 			this->position.y += glm::cos(-this->yaw_rad) * this->movement_speed * ts.get_seconds();
@@ -45,7 +45,7 @@ namespace elm {
 			this->is_moving_forward = false;
 		}
 
-		if (!this->is_moving_forward && input::is_key_pressed(key::S)) {
+		if (!this->is_moving_forward && input::key_pressed(key::S)) {
 			this->is_moving_backwards = true;
 			this->position.x -= -glm::sin(-this->yaw_rad) * this->movement_speed * ts.get_seconds();
 			this->position.y -= glm::cos(-this->yaw_rad) * this->movement_speed * ts.get_seconds();
@@ -54,7 +54,7 @@ namespace elm {
 			this->is_moving_backwards = false;
 		}
 
-		if (!this->is_moving_down && input::is_key_pressed(key::E)) {
+		if (!this->is_moving_down && input::key_pressed(key::E)) {
 			this->is_moving_up = true;
 			this->position.z += this->movement_speed * ts.get_seconds();
 			dirty_view = true;
@@ -62,7 +62,7 @@ namespace elm {
 			this->is_moving_up = false;
 		}
 
-		if (!this->is_moving_up && input::is_key_pressed(key::Q)) {
+		if (!this->is_moving_up && input::key_pressed(key::Q)) {
 			this->is_moving_down = true;
 			this->position.z -= this->movement_speed * ts.get_seconds();
 			dirty_view = true;
@@ -70,7 +70,7 @@ namespace elm {
 			this->is_moving_down = false;
 		}
 
-		if (input::is_mouse_button_pressed(mouse::Button1)) {
+		if (input::mouse_button_pressed(mouse::Button1)) {
 			if (!this->is_paning) {
 				application::get()->get_window()->disable_cursor();
 				this->last_mouse_x = input::get_mouse_x();
