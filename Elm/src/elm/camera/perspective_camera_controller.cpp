@@ -2,7 +2,6 @@
 
 #include "elm/core/input.hpp"
 #include "elm/core/application.hpp"
-
 #include <glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
