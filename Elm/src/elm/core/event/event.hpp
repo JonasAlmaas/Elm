@@ -7,23 +7,24 @@
 namespace elm {
 
 	enum class event_type {
-		EVENT_TYPE_NONE = 0,
-		EVENT_TYPE_WINDOW_CLOSE, EVENT_TYPE_WINDOW_MINIMIZE, EVENT_TYPE_WINDOW_RESIZE,
-		EVENT_TYPE_WINDOW_FOCUS, EVENT_TYPE_WINDOW_BLUR, EVENT_TYPE_WINDOW_MOVED,
-		EVENT_TYPE_KEY_PRESSED, EVENT_TYPE_KEY_RELEASED, EVENT_TYPE_KEY_TYPED,
-		EVENT_TYPE_MOUSE_BUTTON_PRESSED, EVENT_TYPE_MOUSE_BUTTON_RELEASED, EVENT_TYPE_MOUSE_MOVED, EVENT_TYPE_MOUSE_SCROLLED
+		ET_NONE = 0,
+		ET_WINDOW_CLOSE, ET_WINDOW_MINIMIZE, ET_WINDOW_RESIZE,
+		ET_WINDOW_FOCUS, ET_WINDOW_BLUR, ET_WINDOW_MOVED,
+		ET_KEY_PRESSED, ET_KEY_RELEASED, ET_KEY_TYPED,
+		ET_MOUSE_BUTTON_PRESSED, ET_MOUSE_BUTTON_RELEASED, ET_MOUSE_MOVED, ET_MOUSE_SCROLLED
 	};
 
 	enum event_category {
-		EVENT_CATEGORY_NONE = 0,
-		EVENT_CATEGORY_APPLICATION = 1<<0,
-		EVENT_CATEGORY_INPUT = 1<<1,
-		EVENT_CATEGORY_KEYBOARD = 1<<2,
-		EVENT_CATEGORY_MOUSE = 1<<3,
-		EVENT_CATEGORY_MOUSE_BUTTON = 1<<4,
+		ECAT_NONE = 0,
+		ECAT_APPLICATION = 1<<0,
+		ECAT_INPUT = 1<<1,
+		ECAT_KEYBOARD = 1<<2,
+		ECAT_MOUSE = 1<<3,
+		ECAT_MOUSE_BUTTON = 1<<4,
 	};
 
-	#define EVENT_CLASS_TYPE(type) static event_type get_static_type(void) { return event_type::type; }\
+	#define EVENT_CLASS_TYPE(type) \
+		static event_type get_static_type(void) { return event_type::type; }\
 		virtual event_type get_event_type(void) const override { return get_static_type(); }\
 		virtual const char* get_name(void) const override { return #type; }
 
@@ -31,8 +32,6 @@ namespace elm {
 
 	struct event
 	{
-		friend struct event_dispatcher;
-
 		virtual ~event(void) = default;
 
 		virtual event_type get_event_type(void) const = 0;
@@ -45,7 +44,6 @@ namespace elm {
 			return get_category_flags() & category;
 		}
 
-	public:
 		bool handled = false;
 	};
 

@@ -10,7 +10,7 @@ namespace elm {
 	{
 		inline key get_key_code() const { return this->keycode; }
 
-		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_KEYBOARD | EVENT_CATEGORY_INPUT)
+		EVENT_CLASS_CATEGORY(ECAT_KEYBOARD | ECAT_INPUT)
 
 	protected:
 		key_event(key keycode)
@@ -33,7 +33,7 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(EVENT_TYPE_KEY_PRESSED)
+		EVENT_CLASS_TYPE(ET_KEY_PRESSED)
 
 	private:
 		bool is_repeating;
@@ -51,7 +51,7 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(EVENT_TYPE_KEY_RELEASED)
+		EVENT_CLASS_TYPE(ET_KEY_RELEASED)
 	};
 
 	struct key_typed_event : key_event
@@ -66,6 +66,6 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(EVENT_TYPE_KEY_TYPED)
+		EVENT_CLASS_TYPE(ET_KEY_TYPED)
 	};
 }

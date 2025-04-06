@@ -10,7 +10,7 @@ namespace elm {
 	{
 		inline mouse get_mouse_button(void) const { return this->button; }
 
-		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_INPUT | EVENT_CATEGORY_MOUSE | EVENT_CATEGORY_MOUSE_BUTTON)
+		EVENT_CLASS_CATEGORY(ECAT_INPUT | ECAT_MOUSE | ECAT_MOUSE_BUTTON)
 
 	protected:
 		mouse_button_event(mouse button)
@@ -31,7 +31,7 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(EVENT_TYPE_MOUSE_BUTTON_PRESSED)
+		EVENT_CLASS_TYPE(ET_MOUSE_BUTTON_PRESSED)
 	};
 
 	struct mouse_button_released_event : mouse_button_event
@@ -46,7 +46,7 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(EVENT_TYPE_MOUSE_BUTTON_RELEASED)
+		EVENT_CLASS_TYPE(ET_MOUSE_BUTTON_RELEASED)
 	};
 
 	struct mouse_moved_event : event
@@ -64,8 +64,8 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(EVENT_TYPE_MOUSE_MOVED)
-		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_INPUT | EVENT_CATEGORY_MOUSE)
+		EVENT_CLASS_TYPE(ET_MOUSE_MOVED)
+		EVENT_CLASS_CATEGORY(ECAT_INPUT | ECAT_MOUSE)
 
 	private:
 		float mouse_x, mouse_y;
@@ -86,8 +86,8 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(EVENT_TYPE_MOUSE_SCROLLED)
-		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_INPUT | EVENT_CATEGORY_MOUSE)
+		EVENT_CLASS_TYPE(ET_MOUSE_SCROLLED)
+		EVENT_CLASS_CATEGORY(ECAT_INPUT | ECAT_MOUSE)
 
 	private:
 		float offset_x, offset_y;

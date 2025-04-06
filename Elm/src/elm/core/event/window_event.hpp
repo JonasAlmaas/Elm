@@ -10,8 +10,8 @@ namespace elm {
 	{
 		window_close_event(void) = default;
 
-		EVENT_CLASS_TYPE(EVENT_TYPE_WINDOW_CLOSE)
-		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_APPLICATION)
+		EVENT_CLASS_TYPE(ET_WINDOW_CLOSE)
+		EVENT_CLASS_CATEGORY(ECAT_APPLICATION)
 	};
 
 	struct window_minimize_event : event
@@ -21,8 +21,8 @@ namespace elm {
 
 		inline bool is_minimized(void) const { return this->minimized; }
 
-		EVENT_CLASS_TYPE(EVENT_TYPE_WINDOW_MINIMIZE)
-		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_APPLICATION)
+		EVENT_CLASS_TYPE(ET_WINDOW_MINIMIZE)
+		EVENT_CLASS_CATEGORY(ECAT_APPLICATION)
 
 	private:
 		bool minimized;
@@ -43,8 +43,8 @@ namespace elm {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(EVENT_TYPE_WINDOW_RESIZE)
-		EVENT_CLASS_CATEGORY(EVENT_CATEGORY_APPLICATION)
+		EVENT_CLASS_TYPE(ET_WINDOW_RESIZE)
+		EVENT_CLASS_CATEGORY(ECAT_APPLICATION)
 
 	private:
 		uint32_t width, height;

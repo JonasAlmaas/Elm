@@ -63,8 +63,8 @@ namespace elm {
 		}
 
 		ImGuiIO& io = ImGui::GetIO();
-		e.handled |= e.is_in_category(EVENT_CATEGORY_MOUSE) & io.WantCaptureMouse;
-		e.handled |= e.is_in_category(EVENT_CATEGORY_KEYBOARD) & io.WantCaptureKeyboard;
+		e.handled |= e.is_in_category(ECAT_MOUSE) & io.WantCaptureMouse;
+		e.handled |= e.is_in_category(ECAT_KEYBOARD) & io.WantCaptureKeyboard;
 	}
 
 	void imgui_layer::begin(void)
