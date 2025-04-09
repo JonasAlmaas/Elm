@@ -159,11 +159,11 @@ namespace elm {
 	namespace input {
 
 		extern bool key_pressed(key key_code);
-		template<int... KEY_CODE> inline bool any_key_pressed(void)
+		template<key... KEY_CODE> inline bool any_key_pressed(void)
 		{
 			return (key_pressed(KEY_CODE) || ...);
 		}
-		template<int... KEY_CODE> inline bool all_keys_pressed(void)
+		template<key... KEY_CODE> inline bool all_keys_pressed(void)
 		{
 			return (key_pressed(KEY_CODE) && ...);
 		}
