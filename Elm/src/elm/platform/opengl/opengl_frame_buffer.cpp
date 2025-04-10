@@ -190,7 +190,7 @@ namespace elm {
 		glBindFramebuffer(GL_FRAMEBUFFER, this->renderer_id);
 
 		bool is_multisampled = this->spec.samples > 1;
-		bool has_color_attachment = this->color_attachments.size() > 0;
+		bool has_color_attachment = this->color_attachment_specs.size() > 0;
 		bool has_depth_attachment = this->depth_attachment_spec.texture_format != frame_buffer_texture_format::NONE;
 
 		// Setup color attachments
