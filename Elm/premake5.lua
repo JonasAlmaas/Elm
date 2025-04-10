@@ -7,12 +7,8 @@ project "Elm"
 	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
 	files {
-		"src/**.h",
-		"src/**.c",
 		"src/**.hpp",
 		"src/**.cpp",
-
-		"include/**.h",
 
 		"%{IncludeDir.stb}/stb_image.cpp",
 		"%{IncludeDir.tinyobjloader}/tiny_obj_loader.cpp",

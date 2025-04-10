@@ -3,7 +3,7 @@ include "dependencies.lua"
 
 workspace "Elm"
 	architecture "x86_64"
-	startproject "Sandbox"
+	startproject "ElmEditor"
 
 	configurations {
 		"Debug",
@@ -23,6 +23,10 @@ workspace "Elm"
 
 	group "Core"
 	include "Elm"
+	group ""
+
+	group "Tools"
+	include "ElmEditor"
 	group ""
 
 	include "Sandbox"

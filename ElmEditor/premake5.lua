@@ -1,4 +1,4 @@
-project "Sandbox"
+project "ElmEditor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++23"
