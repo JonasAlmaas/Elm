@@ -7,12 +7,20 @@
 #include "elm/renderer/mesh.hpp"
 #include <glm/glm.hpp>
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace elm {
 
+	struct tag_component {
+		std::string tag;
+
+		tag_component(void) = default;
+		tag_component(const tag_component &) = default;
+	};
+
 	struct transform_component {
-		glm::mat4 transform;
+		glm::mat4 transform = glm::mat4(1.0f);
 
 		transform_component(void) = default;
 		transform_component(const transform_component &) = default;

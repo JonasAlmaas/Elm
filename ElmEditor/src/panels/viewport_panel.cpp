@@ -12,7 +12,7 @@ namespace elm {
 	void viewport_panel::on_attach(void)
 	{
 		this->camera_controller.set_position({ -1.5f, -1.5f, 1.5f });
-		this->camera_controller.set_pitch_deg(-55.0f);
+		this->camera_controller.set_pitch_deg(-65.0f);
 		this->camera_controller.set_yaw_deg(45.0f);
 
 		frame_buffer_specification fb_spec;
@@ -22,6 +22,7 @@ namespace elm {
 			elm::frame_buffer_texture_format::RGBA8,
 			elm::frame_buffer_texture_format::DEPTH24STENCIL8
 		};
+		//fb_spec.samples = 8; // TODO: Fix multi sampling
 		this->frame_buffer = elm::frame_buffer::create(fb_spec);
 	}
 
