@@ -1,7 +1,11 @@
 #pragma once
 
+#include "panels/entity_properties_panel.hpp"
+#include "panels/scene_properties_panel.hpp"
+#include "panels/scene_hierarchy_panel.hpp"
+#include "panels/shader_library_panel.hpp"
+#include "panels/viewport_panel.hpp"
 #include <elm.hpp>
-#include <glm/glm.hpp>
 #include <memory>
 
 namespace elm {
@@ -18,10 +22,13 @@ namespace elm {
 		virtual void on_imgui_render(void) override;
 
 	private:
-		std::shared_ptr<frame_buffer> frame_buffer;
+		std::shared_ptr<scene> scene;
+		shader_library shader_lib;
 
-		glm::vec2 viewport_size = { 0.0f, 0.0f };
-		bool viewport_focused = false;
-		bool viewport_hovered = false;
+		entity_properties_panel entity_properties_panel;
+		scene_properties_panel scene_properties_panel;
+		scene_hierarchy_panel scene_hierarchy_panel;
+		shader_library_panel shader_library_panel;
+		viewport_panel viewport_panel;
 	};
 }

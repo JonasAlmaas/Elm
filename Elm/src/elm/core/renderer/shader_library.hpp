@@ -19,6 +19,7 @@ namespace elm {
 
 		inline bool contains(const std::string &name) const { return this->shaders.find(name) != this->shaders.end(); }
 
+		inline const std::unordered_map<std::string, std::shared_ptr<shader>> &get_shaders(void) const {return shaders;}
 	private:
 		std::unordered_map<std::string, std::shared_ptr<shader>> shaders;
 	};
