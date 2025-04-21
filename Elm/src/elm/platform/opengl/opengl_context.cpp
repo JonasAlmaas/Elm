@@ -11,7 +11,7 @@ namespace elm {
 		ELM_CORE_ASSERT(this->window, "Window handle is null");
 	}
 
-	void opengl_context::init(void)
+	void opengl_context::init()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -28,7 +28,7 @@ namespace elm {
 		ELM_CORE_ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5), "ELM requires at least OpenGL version 4.5");
 	}
 
-	void opengl_context::swap_buffers(void)
+	void opengl_context::swap_buffers()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 

@@ -28,7 +28,7 @@ namespace elm {
 		}
 	}
 
-	void instrumentor::end_session(void)
+	void instrumentor::end_session()
 	{
 		std::lock_guard lock(this->mutex);
 		internal_end_session();
@@ -56,19 +56,19 @@ namespace elm {
 		}
 	}
 
-	void instrumentor::write_header(void)
+	void instrumentor::write_header()
 	{
 		this->output_stream << "{\"otherData\": {},\"traceEvents\":[{}";
 		this->output_stream.flush();
 	}
 
-	void instrumentor::write_footer(void)
+	void instrumentor::write_footer()
 	{
 		this->output_stream << "]}";
 		this->output_stream.flush();
 	}
 
-	void instrumentor::internal_end_session(void)
+	void instrumentor::internal_end_session()
 	{
 		if (this->current_session) {
 			write_footer();

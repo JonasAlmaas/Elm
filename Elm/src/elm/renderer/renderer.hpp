@@ -9,13 +9,13 @@
 
 namespace elm::renderer {
 
-	extern void init(void);
-	extern void shutdown(void);
+	extern void init();
+	extern void shutdown();
 
 	extern void on_viewport_resize(uint32_t width, uint32_t height);
 
 	extern void begin_scene(const camera *camera);
-	extern void end_scene(void);
+	extern void end_scene();
 
 	extern void submit(
 		const std::shared_ptr<shader> &shader,

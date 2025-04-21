@@ -35,24 +35,24 @@ namespace elm {
 	struct application
 	{
 		application(
-			const struct application_specification &spec,
-			struct application_command_line_args args = struct application_command_line_args());
-		virtual ~application(void) = default;
+			const application_specification &spec,
+			application_command_line_args args = application_command_line_args());
+		virtual ~application() = default;
 
-		void run(void);
+		void run();
 
-		inline void close(void) { this->running = false; }
+		void close() {this->running = false;}
 
 		void push_layer(layer *layer);
 		void push_overlay(layer *layer);
 
-		inline struct application_command_line_args get_command_line_args(void) const { return this->cmd_line_args; };
-		inline const application_telemetry *get_telemetry(void) const { return &this->telemetry; }
-		inline imgui_layer *get_imgui_layer(void) const { return this->imgui_l; }
-		inline window *get_window(void) const { return this->window.get(); }
+		application_command_line_args get_command_line_args() const {return this->cmd_line_args;};
+		const application_telemetry *get_telemetry() const {return &this->telemetry;}
+		imgui_layer *get_imgui_layer() const {return this->imgui_l;}
+		window *get_window() const {return this->window.get();}
 
 	public:
-		static inline application *get(void) { return s_instance; }
+		static application *get() {return s_instance;}
 
 	private:
 		void on_event(event& e);
@@ -60,8 +60,8 @@ namespace elm {
 		bool on_window_resize(window_resize_event &e);
 
 	private:
-		struct application_specification spec;
-		struct application_command_line_args cmd_line_args;
+		application_specification spec;
+		application_command_line_args cmd_line_args;
 
 		bool running = true;
 		bool minimized = false;
@@ -78,6 +78,6 @@ namespace elm {
 
 	public:
 		// To be defined by the client
-		static application *create(struct application_command_line_args args);
+		static application *create(application_command_line_args args);
 	};
 }

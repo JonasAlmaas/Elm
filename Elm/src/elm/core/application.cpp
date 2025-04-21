@@ -7,7 +7,7 @@ namespace elm {
 
 	application* application::s_instance = nullptr;
 
-	application::application(const struct application_specification &spec, struct application_command_line_args args)
+	application::application(const application_specification &spec, application_command_line_args args)
 		: spec(spec), cmd_line_args(args)
 	{
 		ELM_PROFILE_FUNCTION();
@@ -33,7 +33,7 @@ namespace elm {
 		push_overlay(this->imgui_l);
 	}
 
-	void application::run(void)
+	void application::run()
 	{
 		ELM_PROFILE_FUNCTION();
 

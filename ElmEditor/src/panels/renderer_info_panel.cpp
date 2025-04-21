@@ -5,7 +5,7 @@
 
 namespace elm {
 
-	void renderer_info_panel::on_imgui_render(void)
+	void renderer_info_panel::on_imgui_render()
 	{
 		ImGui::Begin("Renderer");
 		

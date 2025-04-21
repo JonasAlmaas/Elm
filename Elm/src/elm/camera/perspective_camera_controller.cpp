@@ -122,7 +122,7 @@ namespace elm {
 		return false;
 	}
 
-	void perspective_camera_controller::recalculate_view_matrix(void)
+	void perspective_camera_controller::recalculate_view_matrix()
 	{
 		this->camera.set_view_matrix(glm::inverse(
 			glm::translate(glm::mat4(1.0f), this->position)

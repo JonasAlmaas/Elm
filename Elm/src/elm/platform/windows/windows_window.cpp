@@ -52,12 +52,12 @@ namespace elm {
 		this->data.vsync = enabled;
 	}
 
-	void windows_window::enable_cursor(void)
+	void windows_window::enable_cursor()
 	{
 		glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
-	void windows_window::disable_cursor(void)
+	void windows_window::disable_cursor()
 	{
 		glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
@@ -163,7 +163,7 @@ namespace elm {
 		});
 	}
 
-	void windows_window::shutdown(void)
+	void windows_window::shutdown()
 	{
 		ELM_PROFILE_FUNCTION();
 

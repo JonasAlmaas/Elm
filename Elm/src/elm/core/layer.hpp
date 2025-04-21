@@ -13,14 +13,14 @@ namespace elm {
 
 		virtual ~layer() = default;
 
-		virtual void on_attach(void) {}
-		virtual void on_detach(void) {}
+		virtual void on_attach() {}
+		virtual void on_detach() {}
 		virtual void on_update(timestep ts) {}
 		virtual void on_event(event& e) {}
 
-		virtual void on_imgui_render(void) {}
+		virtual void on_imgui_render() {}
 
-		inline const std::string& get_name(void) const { return this->debug_name; }
+		const std::string& get_name() const {return this->debug_name;}
 
 	private:
 		std::string debug_name;

@@ -4,12 +4,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-pbr_layer::pbr_layer(void)
+pbr_layer::pbr_layer()
 	: layer("Sandbox3D"), camera_controller(60.0f, 16.0f / 9.0f)
 {
 }
 
-void pbr_layer::on_attach(void)
+void pbr_layer::on_attach()
 {
 	this->camera_controller.set_position({ -1.5f, -1.5f, 1.5f });
 	this->camera_controller.set_pitch_deg(-55.0f);
@@ -148,7 +148,7 @@ void pbr_layer::on_attach(void)
 	}
 }
 
-void pbr_layer::on_detach(void)
+void pbr_layer::on_detach()
 {
 }
 
@@ -171,7 +171,7 @@ void pbr_layer::on_event(elm::event &e)
 	dispatcher.dispatch<elm::window_resize_event>(ELM_BIND_EVENT_FN(pbr_layer::on_window_resize));
 }
 
-void pbr_layer::on_imgui_render(void)
+void pbr_layer::on_imgui_render()
 {
 	// -- Scene --
 	ImGui::Begin("Scene");

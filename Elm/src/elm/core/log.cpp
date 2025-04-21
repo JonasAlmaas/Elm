@@ -7,7 +7,7 @@ namespace elm {
 	static std::shared_ptr<spdlog::logger> s_core_logger;
 	static std::shared_ptr<spdlog::logger> s_client_logger;
 
-	extern void log::init(void)
+	extern void log::init()
 	{
 		spdlog::set_pattern("%^[%T] %n: %v%$");
 
@@ -18,12 +18,12 @@ namespace elm {
 		s_client_logger->set_level(spdlog::level::trace);
 	}
 
-	extern std::shared_ptr<spdlog::logger> &log::get_core_logger(void)
+	extern std::shared_ptr<spdlog::logger> &log::get_core_logger()
 	{
 		return s_core_logger;
 	}
 
-	extern std::shared_ptr<spdlog::logger> &log::get_client_logger(void)
+	extern std::shared_ptr<spdlog::logger> &log::get_client_logger()
 	{
 		return s_client_logger;
 	}

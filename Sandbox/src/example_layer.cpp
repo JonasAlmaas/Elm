@@ -3,7 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <imgui.h>
 
-example_layer::example_layer(void)
+example_layer::example_layer()
 	: layer("ExampleLayer"), camera_controller(16.0f / 9.0f, true)
 {
 	// Triangle
@@ -106,7 +106,7 @@ void example_layer::on_event(elm::event &e)
 	dispatcher.dispatch<elm::window_resize_event>(ELM_BIND_EVENT_FN(example_layer::on_window_resize));
 }
 
-void example_layer::on_imgui_render(void)
+void example_layer::on_imgui_render()
 {
 }
 

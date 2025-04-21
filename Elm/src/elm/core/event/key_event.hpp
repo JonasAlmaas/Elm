@@ -8,7 +8,7 @@ namespace elm {
 
 	struct key_event : event
 	{
-		inline key get_key_code() const { return this->keycode; }
+		key get_key_code() const { return this->keycode; }
 
 		EVENT_CLASS_CATEGORY(ECAT_KEYBOARD | ECAT_INPUT)
 

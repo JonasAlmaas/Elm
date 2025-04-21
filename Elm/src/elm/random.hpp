@@ -5,12 +5,12 @@
 
 namespace elm::random {
 
-	extern void init(void);
+	extern void init();
 
 	/**
 	 * @brief Get a random uint32
 	 */
-	extern uint32_t uint32(void);
+	extern uint32_t uint32();
 
 	/**
 	 * @brief Get a random uint32 in the range [min - max]
@@ -21,13 +21,13 @@ namespace elm::random {
 	 * @brief Get a random number in the range of [0 - 1]
 	 * @note 'seed' will be modified so it can be reused
 	 */
-	extern float f32(void);
+	extern float f32();
 
 	/**
 	 * @brief Get a set of 3 normalized random numbers in the range of [-1 - 1]
 	 * @note 'seed' will be modified so it can be reused
 	 */
-	extern glm::vec3 f32_unit_sphere(void);
+	extern glm::vec3 f32_unit_sphere();
 
 	// -- Fast random --
 

@@ -6,13 +6,13 @@ namespace elm {
 
 	struct opengl_frame_buffer : frame_buffer
 	{
-		opengl_frame_buffer(const struct frame_buffer_specification &spec);
-		virtual ~opengl_frame_buffer(void);
+		opengl_frame_buffer(const frame_buffer_specification &spec);
+		virtual ~opengl_frame_buffer();
 
-		void invalidate(void);
+		void invalidate();
 
-		virtual void bind(void) override;
-		virtual void unbind(void) override;
+		virtual void bind() override;
+		virtual void unbind() override;
 
 		virtual void resize(uint32_t width, uint32_t height) override;
 
@@ -25,16 +25,16 @@ namespace elm {
 			return this->color_attachments[ix];
 		}
 
-		virtual uint32_t get_depth_attachment_renderer_id(void) const override
+		virtual uint32_t get_depth_attachment_renderer_id() const override
 		{
 			ELM_CORE_ASSERT(this->depth_attachment, "No depth attachment in frame buffer");
 			return this->depth_attachment;
 		}
 
-		inline virtual const struct frame_buffer_specification *get_spec(void) const override { return &this->spec; }
+		virtual const frame_buffer_specification *get_spec() const override {return &this->spec;}
 
 	private:
-		struct frame_buffer_specification spec;
+		frame_buffer_specification spec;
 
 		uint32_t renderer_id = 0;
 

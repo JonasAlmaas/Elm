@@ -20,9 +20,9 @@ namespace elm::renderer {
 		std::shared_ptr<uniform_buffer> model_ub;
 	};
 
-	static struct renderer_data s_data;
+	static renderer_data s_data;
 
-	extern void init(void)
+	extern void init()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -34,7 +34,7 @@ namespace elm::renderer {
 		s_data.model_ub = uniform_buffer::create(sizeof renderer_data::model, 1);
 	}
 
-	extern void shutdown(void)
+	extern void shutdown()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -64,7 +64,7 @@ namespace elm::renderer {
 		s_data.camera_ub->set_data((const void *)&s_data.camera, sizeof s_data.camera);
 	}
 
-	extern void end_scene(void)
+	extern void end_scene()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 	}

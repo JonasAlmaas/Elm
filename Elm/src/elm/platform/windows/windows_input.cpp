@@ -21,7 +21,7 @@ namespace elm::input {
 		return state == GLFW_PRESS;
 	}
 
-	extern std::pair<float, float> get_mouse_pos(void)
+	extern std::pair<float, float> get_mouse_pos()
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(application::get()->get_window()->get_native_window());
 		double xpos, ypos;

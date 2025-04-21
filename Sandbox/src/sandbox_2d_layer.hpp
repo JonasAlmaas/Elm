@@ -6,14 +6,14 @@
 
 struct sandbox_2d_layer : elm::layer
 {
-	sandbox_2d_layer(void);
-	virtual ~sandbox_2d_layer(void) = default;
+	sandbox_2d_layer();
+	virtual ~sandbox_2d_layer() = default;
 
-	virtual void on_attach(void) override;
-	virtual void on_detach(void) override;
+	virtual void on_attach() override;
+	virtual void on_detach() override;
 	virtual void on_update(elm::timestep ts) override;
 	virtual void on_event(elm::event &e) override;
-	virtual void on_imgui_render(void) override;
+	virtual void on_imgui_render() override;
 
 private:
 	bool on_window_resize(elm::window_resize_event &e);

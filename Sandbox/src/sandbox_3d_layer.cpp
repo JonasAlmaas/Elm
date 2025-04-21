@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-sandbox_3d_layer::sandbox_3d_layer(void)
+sandbox_3d_layer::sandbox_3d_layer()
 	: layer("Sandbox3D"), camera_controller(60.0f, 16.0f / 9.0f)
 {
 	this->camera_controller.set_position({ -1.5f, -1.5f, 1.5f });
@@ -206,11 +206,11 @@ sandbox_3d_layer::sandbox_3d_layer(void)
 	}
 }
 
-void sandbox_3d_layer::on_attach(void)
+void sandbox_3d_layer::on_attach()
 {
 }
 
-void sandbox_3d_layer::on_detach(void)
+void sandbox_3d_layer::on_detach()
 {
 }
 
@@ -252,7 +252,7 @@ void sandbox_3d_layer::on_event(elm::event &e)
 	dispatcher.dispatch<elm::window_resize_event>(ELM_BIND_EVENT_FN(sandbox_3d_layer::on_window_resize));
 }
 
-void sandbox_3d_layer::on_imgui_render(void)
+void sandbox_3d_layer::on_imgui_render()
 {
 	// -- Scene --
 	ImGui::Begin("Scene");

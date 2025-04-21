@@ -102,7 +102,7 @@ namespace elm {
 		}
 	}
 
-	opengl_frame_buffer::opengl_frame_buffer(const struct frame_buffer_specification &spec)
+	opengl_frame_buffer::opengl_frame_buffer(const frame_buffer_specification &spec)
 		: spec(spec)
 	{
 		ELM_CORE_ASSERT(spec.width, "Framebuffer can not be created with a width of 0");
@@ -120,7 +120,7 @@ namespace elm {
 		invalidate();
 	}
 
-	opengl_frame_buffer::~opengl_frame_buffer(void)
+	opengl_frame_buffer::~opengl_frame_buffer()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -129,13 +129,13 @@ namespace elm {
 		glDeleteTextures(1, &this->depth_attachment);
 	}
 
-	void opengl_frame_buffer::bind(void)
+	void opengl_frame_buffer::bind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, this->renderer_id);
 		glViewport(0, 0, this->spec.width, this->spec.height);
 	}
 
-	void opengl_frame_buffer::unbind(void)
+	void opengl_frame_buffer::unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -173,7 +173,7 @@ namespace elm {
 		glClearTexImage(this->color_attachments[attachment_ix], 0, utils::frame_buffer_texture_format_to_gl(spec.texture_format), GL_INT, &value);
 	}
 
-	void opengl_frame_buffer::invalidate(void)
+	void opengl_frame_buffer::invalidate()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 

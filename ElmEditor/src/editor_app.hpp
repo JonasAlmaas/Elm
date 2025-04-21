@@ -7,7 +7,7 @@ namespace elm {
 	struct editor_app : application
 	{
 		editor_app(
-			const struct application_specification &spec,
-			struct application_command_line_args args);
+			const application_specification &spec,
+			application_command_line_args args);
 	};
 }

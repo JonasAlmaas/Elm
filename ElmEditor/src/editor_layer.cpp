@@ -5,12 +5,12 @@
 
 namespace elm {
 
-	editor_layer::editor_layer(void)
+	editor_layer::editor_layer()
 		: layer("Editor Layer")
 	{
 	}
 
-	void editor_layer::on_attach(void)
+	void editor_layer::on_attach()
 	{
 		this->viewport_panel.on_attach();
 
@@ -100,7 +100,7 @@ namespace elm {
 		}
 	}
 
-	void editor_layer::on_detach(void)
+	void editor_layer::on_detach()
 	{
 	}
 
@@ -114,7 +114,7 @@ namespace elm {
 		this->viewport_panel.on_event(e);
 	}
 
-	void editor_layer::on_imgui_render(void)
+	void editor_layer::on_imgui_render()
 	{
 		ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
 

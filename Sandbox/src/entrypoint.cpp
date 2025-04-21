@@ -4,7 +4,7 @@
 
 namespace elm {
 
-	application* application::create(struct application_command_line_args args)
+	application* application::create(application_command_line_args args)
 	{
 		elm::application_specification spec;
 		spec.name = "Sandbox";

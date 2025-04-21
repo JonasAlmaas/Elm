@@ -123,7 +123,7 @@ namespace elm {
 		msdfgen::deinitializeFreetype(ft);
 	}
 
-	font::~font(void)
+	font::~font()
 	{
 		delete this->data;
 	}
@@ -133,7 +133,7 @@ namespace elm {
 		return std::make_shared<font>(fpath);
 	}
 
-	std::shared_ptr<font> font::get_default(void)
+	std::shared_ptr<font> font::get_default()
 	{
 		static std::shared_ptr<font> s_default;
 		if (!s_default) {

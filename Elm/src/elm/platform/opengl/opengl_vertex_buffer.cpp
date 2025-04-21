@@ -29,12 +29,12 @@ namespace elm {
 		glDeleteBuffers(1, &this->renderer_id);
 	}
 
-	void opengl_vertex_buffer::bind(void) const
+	void opengl_vertex_buffer::bind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, this->renderer_id);
 	}
 
-	void opengl_vertex_buffer::unbind(void) const
+	void opengl_vertex_buffer::unbind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}

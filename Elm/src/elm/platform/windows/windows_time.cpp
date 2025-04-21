@@ -6,7 +6,7 @@
 
 namespace elm::time {
 
-	extern float get_seconds(void)
+	extern float get_seconds()
 	{
 		return (float)glfwGetTime();
 	}

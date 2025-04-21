@@ -101,7 +101,7 @@ namespace elm {
 		return false;
 	}
 
-	void orthographic_camera_controller::recalculate_view_matrix(void)
+	void orthographic_camera_controller::recalculate_view_matrix()
 	{
 		ELM_PROFILE_FUNCTION();
 

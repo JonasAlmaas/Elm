@@ -6,12 +6,12 @@
 
 struct example_layer : elm::layer
 {
-	example_layer(void);
-	virtual ~example_layer(void) = default;
+	example_layer();
+	virtual ~example_layer() = default;
 
 	virtual void on_update(elm::timestep ts) override;
 	virtual void on_event(elm::event &e) override;
-	virtual void on_imgui_render(void) override;
+	virtual void on_imgui_render() override;
 
 private:
 	bool on_window_resize(elm::window_resize_event &e);

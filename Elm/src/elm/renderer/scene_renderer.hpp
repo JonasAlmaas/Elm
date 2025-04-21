@@ -7,8 +7,8 @@
 
 namespace elm::scene_renderer {
 
-	extern void init(void);
-	extern void shutdown(void);
+	extern void init();
+	extern void shutdown();
 
 	extern void render(std::shared_ptr<scene> scene, const camera *camera);
 }

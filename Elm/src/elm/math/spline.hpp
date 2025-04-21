@@ -18,7 +18,7 @@ namespace elm::math {
 		float length = 0.0f;
 		std::vector<float> segment_lengths;
 
-		void invalidate(void);
+		void invalidate();
 
 		/**
 		 * @param t fractional value

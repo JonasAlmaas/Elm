@@ -21,7 +21,7 @@ namespace elm {
 		this->view_projection = this->projection * this->view;
 	}
 
-	void perspective_camera::recalculate_projection_matrix(void)
+	void perspective_camera::recalculate_projection_matrix()
 	{
 		this->projection = glm::perspective(glm::radians(this->fov), this->aspect_ratio, this->near_clip, this->far_clip);
 		this->view_projection = this->projection * this->view;

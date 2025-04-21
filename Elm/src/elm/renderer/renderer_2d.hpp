@@ -17,13 +17,13 @@ namespace elm::renderer_2d {
 		float line_spacing = 0.0f;
 	};
 
-	extern void init(void);
-	extern void shutdown(void);
+	extern void init();
+	extern void shutdown();
 
 	extern void begin_scene(const camera *camera);
-	extern void end_scene(void);
+	extern void end_scene();
 
-	extern void flush(void);
+	extern void flush();
 
 	// -- Draw sprite --
 	extern void draw_sprite(const glm::mat4 &transform, const std::shared_ptr<texture_2d> &texture, const std::array<glm::vec2, 4> &uvs, const glm::vec4 &color = glm::vec4(1.0f));
@@ -58,16 +58,16 @@ namespace elm::renderer_2d {
 	extern void draw_circle(const glm::mat4 &transform, const glm::vec4 &color, float radius = 0.5f, float thickness = 1.0f, float fade = 0.005f);
 
 	// -- Draw line --
-	extern float get_line_thickness(void);
+	extern float get_line_thickness();
 	extern void set_line_thickness(float thickness);
 
 	extern void draw_line(const glm::vec3 &p0, const glm::vec3 &p1, const glm::vec4 &color = glm::vec4(1.0f));
 	extern void draw_line(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec4 &color = glm::vec4(1.0f));
 
 	// -- Draw text --
-	extern void draw_text(const std::string &text, const std::shared_ptr<font> &font, const glm::mat4 &transform, const struct text_render_params &params);
+	extern void draw_text(const std::string &text, const std::shared_ptr<font> &font, const glm::mat4 &transform, const text_render_params &params);
 
 	// -- Statistics --
-	extern struct statistics get_stats(void);
-	extern void reset_stats(void);
+	extern statistics get_stats();
+	extern void reset_stats();
 }

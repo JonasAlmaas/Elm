@@ -27,7 +27,7 @@ namespace elm {
 		instrumentor(instrumentor &&) = delete;
 
 		void begin_session(const std::string &name, const std::string &fpath = "resuls.json");
-		void end_session(void);
+		void end_session();
 
 		void write_profile(const profile_result &result);
 
@@ -36,18 +36,18 @@ namespace elm {
 			return &instance;
 		}
 	private:
-		instrumentor(void): current_session(nullptr) {}
-		~instrumentor(void)
+		instrumentor(): current_session(nullptr) {}
+		~instrumentor()
 		{
 			end_session();
 		}
 
-		void write_header(void);
-		void write_footer(void);
+		void write_header();
+		void write_footer();
 
 		// Note: You must already own lock on mutex before
 		// calling internal_end_session()
-		void internal_end_session(void);
+		void internal_end_session();
 
 	private:
 		std::mutex mutex;
@@ -63,7 +63,7 @@ namespace elm {
 		{
 		}
 
-		~instrumentation_timer(void)
+		~instrumentation_timer()
 		{
 			if (!this->stopped) {
 				stop();

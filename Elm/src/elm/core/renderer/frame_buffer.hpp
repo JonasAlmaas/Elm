@@ -21,7 +21,7 @@ namespace elm {
 	};
 
 	struct frame_buffer_texture_specification {
-		frame_buffer_texture_specification(void) = default;
+		frame_buffer_texture_specification() = default;
 		frame_buffer_texture_specification(frame_buffer_texture_format format)
 			: texture_format(format) {}
 
@@ -34,7 +34,7 @@ namespace elm {
 	};
 
 	struct frame_buffer_attachment_specification {
-		frame_buffer_attachment_specification(void) = default;
+		frame_buffer_attachment_specification() = default;
 		frame_buffer_attachment_specification(std::initializer_list<frame_buffer_texture_specification> attachments)
 			: attachments(attachments) {}
 
@@ -51,10 +51,10 @@ namespace elm {
 
 	struct frame_buffer
 	{
-		virtual ~frame_buffer(void) = default;
+		virtual ~frame_buffer() = default;
 
-		virtual void bind(void) = 0;
-		virtual void unbind(void) = 0;
+		virtual void bind() = 0;
+		virtual void unbind() = 0;
 
 		virtual void resize(uint32_t width, uint32_t height) = 0;
 
@@ -62,11 +62,11 @@ namespace elm {
 		virtual void clear_attachment_int(uint32_t attachment_ix, int value) = 0;
 
 		virtual uint32_t get_color_attachment_renderer_id(uint32_t ix) const = 0;
-		virtual uint32_t get_depth_attachment_renderer_id(void) const = 0;
+		virtual uint32_t get_depth_attachment_renderer_id() const = 0;
 
-		virtual const struct frame_buffer_specification *get_spec(void) const = 0;
+		virtual const frame_buffer_specification *get_spec() const = 0;
 
 	public:
-		static std::shared_ptr<frame_buffer> create(const struct frame_buffer_specification &spec);
+		static std::shared_ptr<frame_buffer> create(const frame_buffer_specification &spec);
 	};
 }

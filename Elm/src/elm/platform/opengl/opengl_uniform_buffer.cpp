@@ -11,17 +11,17 @@ namespace elm {
 		glBindBufferBase(GL_UNIFORM_BUFFER, this->binding, this->renderer_id);
 	}
 
-	opengl_uniform_buffer::~opengl_uniform_buffer(void)
+	opengl_uniform_buffer::~opengl_uniform_buffer()
 	{
 		glDeleteBuffers(1, &this->renderer_id);
 	}
 
-	void opengl_uniform_buffer::bind(void)
+	void opengl_uniform_buffer::bind()
 	{
 		glBindBufferBase(GL_UNIFORM_BUFFER, this->binding, this->renderer_id);
 	}
 
-	void opengl_uniform_buffer::unbind(void)
+	void opengl_uniform_buffer::unbind()
 	{
 		glBindBufferBase(GL_UNIFORM_BUFFER, this->binding, 0);
 	}

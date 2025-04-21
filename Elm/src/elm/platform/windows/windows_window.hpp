@@ -20,22 +20,22 @@ namespace elm {
 
 		virtual void on_update(bool minimized) override;
 
-		virtual inline uint32_t get_width(void) const override { return this->data.width; }
-		virtual inline uint32_t get_height(void) const override { return this->data.height; }
+		virtual uint32_t get_width() const override {return this->data.width;}
+		virtual uint32_t get_height() const override {return this->data.height;}
 
 		// Window attributes
 		virtual void set_event_callback(const std::function<void(event &)> & cb) override;
 		virtual void set_vsync(bool enabled) override;
-		virtual inline bool is_vsync(void) const override { return this->data.vsync; }
+		virtual bool is_vsync() const override {return this->data.vsync;}
 
-		virtual void enable_cursor(void) override;
-		virtual void disable_cursor(void) override;
+		virtual void enable_cursor() override;
+		virtual void disable_cursor() override;
 
-		virtual void *get_native_window(void) override { return (void *)this->window; }
+		virtual void *get_native_window() override {return (void *)this->window;}
 
 	private:
 		virtual void init(const window_specification& specs);
-		virtual void shutdown(void);
+		virtual void shutdown();
 
 	private:
 		GLFWwindow* window;

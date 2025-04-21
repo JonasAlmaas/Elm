@@ -98,7 +98,7 @@ namespace elm::math {
 		return (float)i + (p / this->segment_lengths[i % this->segment_lengths.size()]);
 	}
 
-	void spline::invalidate(void)
+	void spline::invalidate()
 	{
 		ELM_ASSERT(this->points.size() >= 4, "A spline must contain at least 4 points");
 

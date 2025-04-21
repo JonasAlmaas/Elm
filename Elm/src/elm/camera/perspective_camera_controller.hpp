@@ -17,30 +17,30 @@ namespace elm {
 
 		void resize_viewport(uint32_t width, uint32_t height);
 
-		inline glm::vec3 get_position(void) const { return this->position; }
-		inline float get_pitch_rad(void) const { return this->pitch_rad; }
-		inline float get_pitch_deg(void) const { return glm::degrees(this->pitch_rad); }
-		inline float get_yaw_rad(void) const { return this->yaw_rad; }
-		inline float get_yaw_deg(void) const { return glm::degrees(this->yaw_rad); }
-		inline float get_roll_rad(void) const { return this->roll_rad; }
-		inline float get_roll_deg(void) const { return glm::degrees(this->roll_rad); }
+		glm::vec3 get_position() const {return this->position;}
+		float get_pitch_rad() const {return this->pitch_rad;}
+		float get_pitch_deg() const {return glm::degrees(this->pitch_rad);}
+		float get_yaw_rad() const {return this->yaw_rad;}
+		float get_yaw_deg() const {return glm::degrees(this->yaw_rad);}
+		float get_roll_rad() const {return this->roll_rad;}
+		float get_roll_deg() const {return glm::degrees(this->roll_rad);}
 
-		void set_position(const glm::vec3 &pos) { this->position = pos; recalculate_view_matrix(); }
-		void set_pitch_rad(float pitch) { this->pitch_rad = pitch; recalculate_view_matrix(); }
-		void set_pitch_deg(float pitch) { this->pitch_rad = glm::radians(pitch); recalculate_view_matrix(); }
-		void set_yaw_rad(float yaw) { this->yaw_rad = yaw; recalculate_view_matrix(); }
-		void set_yaw_deg(float yaw) { this->yaw_rad = glm::radians(yaw); recalculate_view_matrix(); }
-		void set_roll_rad(float roll) { this->roll_rad = roll; recalculate_view_matrix(); }
-		void set_roll_deg(float roll) { this->roll_rad = glm::radians(roll); recalculate_view_matrix(); }
+		void set_position(const glm::vec3 &pos) {this->position = pos; recalculate_view_matrix();}
+		void set_pitch_rad(float pitch) {this->pitch_rad = pitch; recalculate_view_matrix();}
+		void set_pitch_deg(float pitch) {this->pitch_rad = glm::radians(pitch); recalculate_view_matrix();}
+		void set_yaw_rad(float yaw) {this->yaw_rad = yaw; recalculate_view_matrix();}
+		void set_yaw_deg(float yaw) {this->yaw_rad = glm::radians(yaw); recalculate_view_matrix();}
+		void set_roll_rad(float roll) {this->roll_rad = roll; recalculate_view_matrix();}
+		void set_roll_deg(float roll) {this->roll_rad = glm::radians(roll); recalculate_view_matrix();}
 
 	public:
-		inline perspective_camera *get_camera(void) { return &this->camera; }
-		inline const perspective_camera *get_camera(void) const { return &this->camera; }
+		perspective_camera *get_camera() {return &this->camera;}
+		const perspective_camera *get_camera() const {return &this->camera;}
 
 	private:
 		bool on_mouse_move_event(mouse_moved_event &e);
 
-		void recalculate_view_matrix(void);
+		void recalculate_view_matrix();
 
 	private:
 		perspective_camera camera;

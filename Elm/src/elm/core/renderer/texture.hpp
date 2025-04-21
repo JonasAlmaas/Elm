@@ -46,25 +46,25 @@ namespace elm {
 
 	struct texture
 	{
-		virtual ~texture(void) = default;
+		virtual ~texture() = default;
 
 		virtual void bind(uint32_t slot = 0) = 0;
 
-		virtual uint32_t get_width(void) const = 0;
-		virtual uint32_t get_height(void) const = 0;
+		virtual uint32_t get_width() const = 0;
+		virtual uint32_t get_height() const = 0;
 
-		virtual uint32_t get_renderer_id(void) const = 0;
+		virtual uint32_t get_renderer_id() const = 0;
 
 		virtual void set_data(void *data, uint32_t size) = 0;
 
-		virtual const texture_specification &get_spec(void) = 0;
+		virtual const texture_specification &get_spec() = 0;
 
 		virtual bool equal(const texture *other) const = 0;
 	};
 
 	struct texture_2d : texture
 	{
-		virtual ~texture_2d(void) = default;
+		virtual ~texture_2d() = default;
 
 	public:
 		static std::shared_ptr<texture_2d> create(const texture_specification &spec = texture_specification());
@@ -73,7 +73,7 @@ namespace elm {
 
 	struct texture_cube : texture
 	{
-		virtual ~texture_cube(void) = default;
+		virtual ~texture_cube() = default;
 
 	public:
 		static std::shared_ptr<texture_cube> create(const texture_specification &spec = texture_specification());

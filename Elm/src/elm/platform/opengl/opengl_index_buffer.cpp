@@ -21,12 +21,12 @@ namespace elm {
 		glDeleteBuffers(1, &this->renderer_id);
 	}
 
-	void opengl_index_buffer::bind(void) const
+	void opengl_index_buffer::bind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, this->renderer_id);
 	}
 
-	void opengl_index_buffer::unbind(void) const
+	void opengl_index_buffer::unbind() const
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}

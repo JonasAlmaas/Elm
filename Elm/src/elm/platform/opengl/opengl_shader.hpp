@@ -16,22 +16,22 @@ namespace elm {
 			const std::string &name,
 			const std::string &vertex_src,
 			const std::string &fragment_src);
-		virtual ~opengl_shader(void);
+		virtual ~opengl_shader();
 
-		virtual void bind(void) override;
-		virtual void unbind(void) override;
+		virtual void bind() override;
+		virtual void unbind() override;
 
-		virtual void reload(void) override;
+		virtual void reload() override;
 
-		inline virtual const std::string &get_name(void) const override { return this->name; }
+		virtual const std::string &get_name() const override {return this->name;}
 
 	private:
-		void load_from_file(void);
-		void delete_binaries(void);
+		void load_from_file();
+		void delete_binaries();
 
 		void compile_or_get_vulkan_binaries(std::unordered_map<uint32_t /*GLenum*/, std::string> &shader_sources);
-		void compile_or_get_opengl_binaries(void);
-		void create_program(void);
+		void compile_or_get_opengl_binaries();
+		void create_program();
 		void reflect(uint32_t /*GLenum*/ kind, const std::vector<uint32_t> &shader_data);
 
 	private:

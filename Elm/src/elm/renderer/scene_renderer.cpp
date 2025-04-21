@@ -35,29 +35,29 @@ namespace elm::scene_renderer {
 	enum {MAX_POINT_LIGHTS=4};
 
 	struct lights_data {
-		struct directional_light dir_light;
+		directional_light dir_light;
 		int point_light_count;
 		uint32_t padding2[3];
-		struct point_light point_lights[MAX_POINT_LIGHTS];
+		point_light point_lights[MAX_POINT_LIGHTS];
 	};
 
-	static struct scene_renderer_data s_data;
+	static scene_renderer_data s_data;
 
-	void init(void)
+	void init()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		s_data.lights_ub = elm::uniform_buffer::create(sizeof(struct lights_data), 2);
+		s_data.lights_ub = elm::uniform_buffer::create(sizeof(lights_data), 2);
 
 		s_data.world_grid_shader = elm::shader::create("content/shaders/world_grid.glsl");
 	}
 
-	void shutdown(void)
+	void shutdown()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 	}
 
-	inline static void render_mesh_render_components(const entt::registry &reg)
+	static void render_mesh_render_components(const entt::registry &reg)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -69,7 +69,7 @@ namespace elm::scene_renderer {
 		}
 	}
 
-	inline static void render_sprite_renderer_components(const entt::registry &reg)
+	static void render_sprite_renderer_components(const entt::registry &reg)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -84,7 +84,7 @@ namespace elm::scene_renderer {
 		}
 	}
 
-	inline static void render_circle_renderer_components(const entt::registry &reg)
+	static void render_circle_renderer_components(const entt::registry &reg)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -95,7 +95,7 @@ namespace elm::scene_renderer {
 		}
 	}
 
-	inline static void render_text_renderer_components(const entt::registry &reg)
+	static void render_text_renderer_components(const entt::registry &reg)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -110,11 +110,11 @@ namespace elm::scene_renderer {
 		}
 	}
 
-	inline static void prepare_lights(const entt::registry &reg)
+	static void prepare_lights(const entt::registry &reg)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		static struct lights_data s_lights_data;
+		static lights_data s_lights_data;
 
 		{ // Environment light
 			auto view = reg.view<environment_light_component>();
@@ -165,7 +165,7 @@ namespace elm::scene_renderer {
 		s_data.lights_ub->set_data((const void *)&s_lights_data, sizeof s_lights_data);
 	}
 
-	inline static void render_world_grid(const camera *camera)
+	static void render_world_grid(const camera *camera)
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 

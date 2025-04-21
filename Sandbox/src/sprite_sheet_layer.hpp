@@ -6,18 +6,18 @@
 
 struct sprite_sheet_layer : elm::layer
 {
-	sprite_sheet_layer(void);
-	virtual ~sprite_sheet_layer(void) = default;
+	sprite_sheet_layer();
+	virtual ~sprite_sheet_layer() = default;
 
-	virtual void on_attach(void) override;
-	virtual void on_detach(void) override;
+	virtual void on_attach() override;
+	virtual void on_detach() override;
 	virtual void on_update(elm::timestep ts) override;
 	virtual void on_event(elm::event &e) override;
-	virtual void on_imgui_render(void) override;
+	virtual void on_imgui_render() override;
 
 private:
 	void calculate_fps(elm::timestep ts);
-	void tick(void);
+	void tick();
 
 private:
 	bool on_window_resize(elm::window_resize_event &e);

@@ -6,13 +6,13 @@ namespace elm {
 
 	struct opengl_renderer_api : renderer_api
 	{
-		virtual void init(void) override;
+		virtual void init() override;
 
 		virtual void get_viewport(uint32_t *x, uint32_t *y, uint32_t *width, uint32_t *height) override;
 		virtual void set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
 
 		virtual void set_clear_color(const glm::vec4 &color) override;
-		virtual void clear(void) override;
+		virtual void clear() override;
 
 		virtual void set_depth_test(bool enabled) override;
 		virtual void set_depth_fn(depth_function fn) override;
@@ -24,8 +24,8 @@ namespace elm {
 		virtual void set_line_thickness(float thickness) override;
 
 	public:
-		virtual std::string get_vendor(void) override;
-		virtual std::string get_render(void) override;
-		virtual std::string get_render_version(void) override;
+		virtual std::string get_vendor() override;
+		virtual std::string get_render() override;
+		virtual std::string get_render_version() override;
 	};
 }

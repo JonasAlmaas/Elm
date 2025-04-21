@@ -14,18 +14,18 @@ namespace elm {
 		void on_update(timestep ts);
 		void on_event(event &e);
 
-		inline float get_zoom_level(void) const { return this->zoom_level; }
-		inline void set_zoom_level(float level) { this->zoom_level = level; }
+		float get_zoom_level() const {return this->zoom_level;}
+		void set_zoom_level(float level) {this->zoom_level = level;}
 
 		void resize_viewport(uint32_t width, uint32_t height);
 
-		inline orthographic_camera *get_camera(void) { return &this->camera; }
-		inline const orthographic_camera *get_camera(void) const { return &this->camera; }
+		orthographic_camera *get_camera() {return &this->camera;}
+		const orthographic_camera *get_camera() const {return &this->camera;}
 
 	private:
 		bool on_mouse_scrolled(mouse_scrolled_event &e);
 
-		void recalculate_view_matrix(void);
+		void recalculate_view_matrix();
 
 	private:
 		float aspect_ratio;

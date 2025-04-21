@@ -9,9 +9,9 @@ namespace elm {
 
 	struct material
 	{
-		virtual ~material(void) = default;
+		virtual ~material() = default;
 
-		virtual void bind(void) = 0;
+		virtual void bind() = 0;
 
 	public:
 		std::shared_ptr<shader> shader;
@@ -19,9 +19,9 @@ namespace elm {
 
 	struct pbr_material : material
 	{
-		virtual ~pbr_material(void) = default;
+		virtual ~pbr_material() = default;
 
-		virtual void bind(void) override
+		virtual void bind() override
 		{
 			//shader->bind();
 

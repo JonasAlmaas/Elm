@@ -15,12 +15,12 @@
 
 namespace elm {
 
-	imgui_layer::imgui_layer(void)
+	imgui_layer::imgui_layer()
 		: layer("ImGuiLayer")
 	{
 	}
 
-	void imgui_layer::on_attach(void)
+	void imgui_layer::on_attach()
 	{
 		ELM_PROFILE_FUNCTION();
 
@@ -45,7 +45,7 @@ namespace elm {
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
-	void imgui_layer::on_detach(void)
+	void imgui_layer::on_detach()
 	{
 		ELM_PROFILE_FUNCTION();
 
@@ -67,7 +67,7 @@ namespace elm {
 		e.handled |= e.is_in_category(ECAT_KEYBOARD) & io.WantCaptureKeyboard;
 	}
 
-	void imgui_layer::begin(void)
+	void imgui_layer::begin()
 	{
 		ELM_PROFILE_FUNCTION();
 
@@ -76,7 +76,7 @@ namespace elm {
 		ImGui::NewFrame();
 	}
 
-	void imgui_layer::end(void)
+	void imgui_layer::end()
 	{
 		ELM_PROFILE_FUNCTION();
 
@@ -99,7 +99,7 @@ namespace elm {
 		}
 	}
 
-	void imgui_layer::set_style(void)
+	void imgui_layer::set_style()
 	{
 		ELM_PROFILE_FUNCTION();
 

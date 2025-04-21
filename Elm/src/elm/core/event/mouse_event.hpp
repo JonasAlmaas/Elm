@@ -8,7 +8,7 @@ namespace elm {
 
 	struct mouse_button_event : event
 	{
-		inline mouse get_mouse_button(void) const { return this->button; }
+		mouse get_mouse_button() const {return this->button;}
 
 		EVENT_CLASS_CATEGORY(ECAT_INPUT | ECAT_MOUSE | ECAT_MOUSE_BUTTON)
 
@@ -54,8 +54,8 @@ namespace elm {
 		mouse_moved_event(float x, float y)
 			: mouse_x(x), mouse_y(y) {}
 
-		inline float get_x() const { return this->mouse_x; }
-		inline float get_y() const { return this->mouse_y; }
+		float get_x() const { return this->mouse_x; }
+		float get_y() const { return this->mouse_y; }
 
 		std::string to_string() const override
 		{
@@ -76,8 +76,8 @@ namespace elm {
 		mouse_scrolled_event(float offset_x, float offset_y)
 			: offset_x(offset_x), offset_y(offset_y) {}
 
-		inline float get_offset_x() const { return this->offset_x; }
-		inline float get_offset_y() const { return this->offset_y; }
+		float get_offset_x() const { return this->offset_x; }
+		float get_offset_y() const { return this->offset_y; }
 
 		std::string to_string() const override
 		{

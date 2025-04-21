@@ -10,10 +10,10 @@ namespace elm {
 		opengl_index_buffer(const uint32_t *indices, uint32_t count);
 		virtual ~opengl_index_buffer();
 
-		virtual void bind(void) const override;
-		virtual void unbind(void) const  override;
+		virtual void bind() const override;
+		virtual void unbind() const  override;
 
-		inline virtual uint32_t get_count(void) const override { return this->count; }
+		virtual uint32_t get_count() const override {return this->count;}
 
 	private:
 		uint32_t renderer_id;

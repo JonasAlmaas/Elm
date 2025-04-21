@@ -38,12 +38,12 @@ static uint32_t s_map[MAP_SIZE * MAP_SIZE] = {
 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 };
 
-sprite_sheet_layer::sprite_sheet_layer(void)
+sprite_sheet_layer::sprite_sheet_layer()
 	: layer("Sandbox2D"), camera_controller(16.0f / 9.0f, false)
 {
 }
 
-void sprite_sheet_layer::on_attach(void)
+void sprite_sheet_layer::on_attach()
 {
 	this->texture_grass_tileset = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png", {
 		.mag_filter = elm::texture_filter::NEAREST
@@ -63,7 +63,7 @@ void sprite_sheet_layer::on_attach(void)
 	}
 }
 
-void sprite_sheet_layer::on_detach(void)
+void sprite_sheet_layer::on_detach()
 {
 }
 
@@ -120,7 +120,7 @@ void sprite_sheet_layer::on_event(elm::event &e)
 	dispatcher.dispatch<elm::window_resize_event>(ELM_BIND_EVENT_FN(sprite_sheet_layer::on_window_resize));
 }
 
-void sprite_sheet_layer::on_imgui_render(void)
+void sprite_sheet_layer::on_imgui_render()
 {
 	elm::renderer_2d::statistics stats = elm::renderer_2d::get_stats();
 
@@ -156,7 +156,7 @@ void sprite_sheet_layer::calculate_fps(elm::timestep ts)
 	}
 }
 
-void sprite_sheet_layer::tick(void)
+void sprite_sheet_layer::tick()
 {
 	if (++this->animation_ix > 3) {
 		this->animation_ix = 0;

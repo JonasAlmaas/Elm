@@ -7,10 +7,10 @@ namespace elm {
 
 	struct graphics_context
 	{
-		virtual ~graphics_context(void) = default;
+		virtual ~graphics_context() = default;
 
-		virtual void init(void) = 0;
-		virtual void swap_buffers(void) = 0;
+		virtual void init() = 0;
+		virtual void swap_buffers() = 0;
 
 	public:
 		static std::unique_ptr<graphics_context> create(void *window);

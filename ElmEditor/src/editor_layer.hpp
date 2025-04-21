@@ -14,14 +14,14 @@ namespace elm {
 
 	struct editor_layer : layer
 	{
-		editor_layer(void);
-		virtual ~editor_layer(void) = default;
+		editor_layer();
+		virtual ~editor_layer() = default;
 
-		virtual void on_attach(void) override;
-		virtual void on_detach(void) override;
+		virtual void on_attach() override;
+		virtual void on_detach() override;
 		virtual void on_update(timestep ts) override;
 		virtual void on_event(event &e) override;
-		virtual void on_imgui_render(void) override;
+		virtual void on_imgui_render() override;
 
 	private:
 		std::shared_ptr<scene> scene;

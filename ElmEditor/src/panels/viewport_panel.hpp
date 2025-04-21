@@ -8,12 +8,12 @@ namespace elm {
 
 	struct viewport_panel
 	{
-		viewport_panel(void);
+		viewport_panel();
 
-		void on_attach(void);
+		void on_attach();
 		void on_update(timestep ts, const std::shared_ptr<scene> &scene);
 		void on_event(event &e);
-		void on_imgui_render(void);
+		void on_imgui_render();
 
 		perspective_camera_controller camera_controller;
 		//orthographic_camera_controller camera_controller;

@@ -10,14 +10,14 @@ namespace elm {
 
 	struct shader
 	{
-		virtual ~shader(void) = default;
+		virtual ~shader() = default;
 
-		virtual void bind(void) = 0;
-		virtual void unbind(void) = 0;
+		virtual void bind() = 0;
+		virtual void unbind() = 0;
 
-		virtual void reload(void) = 0;
+		virtual void reload() = 0;
 
-		virtual const std::string &get_name(void) const = 0;
+		virtual const std::string &get_name() const = 0;
 
 	public:
 		static std::shared_ptr<shader> create(const std::filesystem::path &fpath);

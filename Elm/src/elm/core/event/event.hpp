@@ -24,20 +24,20 @@ namespace elm {
 	};
 
 	#define EVENT_CLASS_TYPE(type) \
-		static event_type get_static_type(void) { return event_type::type; }\
-		virtual event_type get_event_type(void) const override { return get_static_type(); }\
-		virtual const char* get_name(void) const override { return #type; }
+		static event_type get_static_type() {return event_type::type;}\
+		virtual event_type get_event_type() const override {return get_static_type();}\
+		virtual const char* get_name() const override {return #type;}
 
-	#define EVENT_CLASS_CATEGORY(category) virtual int get_category_flags(void) const override { return category; }
+	#define EVENT_CLASS_CATEGORY(category) virtual int get_category_flags() const override {return category;}
 
 	struct event
 	{
-		virtual ~event(void) = default;
+		virtual ~event() = default;
 
-		virtual event_type get_event_type(void) const = 0;
-		virtual const char *get_name(void) const = 0;
-		virtual int get_category_flags(void) const = 0;
-		virtual std::string to_string(void) const { return get_name(); }
+		virtual event_type get_event_type() const = 0;
+		virtual const char *get_name() const = 0;
+		virtual int get_category_flags() const = 0;
+		virtual std::string to_string() const {return get_name();}
 
 		bool is_in_category(event_category category) const
 		{

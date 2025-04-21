@@ -7,7 +7,7 @@ namespace elm {
 
 	struct layer_stack
 	{
-		~layer_stack(void);
+		~layer_stack();
 
 		void push_layer(layer *layer);
 		void push_overlay(layer *layer);

@@ -14,9 +14,9 @@ namespace elm {
 		void set_view_matrix(const glm::mat4 &view_matrix);
 
 	public:
-		inline virtual const glm::mat4 &get_view(void) const override { return this->view; }
-		inline virtual const glm::mat4 &get_projection(void) const override { return this->projection; }
-		inline virtual const glm::mat4 &get_view_projection(void) const override { return this->view_projection; }
+		virtual const glm::mat4 &get_view() const override {return this->view;}
+		virtual const glm::mat4 &get_projection() const override {return this->projection;}
+		virtual const glm::mat4 &get_view_projection() const override {return this->view_projection;}
 
 	private:
 		glm::mat4 view;

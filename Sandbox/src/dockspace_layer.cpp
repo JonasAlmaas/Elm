@@ -3,12 +3,12 @@
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
-dockspace_layer::dockspace_layer(void)
+dockspace_layer::dockspace_layer()
 	: layer("Dockspace layer"), camera_controller(16.0f / 9.0f, false)
 {
 }
 
-void dockspace_layer::on_attach(void)
+void dockspace_layer::on_attach()
 {
 	uint32_t checkerboard_data[8 * 8];
 	for (int y = 0; y < 8; ++y) {
@@ -33,7 +33,7 @@ void dockspace_layer::on_attach(void)
 	});
 }
 
-void dockspace_layer::on_detach(void)
+void dockspace_layer::on_detach()
 {
 }
 
@@ -74,7 +74,7 @@ void dockspace_layer::on_event(elm::event &e)
 	this->camera_controller.on_event(e);
 }
 
-void dockspace_layer::on_imgui_render(void)
+void dockspace_layer::on_imgui_render()
 {
 	ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
 

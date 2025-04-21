@@ -12,18 +12,18 @@ namespace elm {
 			reset();
 		}
 
-		inline void reset(void)
+		void reset()
 		{
 			this->start = std::chrono::high_resolution_clock::now();
 		}
 
-		inline float elapsed_seconds(void) const
+		float elapsed_seconds() const
 		{
 			return std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - this->start)
 				.count() * 0.001f * 0.001f * 0.001f;
 		}
 
-		inline float elapsed_milliseconds(void) const
+		float elapsed_milliseconds() const
 		{
 			return elapsed_seconds() * 1000.0f;
 		}

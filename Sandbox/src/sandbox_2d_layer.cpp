@@ -3,12 +3,12 @@
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
-sandbox_2d_layer::sandbox_2d_layer(void)
+sandbox_2d_layer::sandbox_2d_layer()
 	: layer("Sandbox2D"), camera_controller(16.0f / 9.0f, true)
 {
 }
 
-void sandbox_2d_layer::on_attach(void)
+void sandbox_2d_layer::on_attach()
 {
 	this->texture_grass_tileset = elm::texture_2d::create("content/textures/sprout-lands/grass_tileset.png", {
 		.mag_filter = elm::texture_filter::NEAREST
@@ -45,7 +45,7 @@ void sandbox_2d_layer::on_attach(void)
 	this->spline2.invalidate();
 }
 
-void sandbox_2d_layer::on_detach(void)
+void sandbox_2d_layer::on_detach()
 {
 }
 
@@ -132,7 +132,7 @@ void sandbox_2d_layer::on_event(elm::event &e)
 	dispatcher.dispatch<elm::window_resize_event>(ELM_BIND_EVENT_FN(sandbox_2d_layer::on_window_resize));
 }
 
-void sandbox_2d_layer::on_imgui_render(void)
+void sandbox_2d_layer::on_imgui_render()
 {
 	elm::renderer_2d::statistics stats = elm::renderer_2d::get_stats();
 

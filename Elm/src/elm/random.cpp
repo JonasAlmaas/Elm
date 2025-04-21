@@ -6,12 +6,12 @@ namespace elm::random {
 	static thread_local std::mt19937 s_random_engine;
 	static std::uniform_int_distribution<std::mt19937::result_type> s_distribution;
 
-	extern void init(void)
+	extern void init()
 	{
 		s_random_engine.seed(std::random_device()());
 	}
 
-	extern uint32_t uint32(void)
+	extern uint32_t uint32()
 	{
 		return s_distribution(s_random_engine);
 	}
@@ -21,12 +21,12 @@ namespace elm::random {
 		return min + (s_distribution(s_random_engine) % (max - min + 1));
 	}
 
-	extern float f32(void)
+	extern float f32()
 	{
 		return (float)s_distribution(s_random_engine) / (float)UINT32_MAX;
 	}
 
-	extern glm::vec3 f32_unit_sphere(void)
+	extern glm::vec3 f32_unit_sphere()
 	{
 		return glm::normalize(glm::vec3(
 			f32() * 2.0f - 1.0f,

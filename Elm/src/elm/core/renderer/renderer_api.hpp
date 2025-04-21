@@ -26,15 +26,15 @@ namespace elm {
 			opengl
 		};
 
-		virtual ~renderer_api(void) = default;
+		virtual ~renderer_api() = default;
 
-		virtual void init(void) = 0;
+		virtual void init() = 0;
 
 		virtual void get_viewport(uint32_t *x, uint32_t *y, uint32_t *width, uint32_t *height) = 0;
 		virtual void set_viewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) = 0;
 
 		virtual void set_clear_color(const glm::vec4 &color) = 0;
-		virtual void clear(void) = 0;
+		virtual void clear() = 0;
 
 		virtual void set_depth_test(bool enabled) = 0;
 		virtual void set_depth_fn(depth_function fn) = 0;
@@ -46,12 +46,12 @@ namespace elm {
 		virtual void set_line_thickness(float thickness) = 0;
 
 	public:
-		virtual std::string get_vendor(void) = 0;
-		virtual std::string get_render(void) = 0;
-		virtual std::string get_render_version(void) = 0;
+		virtual std::string get_vendor() = 0;
+		virtual std::string get_render() = 0;
+		virtual std::string get_render_version() = 0;
 
 	public:
-		inline static api get_api(void) { return s_api; }
+		static api get_api() {return s_api;}
 
 	private:
 		static api s_api;

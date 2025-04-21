@@ -16,14 +16,14 @@ namespace elm {
 		size_t offset;
 		bool normalized;
 
-		vertex_buffer_element(void) = default;
+		vertex_buffer_element() = default;
 
 		vertex_buffer_element(shader_data_type type, const std::string& name, bool normalized=false)
 			: name(name), type(type), size(shader_data_type_get_size(type)), offset(0), normalized(normalized)
 		{
 		}
 
-		uint32_t get_component_count(void) const
+		uint32_t get_component_count() const
 		{
 			switch (type) {
 			case elm::shader_data_type::BOOL: return 1;

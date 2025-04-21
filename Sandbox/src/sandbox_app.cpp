@@ -7,8 +7,8 @@
 #include "pbr_layer.hpp"
 
 sandbox::sandbox(
-		const struct elm::application_specification &spec,
-		struct elm::application_command_line_args args)
+		const elm::application_specification &spec,
+		elm::application_command_line_args args)
 	: elm::application(spec, args)
 {
 	//push_layer(new example_layer());

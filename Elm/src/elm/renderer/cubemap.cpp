@@ -21,7 +21,7 @@ namespace elm::cubemap {
 		glm::lookAt(glm::vec3(0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
 	};
 
-	static void render_cube(void)
+	static void render_cube()
 	{
 		static float s_vertices[] = {
 			// Back
@@ -82,7 +82,7 @@ namespace elm::cubemap {
 		render_command::draw_triangles(36);
 	}
 
-	static void render_quad(void)
+	static void render_quad()
 	{
 		static float s_vertices[] = {
 			// Positions        // UVs

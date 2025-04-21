@@ -91,7 +91,7 @@ namespace elm::renderer_2d {
 		std::array<std::shared_ptr<texture_2d>, max_texture_slots> batch_text_texture_slots;
 		uint32_t batch_text_texture_slot_ix = 0u;
 
-		struct statistics stats;
+		statistics stats;
 	};
 
 	static renderer_2d_data s_data;
@@ -110,11 +110,11 @@ namespace elm::renderer_2d {
 		glm::vec2(0.0f, 1.0f),
 	};
 
-	extern void init(void)
+	extern void init()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
-		s_data.camera_uniform_buffer = uniform_buffer::create(sizeof(struct renderer_2d_data::camera_data), 0);
+		s_data.camera_uniform_buffer = uniform_buffer::create(sizeof(renderer_2d_data::camera_data), 0);
 
 		// Load shaders
 		s_data.sprite_shader = shader::create("content/shaders/renderer_2d_sprite.glsl");
@@ -204,7 +204,7 @@ namespace elm::renderer_2d {
 		delete[] quad_indices;
 	}
 
-	extern void shutdown(void)
+	extern void shutdown()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -248,14 +248,14 @@ namespace elm::renderer_2d {
 		s_data.batch_text_texture_slot_ix = 0u;
 	}
 
-	extern void end_scene(void)
+	extern void end_scene()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		flush();
 	}
 
-	static void flush_sprites(void)
+	static void flush_sprites()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -281,7 +281,7 @@ namespace elm::renderer_2d {
 		++s_data.stats.draw_calls;
 	}
 
-	static void flush_circles(void)
+	static void flush_circles()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -302,7 +302,7 @@ namespace elm::renderer_2d {
 		++s_data.stats.draw_calls;
 	}
 
-	static void flush_lines(void)
+	static void flush_lines()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -324,7 +324,7 @@ namespace elm::renderer_2d {
 		++s_data.stats.draw_calls;
 	}
 
-	static void flush_text(void)
+	static void flush_text()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -350,7 +350,7 @@ namespace elm::renderer_2d {
 		++s_data.stats.draw_calls;
 	}
 
-	extern void flush(void)
+	extern void flush()
 	{
 		flush_sprites();
 		flush_circles();
@@ -646,7 +646,7 @@ namespace elm::renderer_2d {
 
 #pragma region Lines
 
-	extern float get_line_thickness(void)
+	extern float get_line_thickness()
 	{
 		return s_data.line_thickness;
 	}
@@ -687,7 +687,7 @@ namespace elm::renderer_2d {
 		const std::string &text,
 		const std::shared_ptr<font> &font,
 		const glm::mat4 &transform,
-		const struct text_render_params &params)
+		const text_render_params &params)
 	{
 		const auto &font_geometry = font->get_msdf_data()->font_geometry;
 		const auto &metrics = font_geometry.getMetrics();
@@ -816,12 +816,12 @@ namespace elm::renderer_2d {
 
 #pragma endregion
 
-	extern struct statistics get_stats(void)
+	extern statistics get_stats()
 	{
 		return s_data.stats;
 	}
 
-	extern void reset_stats(void)
+	extern void reset_stats()
 	{
 		memset(&s_data.stats, 0, sizeof s_data.stats);
 	}

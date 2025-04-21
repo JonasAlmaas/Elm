@@ -10,8 +10,8 @@ namespace elm {
 	{
 		opengl_context(GLFWwindow *window);
 
-		virtual void init(void) override;
-		virtual void swap_buffers(void) override;
+		virtual void init() override;
+		virtual void swap_buffers() override;
 
 	private:
 		GLFWwindow *window;

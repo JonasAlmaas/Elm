@@ -4,7 +4,7 @@
 
 namespace elm {
 
-	void opengl_renderer_api::init(void)
+	void opengl_renderer_api::init()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -48,7 +48,7 @@ namespace elm {
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
-	void opengl_renderer_api::clear(void)
+	void opengl_renderer_api::clear()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -120,17 +120,17 @@ namespace elm {
 		glLineWidth(thickness);
 	}
 
-	std::string opengl_renderer_api::get_vendor(void)
+	std::string opengl_renderer_api::get_vendor()
 	{
 		return std::string((const char *)glGetString(GL_VENDOR));
 	}
 
-	std::string opengl_renderer_api::get_render(void)
+	std::string opengl_renderer_api::get_render()
 	{
 		return std::string((const char *)glGetString(GL_RENDERER));
 	}
 
-	std::string opengl_renderer_api::get_render_version(void)
+	std::string opengl_renderer_api::get_render_version()
 	{
 		return std::string((const char *)glGetString(GL_VERSION));
 	}

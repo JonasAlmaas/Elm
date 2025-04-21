@@ -3,13 +3,13 @@
 
 namespace elm {
 
-	viewport_panel::viewport_panel(void)
+	viewport_panel::viewport_panel()
 		//: camera_controller(16.0f / 9.0f, false)
 		: camera_controller(60.0f, 1.0f)
 	{
 	}
 
-	void viewport_panel::on_attach(void)
+	void viewport_panel::on_attach()
 	{
 		this->camera_controller.set_position({ -1.5f, -1.5f, 1.5f });
 		this->camera_controller.set_pitch_deg(-65.0f);
@@ -49,7 +49,7 @@ namespace elm {
 		this->camera_controller.on_event(e);
 	}
 
-	void viewport_panel::on_imgui_render(void)
+	void viewport_panel::on_imgui_render()
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0.0f, 0.0f });
 		ImGui::Begin("Viewport");

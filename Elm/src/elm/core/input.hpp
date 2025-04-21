@@ -159,24 +159,24 @@ namespace elm {
 	namespace input {
 
 		extern bool key_pressed(key key_code);
-		template<key... KEY_CODE> inline bool any_key_pressed(void)
+		template<key... KEY_CODE> inline bool any_key_pressed()
 		{
 			return (key_pressed(KEY_CODE) || ...);
 		}
-		template<key... KEY_CODE> inline bool all_keys_pressed(void)
+		template<key... KEY_CODE> inline bool all_keys_pressed()
 		{
 			return (key_pressed(KEY_CODE) && ...);
 		}
 
 		extern bool mouse_button_pressed(mouse button);
 
-		extern std::pair<float, float> get_mouse_pos(void);
-		inline float get_mouse_x(void)
+		extern std::pair<float, float> get_mouse_pos();
+		inline float get_mouse_x()
 		{
 			auto [x, y] = get_mouse_pos();
 			return x;
 		}
-		inline float get_mouse_y(void)
+		inline float get_mouse_y()
 		{
 			auto [x, y] = get_mouse_pos();
 			return y;

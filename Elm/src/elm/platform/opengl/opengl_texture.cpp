@@ -120,7 +120,7 @@ namespace elm {
 		stbi_image_free(data);
 	}
 
-	opengl_texture_2d::~opengl_texture_2d(void)
+	opengl_texture_2d::~opengl_texture_2d()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -177,7 +177,7 @@ namespace elm {
 		}
 	}
 
-	opengl_texture_cube::~opengl_texture_cube(void)
+	opengl_texture_cube::~opengl_texture_cube()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 

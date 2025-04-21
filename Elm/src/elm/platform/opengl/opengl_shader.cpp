@@ -14,7 +14,7 @@ namespace elm {
 
 	static const std::filesystem::path s_cache_directory = "content/_shadercache/opengl";
 
-	static void ensure_cache_directory_exists(void)
+	static void ensure_cache_directory_exists()
 	{
 		if (!std::filesystem::exists(s_cache_directory)) {
 			std::filesystem::create_directories(s_cache_directory);
@@ -153,30 +153,30 @@ namespace elm {
 		ELM_CORE_INFO("Shader compilation of \"{0}\" complete in {1} ms", this->name, timer.elapsed_milliseconds());
 	}
 
-	opengl_shader::~opengl_shader(void)
+	opengl_shader::~opengl_shader()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
 		glDeleteProgram(this->renderer_id);
 	}
 
-	void opengl_shader::bind(void)
+	void opengl_shader::bind()
 	{
 		glUseProgram(this->renderer_id);
 	}
 
-	void opengl_shader::unbind(void)
+	void opengl_shader::unbind()
 	{
 		glUseProgram(0);
 	}
 
-	void opengl_shader::reload(void)
+	void opengl_shader::reload()
 	{
 		delete_binaries();
 		load_from_file(); // TODO: Only do it is there is a valid fpath
 	}
 
-	void opengl_shader::load_from_file(void)
+	void opengl_shader::load_from_file()
 	{
 		std::string shader_source = read_file(this->fpath);
 		auto shader_sources = preprocess(shader_source);
@@ -189,7 +189,7 @@ namespace elm {
 		ELM_CORE_INFO("Shader compilation of \"{0}\" complete in {1} ms", this->name, timer.elapsed_milliseconds());
 	}
 
-	void opengl_shader::delete_binaries(void)
+	void opengl_shader::delete_binaries()
 	{
 		if (std::filesystem::exists(s_cache_directory)) {
 			for (auto &kind : { GL_VERTEX_SHADER, GL_FRAGMENT_SHADER }) {
@@ -271,7 +271,7 @@ namespace elm {
 		}
 	}
 
-	void opengl_shader::compile_or_get_opengl_binaries(void)
+	void opengl_shader::compile_or_get_opengl_binaries()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
@@ -340,7 +340,7 @@ namespace elm {
 		}
 	}
 
-	void opengl_shader::create_program(void)
+	void opengl_shader::create_program()
 	{
 		ELM_PROFILE_RENDERER_FUNCTION();
 
