@@ -19,7 +19,7 @@ namespace elm {
 		mouse button;
 	};
 
-	struct mouse_button_pressed_event : mouse_button_event
+	struct mouse_button_pressed_event final : mouse_button_event
 	{
 		mouse_button_pressed_event(mouse button)
 			: mouse_button_event(button) {}
@@ -34,7 +34,7 @@ namespace elm {
 		EVENT_CLASS_TYPE(ET_MOUSE_BUTTON_PRESSED)
 	};
 
-	struct mouse_button_released_event : mouse_button_event
+	struct mouse_button_released_event final : mouse_button_event
 	{
 		mouse_button_released_event(mouse button)
 			: mouse_button_event(button) {}
@@ -49,7 +49,7 @@ namespace elm {
 		EVENT_CLASS_TYPE(ET_MOUSE_BUTTON_RELEASED)
 	};
 
-	struct mouse_moved_event : event
+	struct mouse_moved_event final : event
 	{
 		mouse_moved_event(float x, float y)
 			: mouse_x(x), mouse_y(y) {}
@@ -71,7 +71,7 @@ namespace elm {
 		float mouse_x, mouse_y;
 	};
 
-	struct mouse_scrolled_event : event
+	struct mouse_scrolled_event final : event
 	{
 		mouse_scrolled_event(float offset_x, float offset_y)
 			: offset_x(offset_x), offset_y(offset_y) {}

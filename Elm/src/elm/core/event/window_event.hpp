@@ -6,7 +6,7 @@
 
 namespace elm {
 
-	struct window_close_event : event
+	struct window_close_event final : event
 	{
 		window_close_event() = default;
 
@@ -14,7 +14,7 @@ namespace elm {
 		EVENT_CLASS_CATEGORY(ECAT_APPLICATION)
 	};
 
-	struct window_minimize_event : event
+	struct window_minimize_event final : event
 	{
 		window_minimize_event(bool minimized)
 			: minimized(minimized) {}
@@ -28,7 +28,7 @@ namespace elm {
 		bool minimized;
 	};
 
-	struct window_resize_event : event
+	struct window_resize_event final : event
 	{
 		window_resize_event(uint32_t width, uint32_t height)
 			: width(width), height(height) {}

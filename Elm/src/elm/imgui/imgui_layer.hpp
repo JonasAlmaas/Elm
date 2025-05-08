@@ -4,7 +4,7 @@
 
 namespace elm {
 
-	struct imgui_layer : layer
+	struct imgui_layer final : layer
 	{
 		imgui_layer();
 

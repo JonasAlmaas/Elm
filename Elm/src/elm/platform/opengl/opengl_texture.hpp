@@ -4,7 +4,7 @@
 
 namespace elm {
 
-	struct opengl_texture_2d : texture_2d
+	struct opengl_texture_2d final : texture_2d
 	{
 		opengl_texture_2d(const texture_specification &spec);
 		opengl_texture_2d(const std::string &fpath, const texture_specification &spec);
@@ -36,7 +36,7 @@ namespace elm {
 		uint32_t/*GLenum*/ internal_format, data_format;
 	};
 
-	struct opengl_texture_cube : texture_cube
+	struct opengl_texture_cube final : texture_cube
 	{
 		opengl_texture_cube(const texture_specification &spec);
 		virtual ~opengl_texture_cube();

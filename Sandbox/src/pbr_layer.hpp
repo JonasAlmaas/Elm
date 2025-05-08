@@ -3,7 +3,7 @@
 #include <elm.hpp>
 #include <memory>
 
-struct pbr_layer : elm::layer
+struct pbr_layer final : elm::layer
 {
 	pbr_layer();
 	virtual ~pbr_layer() = default;

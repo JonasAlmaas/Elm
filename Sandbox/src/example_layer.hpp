@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-struct example_layer : elm::layer
+struct example_layer final : elm::layer
 {
 	example_layer();
 	virtual ~example_layer() = default;

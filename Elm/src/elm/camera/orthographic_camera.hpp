@@ -6,7 +6,7 @@
 
 namespace elm {
 
-	struct orthographic_camera : camera
+	struct orthographic_camera final : camera
 	{
 		orthographic_camera(float left, float right, float bottom, float top);
 

@@ -2,7 +2,7 @@
 
 #include <elm.hpp>
 
-struct sandbox : elm::application
+struct sandbox final : elm::application
 {
 	sandbox(
 		const elm::application_specification &spec,

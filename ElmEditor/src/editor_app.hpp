@@ -4,7 +4,7 @@
 
 namespace elm {
 
-	struct editor_app : application
+	struct editor_app final : application
 	{
 		editor_app(
 			const application_specification &spec,

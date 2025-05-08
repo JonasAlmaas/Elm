@@ -4,7 +4,7 @@
 
 namespace elm {
 
-	struct opengl_renderer_api : renderer_api
+	struct opengl_renderer_api final : renderer_api
 	{
 		virtual void init() override;
 

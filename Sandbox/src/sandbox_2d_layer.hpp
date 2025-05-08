@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-struct sandbox_2d_layer : elm::layer
+struct sandbox_2d_layer final : elm::layer
 {
 	sandbox_2d_layer();
 	virtual ~sandbox_2d_layer() = default;

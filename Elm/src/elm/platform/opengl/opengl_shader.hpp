@@ -9,7 +9,7 @@
 
 namespace elm {
 
-	struct opengl_shader : shader
+	struct opengl_shader final : shader
 	{
 		opengl_shader(const std::filesystem::path &fpath);
 		opengl_shader(

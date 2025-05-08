@@ -17,7 +17,7 @@ namespace elm {
 		std::shared_ptr<shader> shader;
 	};
 
-	struct pbr_material : material
+	struct pbr_material final : material
 	{
 		virtual ~pbr_material() = default;
 

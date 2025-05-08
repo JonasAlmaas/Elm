@@ -2,7 +2,7 @@
 
 #include <elm.hpp>
 
-struct sandbox_3d_layer : elm::layer
+struct sandbox_3d_layer final : elm::layer
 {
 	sandbox_3d_layer();
 	virtual ~sandbox_3d_layer() = default;

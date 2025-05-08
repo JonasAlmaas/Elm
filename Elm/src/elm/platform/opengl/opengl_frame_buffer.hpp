@@ -4,7 +4,7 @@
 
 namespace elm {
 
-	struct opengl_frame_buffer : frame_buffer
+	struct opengl_frame_buffer final : frame_buffer
 	{
 		opengl_frame_buffer(const frame_buffer_specification &spec);
 		virtual ~opengl_frame_buffer();

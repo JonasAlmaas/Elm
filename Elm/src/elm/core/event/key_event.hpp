@@ -19,7 +19,7 @@ namespace elm {
 		key keycode;
 	};
 
-	struct key_pressed_event : key_event
+	struct key_pressed_event final : key_event
 	{
 		key_pressed_event(key keycode, bool is_repeat=false)
 			: key_event(keycode), is_repeating(is_repeat) {}
@@ -39,7 +39,7 @@ namespace elm {
 		bool is_repeating;
 	};
 
-	struct key_released_event : key_event
+	struct key_released_event final : key_event
 	{
 		key_released_event(key keycode)
 			: key_event(keycode) {}
@@ -54,7 +54,7 @@ namespace elm {
 		EVENT_CLASS_TYPE(ET_KEY_RELEASED)
 	};
 
-	struct key_typed_event : key_event
+	struct key_typed_event final : key_event
 	{
 		key_typed_event(key keycode)
 			: key_event(keycode) {}

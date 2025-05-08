@@ -5,7 +5,7 @@
 
 namespace elm {
 
-	struct opengl_index_buffer : index_buffer
+	struct opengl_index_buffer final : index_buffer
 	{
 		opengl_index_buffer(const uint32_t *indices, uint32_t count);
 		virtual ~opengl_index_buffer();

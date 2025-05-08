@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-struct dockspace_layer : elm::layer
+struct dockspace_layer final : elm::layer
 {
 	dockspace_layer();
 	virtual ~dockspace_layer() = default;

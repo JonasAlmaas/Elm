@@ -4,7 +4,7 @@
 
 namespace elm {
 
-	struct opengl_uniform_buffer : uniform_buffer
+	struct opengl_uniform_buffer final : uniform_buffer
 	{
 		opengl_uniform_buffer(uint32_t size, uint32_t binding);
 		virtual ~opengl_uniform_buffer();

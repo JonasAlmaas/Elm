@@ -6,7 +6,7 @@
 
 namespace elm {
 
-	struct opengl_vertex_buffer : vertex_buffer
+	struct opengl_vertex_buffer final : vertex_buffer
 	{
 		opengl_vertex_buffer(uint32_t size);
 		opengl_vertex_buffer(const void *vertices, uint32_t size);

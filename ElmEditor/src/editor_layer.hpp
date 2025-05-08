@@ -12,7 +12,7 @@
 
 namespace elm {
 
-	struct editor_layer : layer
+	struct editor_layer final : layer
 	{
 		editor_layer();
 		virtual ~editor_layer() = default;

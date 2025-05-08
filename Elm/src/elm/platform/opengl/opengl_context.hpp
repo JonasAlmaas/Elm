@@ -6,7 +6,7 @@ struct GLFWwindow;
 
 namespace elm {
 
-	struct opengl_context : graphics_context
+	struct opengl_context final : graphics_context
 	{
 		opengl_context(GLFWwindow *window);
 
