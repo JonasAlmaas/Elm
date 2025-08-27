@@ -7,7 +7,7 @@ namespace elm::math {
 
 	extern bool decompose_transform(const glm::mat4 &transform, glm::vec3 *translation, glm::vec3 *rotation, glm::vec3 *scale)
 	{
-		// Form glm::decompose in matrix_decompose.inl
+		// From glm::decompose in matrix_decompose.inl
 
 		ELM_CORE_ASSERT(scale || !rotation, "Can not decompose rotation without scale");
 
