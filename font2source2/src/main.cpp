@@ -95,19 +95,12 @@ static void create_font(
 	// if MSDF || MTSDF
 
 	uint64_t coloring_seed = 0;
-	bool expensive_coloring = false;
-	if (expensive_coloring) {
-		msdf_atlas::Workload([&glyphs = msdf_data->glyphs, &coloring_seed](int i, int thread_no) -> bool {
-			uint64_t glyph_seed = (LCG_MULTIPLIER * (coloring_seed ^ i) + LCG_INCREMENT) * !!coloring_seed;
-			glyphs[i].edgeColoring(msdfgen::edgeColoringInkTrap, DEFAULT_ANGLE_THRESHOLD, glyph_seed);
-			return true;
-			}, (int)msdf_data->glyphs.size()).finish(THREAD_COUNT);
-	} else {
-		uint64_t glyph_seed = coloring_seed;
-		for (auto &glyph : msdf_data->glyphs) {
-			glyph_seed *= LCG_MULTIPLIER;
-			glyph.edgeColoring(msdfgen::edgeColoringInkTrap, DEFAULT_ANGLE_THRESHOLD, glyph_seed);
-		}
+	uint64_t glyph_seed = coloring_seed;
+	for (auto &glyph : msdf_data->glyphs) {
+		glyph_seed *= LCG_MULTIPLIER;
+		//glyph.edgeColoring(msdfgen::edgeColoringSimple, DEFAULT_ANGLE_THRESHOLD, glyph_seed);
+		glyph.edgeColoring(msdfgen::edgeColoringInkTrap, DEFAULT_ANGLE_THRESHOLD, glyph_seed);
+		//glyph.edgeColoring(msdfgen::edgeColoringByDistance, DEFAULT_ANGLE_THRESHOLD, glyph_seed);
 	}
 
 	create_n_store_atlas<uint8_t, float, 3, msdf_atlas::msdfGenerator>(
