@@ -145,9 +145,11 @@ struct font_meta_s {
 
 static void create_glyph_model(
 	const msdf_atlas::GlyphGeometry *glyph,
+	const std::string &font_name,
 	uint32_t atlas_width,
 	uint32_t atlas_height,
-	const std::filesystem::path &fpath)
+	const std::filesystem::path &fpath_vmdl,
+	const std::filesystem::path &fpath_smd)
 {
 	double al, ab, ar, at;
 	glyph->getQuadAtlasBounds(al, ab, ar, at);
@@ -162,23 +164,92 @@ static void create_glyph_model(
 
 	float texel_width = 1.0f / atlas_width;
 	float texel_height = 1.0f / atlas_height;
+	uv_min *= glm::vec2(texel_width, texel_height);
+	uv_max *= glm::vec2(texel_width, texel_height);
 
-	std::ofstream ofs(fpath);
-	ofs << "# font2source2\n";
-	ofs << "o Plane\n";
+	std::ofstream ofs_smd(fpath_smd);
+	ofs_smd << "version 1\n"
+		<< "nodes\n"
+		<< "0 \"root\" -1\n"
+		<< "end\n"
+		<< "skeleton\n"
+		<< "time 0\n"
+		<< "0 0 0 0 0 0 0\n"
+		<< "end\n"
+		<< "triangles\n";
 
-	ofs << "v " << quad_min.x << " 0.000000 " << quad_max.y << "\n";
-	ofs << "v " << quad_max.x << " 0.000000 " << quad_max.y << "\n";
-	ofs << "v " << quad_min.x << " 0.000000 " << quad_min.y << "\n";
-	ofs << "v " << quad_max.x << " 0.000000 " << quad_min.y << "\n";
+	ofs_smd << "no_material\n";
+	ofs_smd << "0  " << quad_min.x << " " << quad_min.y << " 0.000000  "
+		<< "0.000000 0.000000 1.000000  "
+		<< uv_min.x << " " << uv_min.y << "\n";
+	ofs_smd << "0  " << quad_max.x << " " << quad_max.y << " 0.000000  "
+		<< "0.000000 0.000000 1.000000  "
+		<< uv_max.x << " " << uv_max.y << "\n";
+	ofs_smd << "0  " << quad_min.x << " " << quad_max.y << " 0.000000  "
+		<< "0.000000 0.000000 1.000000  "
+		<< uv_min.x << " " << uv_max.y << "\n";
 
-	ofs << "vt " << uv_min.x << " 0.000000 " << uv_max.y << "\n";
-	ofs << "vt " << uv_max.x << " 0.000000 " << uv_max.y << "\n";
-	ofs << "vt " << uv_min.x << " 0.000000 " << uv_min.y << "\n";
-	ofs << "vt " << uv_max.x << " 0.000000 " << uv_min.y << "\n";
+	ofs_smd << "no_material\n";
+	ofs_smd << "0  " << quad_min.x << " " << quad_min.y << " 0.000000  "
+		<< "0.000000 0.000000 1.000000  "
+		<< uv_min.x << " " << uv_min.y << "\n";
+	ofs_smd << "0  " << quad_max.x << " " << quad_min.y << " 0.000000  "
+		<< "0.000000 0.000000 1.000000  "
+		<< uv_max.x << " " << uv_min.y << "\n";
+	ofs_smd << "0  " << quad_max.x << " " << quad_max.y << " 0.000000  "
+		<< "0.000000 0.000000 1.000000  "
+		<< uv_max.x << " " << uv_max.y << "\n";
 
-	ofs << "s 0\n";
-	ofs << "f 1/1 2/2 4/3 3/4\n";
+	ofs_smd << "end\n";
+
+	std::ofstream ofs_vmdl(fpath_vmdl);
+
+	ofs_vmdl << R"(<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc40:version{da0ab1f8-9722-4910-94b8-10b6a08c0934} -->
+{
+	rootNode =
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						use_global_default = true
+						global_default_material = "materials/text/)";
+	ofs_vmdl << font_name;
+	ofs_vmdl << R"(.vmat"
+					},
+				]
+			},
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						filename = "models/text/)";
+
+	ofs_vmdl << fpath_smd.filename().string();
+	ofs_vmdl << R"("
+						import_scale = 1.0
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = ""
+		document_sub_type = "ModelDocSubType_None"
+	}
+})";
 }
 
 int main(void)
@@ -221,9 +292,11 @@ int main(void)
 
 			create_glyph_model(
 				glyph,
+				font_name,
 				msdf_data.atlas_width,
 				msdf_data.atlas_height,
-				out_models_dir / (font_name + "_" + ss.str() + ".obj"));
+				out_models_dir / (font_name + "_" + ss.str() + ".vmdl"),
+				out_models_dir / (font_name + "_" + ss.str() + ".smd"));
 
 			result.glyph_meta[c] = {
 				.advance = glyph->getAdvance(),
