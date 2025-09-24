@@ -19,6 +19,7 @@ project "font2source2"
 
 		"%{IncludeDir.vendor_config}",
 
+		"%{IncludeDir.glm}",
 		"%{IncludeDir.msdf_atlas_gen}",
 		"%{IncludeDir.msdfgen}",
 		"%{IncludeDir.stb}",
