@@ -27,6 +27,7 @@ workspace "Elm"
 
 	group "Tools"
 	include "ElmEditor"
+	include "font2source2"
 	group ""
 
 	include "Sandbox"
