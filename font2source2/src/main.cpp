@@ -6,6 +6,7 @@
 
 #include <glm/glm.hpp>
 
+#include <iostream>
 #include <stdlib.h>
 #include <memory>
 #include <filesystem>
@@ -284,11 +285,14 @@ int main(void)
 
 	for (auto &range : charset_ranges) {
 		for (uint32_t c = range.begin; c <= range.end; ++c) {
-			auto glyph = msdf_data.font_geometry.getGlyph(c);
-			if (!glyph) exit(1);
-
 			std::stringstream ss;
 			ss << std::setfill('0') << std::setw(4) << std::hex << c;
+
+			auto glyph = msdf_data.font_geometry.getGlyph(c);
+			if (!glyph) {
+				std::cerr << "Failed to load glyph for " << ss.str() << "\n";
+				continue;
+			}
 
 			create_glyph_model(
 				glyph,
@@ -302,6 +306,15 @@ int main(void)
 				.advance = glyph->getAdvance(),
 			};
 		}
+	}
+
+	for (auto &gmeta : result.glyph_meta) {
+		std::stringstream ss;
+		ss << std::setfill('0') << std::setw(4) << std::hex << gmeta.first;
+
+		const auto &meta = gmeta.second;
+
+		std::cout << '"' << ss.str() << "\":{\"advance\":" << meta.advance << "},\n";
 	}
 
 	return EXIT_SUCCESS;
