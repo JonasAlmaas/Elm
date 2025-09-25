@@ -135,6 +135,7 @@ struct font_meta_s {
 	font_metrics_s font_metrics;
 
 	std::unordered_map<uint32_t, glyph_meta_s> glyph_meta;
+	std::map<std::pair<uint32_t, uint32_t>, double> kerning;
 };
 
 static void create_glyph_model(
@@ -253,6 +254,8 @@ int main(void)
 
 	std::string font_name = font_path.stem().string();
 
+	std::filesystem::path out_meta_fpath = "./meta.json";
+
 	std::filesystem::path out_materials_dir = ".\\addon\\materials\\text";
 	std::filesystem::create_directories(out_materials_dir);
 	std::filesystem::path out_models_dir = ".\\addon\\models\\text";
@@ -299,7 +302,18 @@ int main(void)
 				.advance = glyph->getAdvance(),
 			};
 		}
+
+		// Load kerning
+		for (size_t i = range.begin; i < range.end; ++i) {
+			for (size_t j = range.begin; j < range.end; ++j) {
+				double advance;
+				msdf_data.font_geometry.getAdvance(advance, i, j);
+				result.kerning[std::make_pair<uint32_t, uint32_t>(i, j)] = /*geometryScale **/ advance;
+			}
+		}
 	}
+
+	std::ofstream ofs_meta(out_meta_fpath);
 
 	for (auto &gmeta : result.glyph_meta) {
 		std::stringstream ss;
@@ -307,7 +321,15 @@ int main(void)
 
 		const auto &meta = gmeta.second;
 
-		std::cout << '"' << ss.str() << "\":{\"advance\":" << meta.advance << "},\n";
+		ofs_meta << '"' << ss.str() << "\":{\"advance\":" << meta.advance << "},\n";
+	}
+
+	for (auto [key, advance] : result.kerning) {
+		std::stringstream ss;
+		ss << std::setfill('0') << std::setw(4) << std::hex << key.first
+			<< "->" << std::setfill('0') << std::setw(4) << std::hex << key.second;
+
+		ofs_meta << '"' << ss.str() << "\":" << advance << ",\n";
 	}
 
 	return EXIT_SUCCESS;
