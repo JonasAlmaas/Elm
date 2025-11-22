@@ -263,7 +263,7 @@ int main(void)
 
 	std::filesystem::path out_atlas_path = out_materials_dir / (font_name + ".png");
 
-	std::vector<charset_range> charset_ranges = { { 0x0020, 0x00FF } };
+	std::vector<charset_range> charset_ranges = { { 0x0020, 0x007E} };
 
 	msdf_data_s msdf_data;
 	create_font(font_path_str, &msdf_data, out_atlas_path, charset_ranges);
